@@ -1,11 +1,16 @@
-import logo from './logo.svg';
 import './App.css';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Biodata from './pages/Biodata';
+import Header from './components/Header';
 
 function App() {
   return (
-    <div className="App">
-      hello there
-    </div>
+    <BrowserRouter>
+    <Header/>
+      <Routes>
+        <Route path='/' element={<Biodata/>}></Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
