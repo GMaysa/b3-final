@@ -2,13 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600&display=swap");
+
 body {
-  @apply m-0 font-sans;
+  @apply m-0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.gradient {
+  background: linear-gradient(180deg, rgba(255, 233, 202, 0) 5%, #DEC9FF 100%);
 }

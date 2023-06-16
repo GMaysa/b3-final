@@ -1,3 +1,10 @@
-.App{
-  @apply h-screen flex items-center justify-center
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600&display=swap");
+
+
+body {
+  @apply box-border bg-white;
+}
+
+.gradient {
+  background: linear-gradient(180deg, rgba(255, 233, 202, 0) 5%, #DEC9FF 100%);
 }
