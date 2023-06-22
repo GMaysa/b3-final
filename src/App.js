@@ -8,11 +8,16 @@ import DetailHistory from "./pages/DetailHistory";
 import Biodata from './pages/Biodata';
 import Payment from './pages/Payment';
 import PaymentSuccess from './pages/PaymentSuccess';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Reset from './pages/Reset'; 
 
 function App() {
   return (
     <BrowserRouter>
+    {/* <Header/> */}
       <Routes>
+        <Route path='/' element={<Reset/>}></Route>
         <Route path="/edit" element={<EditProfile />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/notification" element={<Notification />} />
