@@ -1,7 +1,11 @@
-import './App.css';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import "./App.css";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import EditProfile from "./pages/EditProfile";
+import Profile from "./pages/Profile";
+import Notification from "./Components/Notification";
+import FlightTicketHistory from "./Components/FlightTicketHistory";
+import DetailHistory from "./pages/DetailHistory";
 import Biodata from './pages/Biodata';
-import Header from './components/Header';
 import Payment from './pages/Payment';
 import PaymentSuccess from './pages/PaymentSuccess';
 import Login from './pages/Login';
@@ -14,15 +18,16 @@ function App() {
     {/* <Header/> */}
       <Routes>
         <Route path='/' element={<Reset/>}></Route>
-      </Routes>
-      <Routes>
+        <Route path="/edit" element={<EditProfile />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/notification" element={<Notification />} />
+        <Route path="/history" element={<FlightTicketHistory />} />
+        <Route path="/detail" element={<DetailHistory />} />
+        <Route path='/biodata' element={<Biodata/>}></Route>
         <Route path='/pay' element={<Payment/>}></Route>
-      </Routes>
-      <Routes>
         <Route path='/paysuccess' element={<PaymentSuccess/>}></Route>
       </Routes>
     </BrowserRouter>
   );
 }
-
 export default App;
