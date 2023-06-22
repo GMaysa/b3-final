@@ -4,13 +4,16 @@ import Biodata from './pages/Biodata';
 import Header from './components/Header';
 import Payment from './pages/Payment';
 import PaymentSuccess from './pages/PaymentSuccess';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Reset from './pages/Reset'; 
 
 function App() {
   return (
     <BrowserRouter>
-    <Header/>
+    {/* <Header/> */}
       <Routes>
-        <Route path='/' element={<Biodata/>}></Route>
+        <Route path='/' element={<Reset/>}></Route>
       </Routes>
       <Routes>
         <Route path='/pay' element={<Payment/>}></Route>
