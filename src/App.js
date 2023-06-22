@@ -15,7 +15,7 @@ function App() {
       <Routes>
         <Route path="/edit" element={<EditProfile />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/notifikasi" element={<Notification />} />
+        <Route path="/notification" element={<Notification />} />
         <Route path="/history" element={<FlightTicketHistory />} />
         <Route path="/detail" element={<DetailHistory />} />
         <Route path='/biodata' element={<Biodata/>}></Route>
