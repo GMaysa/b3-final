@@ -3,12 +3,52 @@ import { ReactComponent as Wrapper } from '../assets/Wrapper.svg';
 import Crown  from '../assets/crown.svg';
 import { FiCalendar,FiChevronDown } from "react-icons/fi";
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { connect } from "react-redux";
+import { updateCustomerData, updatePassengersData, postDataToApi } from "../redux/actions/actions";
+
 
 const Biodata = () => {
   const navigate = useNavigate()
-  const handleData = () => {
-    navigate('/pay');
+  const [fullName, setFullName] = useState("")
+  const [familName, setFamilyName] = useState("")
+  const [phone, setPhone] = useState("")
+  const [email, setEmail] = useState("")
+  const [title, setTitle] = useState("")
+  const [birthDate, setBirthDate] = useState("")
+  const [nationaly, setNationaly] = useState("")
+  const [identityNumber, setIdentityNumber] = useState("")
+  const [issuingCountry, setIssuingCountry] = useState("")
+  const [availableUntil, setAvailableUntil] = useState("")
+
+  const mapStateToProps = (state) => {
+    return {
+      customer: state.customer,
+      passengers: state.passengers
+    };
+  };  
+
+  const mapDispatchToProps = (dispatch) => {
+    return {
+      updateCustomerData: (customer) => dispatch(updateCustomerData(customer)),
+      updatePassengersData: (passengers) => dispatch(updatePassengersData(passengers)),
+      postDataToApi: (data) => dispatch(postDataToApi(data))
+    };
   };
+  
+  const handleSubmit = () => {
+    const { customer, passengers, postDataToApi } = this.props;
+  
+    // Menggabungkan data customer dan passengers menjadi satu objek
+    const data = {
+      customer,
+      passengers
+    };
+  
+    // Memanggil action creator postDataToApi untuk melakukan POST data ke API
+    postDataToApi(data);
+  };
+
   const [data] = useState([
     { value: false },
     { value: false },
@@ -108,27 +148,6 @@ const Biodata = () => {
     { value: true },
   ]);
 
-  // const handleClick = (index) => {
-  //   if (data[index].value === false) {
-  //     return; // Tidak bisa memilih kotak yang bernilai false
-  //   }
-
-  //   const newData = [...data];
-  //   const selectedCount = newData.filter((item) => item.value).length;
-
-  //   if (selectedCount === 2) {
-  //     // Mengubah kotak yang ketiga menjadi P1 dan bernilai false
-  //     const thirdIndex = newData.findIndex((item) => item.value && item.value !== 'P1' && item.value !== 'P2');
-  //     if (thirdIndex !== -1) {
-  //       newData[thirdIndex].value = false;
-  //     }
-  //   }
-
-  //   newData[index].value = selectedCount === 0 ? 'P1' : 'P2'; // Mengubah nilai item.value
-
-  //   setData(newData);
-  // };
-
   return (
     //300 = font-light
     //500 = font-medium
@@ -163,6 +182,8 @@ const Biodata = () => {
                 <form className='border-[1px] border-[#D0D0D0] text-[12px] sm:text-[14px] font-medium rounded-[4px]'>
                   <input
                     type='text'
+                    value={customer.fullName}
+                    onChange={(e) => setFullName(e.target.value)}
                     placeholder='Nama Lengkap'
                     className='outline-none bg-transparent py-[8px] px-[16px]'
                   />
@@ -183,6 +204,8 @@ const Biodata = () => {
                 <form className='border-[1px] border-[#D0D0D0] font-medium rounded-[4px] text-[12px] sm:text-[14px]'>
                   <input
                     type='text'
+                    value={customer.familyName}
+                    onChange={(e) => setFamilyName(e.target.value)}
                     placeholder='Nama Keluarga'
                     className='outline-none bg-transparent py-[8px] px-[16px]'
                   />
@@ -195,6 +218,8 @@ const Biodata = () => {
                 <form className='border-[1px] border-[#D0D0D0] font-medium rounded-[4px] text-[12px] sm:text-[14px]'>
                   <input
                     type='text'
+                    value={customer.phone}
+                    onChange={(e) => setPhone(e.target.value)}
                     placeholder='Nomor Telepon'
                     className='outline-none bg-transparent py-[8px] px-[16px]'
                   />
@@ -207,6 +232,8 @@ const Biodata = () => {
                 <form className='border-[1px] border-[#D0D0D0] font-light rounded-[4px] text-[12px] sm:text-[14px]'>
                   <input
                     type='text'
+                    value={customer.email}
+                    onChange={(e) => setEmail(e.target.value)}
                     placeholder='Email'
                     className='outline-none bg-transparent py-[8px] px-[16px]'
                   />
@@ -234,6 +261,8 @@ const Biodata = () => {
                     <form className='border-[1px] border-[#D0D0D0] font-medium rounded-[4px] flex justify-between items-center sm:text-[14px]'>
                       <input
                         type='text'
+                        value={passengers.title}
+                        onChange={(e) => setTitle(e.target.value)}
                         placeholder='Mr.'
                         className='outline-none bg-transparent py-[8px] px-[16px]'
                       />
@@ -247,6 +276,8 @@ const Biodata = () => {
                     <form className='border-[1px] border-[#D0D0D0] font-medium rounded-[4px] sm:text-[14px]'>
                       <input
                         type='text'
+                        value={passengers.fullName}
+                        onChange={(e) => setFullName(e.target.value)}
                         placeholder='Harry'
                         className='outline-none bg-transparent py-[8px] px-[16px]'
                       />
@@ -267,6 +298,8 @@ const Biodata = () => {
                     <form className='border-[1px] border-[#D0D0D0] font-medium rounded-[4px] sm:text-[14px]'>
                       <input
                         type='text'
+                        value={passengers.familyName}
+                        onChange={(e) => setFamilyName(e.target.value)}
                         placeholder='Nama Keluarga'
                         className='outline-none bg-transparent py-[8px] px-[16px]'
                       />
@@ -279,6 +312,8 @@ const Biodata = () => {
                     <form className='border-[1px] border-[#D0D0D0] font-light rounded-[4px] flex justify-between items-center sm:text-[14px]'>
                       <input
                         type='text'
+                        value={passengers.birthDate}
+                        onChange={(e) => setBirthDate(e.target.value)}
                         placeholder='dd/mm/yy'
                         className='outline-none bg-transparent py-[8px] px-[16px] placeholder-[#D0D0D0]'
                       />
@@ -292,6 +327,8 @@ const Biodata = () => {
                     <form className='border-[1px] border-[#D0D0D0] font-medium rounded-[4px] sm:text-[14px]'>
                       <input
                         type='text'
+                        value={passengers.nationaly}
+                        onChange={(e) => setNationaly(e.target.value)}
                         placeholder='Indonesia'
                         className='outline-none bg-transparent py-[8px] px-[16px] placeholder-[#3C3C3C]'
                       />
@@ -304,6 +341,8 @@ const Biodata = () => {
                     <form className='border-[1px] border-[#D0D0D0] font-light rounded-[4px] sm:text-[14px]'>
                       <input
                         type='text'
+                        value={passengers.identityNumber}
+                        onChange={(e) => setIdentityNumber(e.target.value)}
                         placeholder=''
                         className='outline-none bg-transparent py-[8px] px-[16px]'
                       />
@@ -316,6 +355,8 @@ const Biodata = () => {
                     <form className='border-[1px] border-[#D0D0D0] font-light rounded-[4px] flex justify-between items-center sm:text-[14px]'>
                       <input
                         type='text'
+                        value={passengers.issuingCountry}
+                        onChange={(e) => setIssuingCountry(e.target.value)}
                         placeholder=''
                         className='outline-none bg-transparent py-[8px] px-[16px]'
                       />
@@ -329,6 +370,8 @@ const Biodata = () => {
                     <form className='border-[1px] border-[#D0D0D0] font-light rounded-[4px] flex justify-between items-center sm:text-[14px]'>
                       <input
                         type='text'
+                        value={passengers.availableUntil}
+                        onChange={(e) => setAvailableUntil(e.target.value)}
                         placeholder='dd/mm/yy'
                         className='outline-none bg-transparent py-[8px] px-[16px] placeholder-[#D0D0D0]'
                       />
@@ -337,7 +380,7 @@ const Biodata = () => {
                   </div>
                 </div>   
                 
-                <div>
+                {/* <div>
                   <div className='pt-[24px]'>
                     <div className='data_diri bg-[#3C3C3C] text-white font-medium py-[8px] px-[16px] sm:w-[486px] rounded-t-[10px]'>
                       <h1 className='font-medium sm:text-[16px]'>Data Diri Penumpang 2 - Adult</h1>
@@ -452,7 +495,7 @@ const Biodata = () => {
                       </form>
                     </div>
                   </div>     
-                </div>  
+                </div>   */}
               </div>      
             </div>
 
@@ -519,7 +562,7 @@ const Biodata = () => {
               </div>
             </div>
             <div className='pt-[34px] pb-[132px]'>
-              <div onClick={handleData} className='text-center bg-[#7126B5] py-[16px] px-[10px] rounded-[12px] shadow-md' style={{ boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)' }}>
+              <div onClick={handleSubmit} className='text-center bg-[#7126B5] py-[16px] px-[10px] rounded-[12px] shadow-md' style={{ boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)' }}>
                 <h1 className='text-[14px] sm:text-[16px] text-[#FFFFFF]'>Simpan</h1>
               </div>
             </div>
@@ -640,4 +683,5 @@ const Biodata = () => {
   );
 };
 
-export default Biodata;
+export default connect(mapStateToProps, mapDispatchToProps)(Biodata);
+
