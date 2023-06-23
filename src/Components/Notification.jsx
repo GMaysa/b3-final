@@ -7,6 +7,7 @@ import ModalSearch from "./ModalSearch";
 
 const Notification = () => {
   const [open, setOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleSearchClick = () => {
     setOpen(true);
@@ -42,17 +43,30 @@ const Notification = () => {
     setSelectedType(event.target.value);
   };
 
-  const filteredNotifications =
-    selectedType === "all"
-      ? notifications
-      : notifications.filter(
-          (notification) => notification.type === selectedType
-        );
+  const filteredNotifications = notifications.filter((notification) => {
+    const typeMatch =
+      selectedType === "all" || notification.type === selectedType;
+    const queryMatch =
+      searchQuery === "" ||
+      notification.message.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      notification.desk.toLowerCase().includes(searchQuery.toLowerCase());
+    return typeMatch && queryMatch;
+  });
+
+  const handleSearchQueryChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const handleSearchQueryKeyPress = (event) => {
+    if (event.key === "Enter") {
+      handleCloseModal();
+    }
+  };
 
   return (
     <section className="px-7 sm:px-20 sm:py-16 py-10 w-full mx-auto font-poppins">
       <h1 className="font-bold text-xl">Notifikasi</h1>
-      <div className="py-4 px-2 flex gap-4 items-center ">
+      <div className="py-4 px-2 flex gap-4 items-center">
         <button className="flex gap-4 w-full h-9 rounded-lg items-center px-6 text-white bg-[#A06ECE] text-md">
           <AiOutlineArrowLeft className="h-7" />
           Beranda
@@ -78,18 +92,21 @@ const Notification = () => {
         {/* Modal */}
         <ModalSearch open={open}>
           <div className="flex gap-4">
-            <div class="relative">
-              <div class="absolute inset-y-0 flex items-center pl-4">
+            <div className="relative">
+              <div className="absolute inset-y-0 flex items-center pl-4">
                 <BiSearch className="text-gray-500" />
               </div>
               <input
                 type="text"
                 placeholder="Cari notifikasi"
                 className="border border-gray-300 text-black placeholder:text-gray-500 placeholder:text-xs rounded-sm px-10 h-8 w-full"
+                value={searchQuery}
+                onChange={handleSearchQueryChange}
+                onKeyPress={handleSearchQueryKeyPress}
               />
             </div>
             <button
-              className=" rounded-lg text-black hover:text-red-600"
+              className="rounded-lg text-black hover:text-red-600"
               onClick={handleCloseModal}
             >
               <AiOutlineClose className="h-6 scale-110" />
@@ -107,12 +124,13 @@ const Notification = () => {
         </ModalSearch>
       </div>
 
+      {/* filter mobile */}
       <div className="justify-end flex mx-auto pt-3 pb-10 sm:pb-2 gap-2">
         <select
           id="filter"
           value={selectedType}
           onChange={handleFilterChange}
-          className="sm:hidden border border-[#A06ECE] text-sm px-1 rounded-2xl w-28 h-8 justify-center items-center"
+          className="sm:hidden border border-[#A06ECE] text-sm px-1 rounded-2xl w-28 h-9 justify-center items-center"
         >
           <option value="all">Filter</option>
           <option value="promosi">Promosi</option>
@@ -121,15 +139,15 @@ const Notification = () => {
       </div>
 
       {/* body */}
-      {filteredNotifications.map((notification, i) => (
-        <div className="flex gap-4 px-4 pb-9 w-full">
-          <div className="pt-1 ">
+      {filteredNotifications.map((notification) => (
+        <div className="flex gap-4 px-4 pb-9 w-full" key={notification.id}>
+          <div className="pt-1">
             <button className="bg-[#A06ECE] rounded-full p-1">
               <IoMdNotifications className="text-white" />
             </button>
           </div>
           <div className="w-full mx-auto">
-            <div className="flex" key={i}>
+            <div className="flex">
               <h6 className="text-gray-500 ">{notification.status}</h6>
               <p className="text-gray-500 justify-end flex gap-3 items-center text-sm w-full">
                 {notification.date}

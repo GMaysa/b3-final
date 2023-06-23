@@ -45,7 +45,12 @@ const Navbar = () => {
               </Link>
             </li>
             <li>
-              <Link to="/notifikasi" smooth={true} offset={-200} duration={500}>
+              <Link
+                to="/notification"
+                smooth={true}
+                offset={-200}
+                duration={500}
+              >
                 <FiBell />
               </Link>
             </li>

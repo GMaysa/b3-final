@@ -1,16 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { BiFilterAlt, BiSearch } from "react-icons/bi";
-import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
-import { AiOutlineClose } from "react-icons/ai";
+import { AiOutlineArrowLeft, AiOutlineClose } from "react-icons/ai";
+import { FaPlaneDeparture, FaPlaneArrival, FaPlane } from "react-icons/fa";
 import Detail from "../pages/DetailHistory";
 import ModalSearch from "./ModalSearch";
 import DateRangeFilter from "./DateRangeFilter";
 import NotFoundHistory from "./NotFoundHistory";
 import { useNavigate } from "react-router-dom";
-import { FaPlaneDeparture, FaPlaneArrival, FaPlane } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { getHistory } from "../redux/actions/historyActions";
 
 const FlightTicketHistory = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { historys } = useSelector((state) => state.history);
+
+  useEffect(() => {
+    dispatch(getHistory());
+  }, [dispatch]);
 
   const [open, setOpen] = useState(false);
   const [showFilterModal, setShowFilterModal] = useState(false);
@@ -53,38 +61,6 @@ const FlightTicketHistory = () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-
-  // data
-  const data = [
-    {
-      id: 1,
-      status: "Issued",
-      class: "Economy Class",
-      from: "Jakarta",
-      dateFrom: "5 Maret 2023",
-      timeFrom: "19.10",
-      range: "4h 0m",
-      to: "Melbern",
-      dateTo: "5 Maret 2023",
-      timeTo: "20.10",
-      code: "6723y2GHK",
-      price: "9.850.000",
-    },
-    {
-      id: 2,
-      status: "Issued",
-      class: "Economy Class",
-      from: "Jakarta",
-      dateFrom: "5 Maret 2023",
-      timeFrom: "19.10",
-      range: "4h 0m",
-      to: "Melbern",
-      dateTo: "5 Maret 2023",
-      timeTo: "20.10",
-      code: "6723y2GHK",
-      price: "9.850.000",
-    },
-  ];
 
   return (
     <section className="pt-16 sm:pt-20 px-7 sm:px-20 sm:py-16 py-10 w-full mx-auto font-poppins">
@@ -164,31 +140,31 @@ const FlightTicketHistory = () => {
         </button>
       </div>
 
-      {data.length > 0 ? (
+      {historys.length > 0 ? (
         <div className="flex gap-5 w-full mx-auto">
           {/* left card */}
           <div className="w-full lg:w-1/2">
-            {data.map((item) => (
+            {historys.map((history) => (
               <div
                 className={`lg:flex ${isMobile ? "flex-col" : "gap-6"}`}
-                key={item.id}
+                key={history.id}
               >
                 <div
                   className={`border hover:border-[#A06ECE] shadow-sm p-4 py-4 rounded-lg h-full w-full ${
                     isMobile ? "mb-7" : "mb-10"
                   }`}
-                  onClick={() => handleClickDetail(item.id)}
+                  onClick={() => handleClickDetail(history.id)}
                 >
                   <div className="flex justify-between gap-3 pb-8">
                     <div>
                       <button className="bg-[#73CA5C] text-white rounded-full px-3 py-1 text-sm">
-                        {item.status}
+                        {history.status}
                       </button>
                     </div>
 
                     <div className="items-center flex gap-2">
                       <button className="bg-black rounded-full p-1 h-1 items-center"></button>
-                      <p className="text-xs">{item.class}</p>
+                      <p className="text-xs">{history.class}</p>
                     </div>
                   </div>
                   <div
@@ -205,13 +181,13 @@ const FlightTicketHistory = () => {
                         <FaPlaneDeparture className="h-4 text-gray-500" />
                       </div>
                       <div>
-                        <h6 className="text-black font-bold">{item.from}</h6>
-                        <p className="text-xs">{item.dateFrom}</p>
-                        <p className="text-xs">{item.timeFrom}</p>
+                        <h6 className="text-black font-bold">{history.from}</h6>
+                        <p className="text-xs">{history.dateFrom}</p>
+                        <p className="text-xs">{history.timeFrom}</p>
                       </div>
                     </div>
                     <div className="flex flex-col items-center justify-items-center w-full">
-                      <p className="pb-1 text-xs">{item.range}</p>
+                      <p className="pb-1 text-xs">{history.range}</p>
                       <div className="flex items-center justify-center w-full">
                         <div className="w-1/3 border-b border-dashed border-[#A06ECE] h-px" />
                         <FaPlane className="w-4 h-4 text-[#A06ECE]" />
@@ -227,9 +203,9 @@ const FlightTicketHistory = () => {
                         <FaPlaneArrival className="h-4 text-gray-500" />
                       </div>
                       <div>
-                        <h6 className="text-black font-bold">{item.to}</h6>
-                        <p className="text-xs">{item.dateTo}</p>
-                        <p className="text-xs">{item.timeTo}</p>
+                        <h6 className="text-black font-bold">{history.to}</h6>
+                        <p className="text-xs">{history.dateTo}</p>
+                        <p className="text-xs">{history.timeTo}</p>
                       </div>
                     </div>
                   </div>
@@ -246,7 +222,7 @@ const FlightTicketHistory = () => {
           >
             {selectedCardId !== null && !isMobile ? (
               <div className="lg:flex flex-col">
-                {data.find((item) => item.id === selectedCardId) ? (
+                {historys.find((history) => history.id === selectedCardId) ? (
                   <Detail />
                 ) : (
                   <></>
