@@ -1,5 +1,3 @@
-// reducers.js
-
 import { combineReducers } from "redux";
 import {
   UPDATE_CUSTOMER_DATA,
