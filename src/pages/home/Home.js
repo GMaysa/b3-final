@@ -3,11 +3,26 @@ import { MdSwapHoriz } from "react-icons/md";
 import { IoIosAirplane } from "react-icons/io";
 import { IoCalendarSharp } from "react-icons/io5";
 import { thisDate } from "./HomeSlicing";
+import { alpha, styled } from '@mui/material/styles';
+import { deepPurple } from '@mui/material/colors';
 import { Switch } from "@mui/material";
 
 
 function Home() {
   let date = thisDate();
+
+  const CustomSwitch = styled(Switch)(({ theme }) => ({
+    '& .MuiSwitch-switchBase': {
+      '.Mui-checked': {
+      color: deepPurple[600],
+      '&:hover': {
+        backgroundColor: alpha(deepPurple[600], theme.palette.action.hoverOpacity),
+      },
+    },
+    '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+      backgroundColor: deepPurple[600],
+    },
+  }}));
 
   return (
     <div>
@@ -79,8 +94,8 @@ function Home() {
             {/* Date */}
             <div className="w-full flex items-center gap-8">
               {/* Departure */}
-              <div className="w-full font-medium text-[#8a8a8a]">
-                <p>Departure</p>
+              <div className="w-full h-full font-medium text-[#8a8a8a] flex flex-col justify-between">
+                <p className="h-full flex items-center">Departure</p>
                 <div className="w-full flex border-b-2 py-2 outline-none">
                   <input
                     input="text"
@@ -92,7 +107,7 @@ function Home() {
               </div>
               {/* Return */}
               <div className="w-full font-medium text-[#8a8a8a]">
-                <p className="flex justify-between items-center">Return <Switch className="flex justify-end" /></p>
+                <p className="flex justify-between items-center">Return <CustomSwitch className="flex justify-end" color="secondary" /></p>
                 <div className="w-full flex border-b-2 py-2 outline-none">
                   <input
                     input="text"
@@ -106,8 +121,8 @@ function Home() {
             {/* Passengers & Seat Class */}
             <div className="w-full flex gap-8">
               {/* Passengers */}
-              <div className="w-full font-medium text-[#8a8a8a]">
-                <p>Jumlah Penumpang</p>
+              <div className="w-full h-full font-medium text-[#8a8a8a] flex flex-col justify-between">
+                <p className="h-full flex items-center">Jumlah Penumpang</p>
                 <div className="w-full flex border-b-2 py-2 outline-none">
                   <input
                     input="text"
@@ -116,8 +131,8 @@ function Home() {
                   />
                 </div>
               </div>
-              <div className="w-full font-medium text-[#8a8a8a]">
-                <p>Jenis Kelas</p>
+              <div className="w-full h-full font-medium text-[#8a8a8a] flex flex-col justify-between">
+                <p className="h-full flex items-center">Jenis Kelas</p>
                 <div className="w-full flex border-b-2 py-2 outline-none">
                   <input
                     input="text"
