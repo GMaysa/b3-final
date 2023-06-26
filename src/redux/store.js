@@ -1,8 +1,8 @@
-import { createStore, applyMiddleware } from "redux";
-import thunk from "redux-thunk";
-import rootReducer from "./reducers/reducers";
+import { configureStore } from "@reduxjs/toolkit";
+import rootReducers from "./reducers"
 
-// Create store with rootReducer and apply middleware
-const store = createStore(rootReducer, applyMiddleware(thunk));
-
-export default store;
+// Create the temporary db / state / store
+export default configureStore({
+  reducer: rootReducers,
+  devTools: process.env.NODE_ENV === "development",
+});

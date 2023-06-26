@@ -5,8 +5,7 @@ import { FiBell,FiUser,FiList,FiSearch,FiX } from "react-icons/fi";
 
 const Header = () => {
   const [isActive, setIsActive] = useState(false);
-
-  
+    
   const divClasses = `tglBtn flex flex-col p-[20px] sm:hidden  ${isActive ? 'active' : ''}`;
   //300 = font-light
   //500 = font-medium

@@ -1,55 +1,84 @@
-import React, {useState} from 'react';
+import React, {useEffect,useState} from 'react';
 import { ReactComponent as Wrapper } from '../assets/Wrapper.svg';
 import Crown  from '../assets/crown.svg';
 import { FiCalendar,FiChevronDown } from "react-icons/fi";
 import { useNavigate } from 'react-router-dom';
+import { useDispatch,useSelector } from 'react-redux';
+import { Link } from "react-router-dom";
+import { getBooking } from "../redux/actions/bookingActions";
 import axios from 'axios';
-import { connect } from "react-redux";
-import { updateCustomerData, updatePassengersData, postDataToApi } from "../redux/actions/actions";
-
 
 const Biodata = () => {
   const navigate = useNavigate()
-  const [fullName, setFullName] = useState("")
-  const [familName, setFamilyName] = useState("")
-  const [phone, setPhone] = useState("")
-  const [email, setEmail] = useState("")
-  const [title, setTitle] = useState("")
-  const [birthDate, setBirthDate] = useState("")
-  const [nationaly, setNationaly] = useState("")
-  const [identityNumber, setIdentityNumber] = useState("")
-  const [issuingCountry, setIssuingCountry] = useState("")
-  const [availableUntil, setAvailableUntil] = useState("")
-
-  const mapStateToProps = (state) => {
-    return {
-      customer: state.customer,
-      passengers: state.passengers
-    };
-  };  
-
-  const mapDispatchToProps = (dispatch) => {
-    return {
-      updateCustomerData: (customer) => dispatch(updateCustomerData(customer)),
-      updatePassengersData: (passengers) => dispatch(updatePassengersData(passengers)),
-      postDataToApi: (data) => dispatch(postDataToApi(data))
-    };
-  };
+  const dispatch = useDispatch();
+  const [customer, setCustomer] = useState({
+    fullName: '',
+    familyName: '',
+    phone: '',
+    email: '',
+  });
+  const [passengers, setPassengers] = useState({
+    title: '',
+    fullName: '',
+    familyName: '',
+    birthDate: '',
+    nationality: '',
+    identityNumber: '',
+    issuingCountry: '',
+    availableUntil: '',
+  });
   
-  const handleSubmit = () => {
-    const { customer, passengers, postDataToApi } = this.props;
+    const handleSubmit = async (event) => {
+      event.preventDefault();
   
-    // Menggabungkan data customer dan passengers menjadi satu objek
-    const data = {
-      customer,
-      passengers
+      try {
+        const response = await axios.post('https://gcpflypal-l5tho6hrtq-as.a.run.app/api/v1/transactions/booking', {
+          userId: userId,
+          booking: {
+            departFlightId: 3,
+            returnFlightId: 2,
+            departClassId: 5,
+            returnClassId: 1,
+            costumer: {
+              fullName: customer.fullName,
+              familyName: customer.familyName,
+              phone: customer.phone,
+              email: customer.email,
+            },
+            passengers: [
+              {
+                fullName: passengers.fullName,
+                familyName: passengers.familyName,
+                title: passengers.title,
+                birthDate: passengers.birthDate,
+                nationality: passengers.nationality,
+                identityNumber: passengers.identityNumber,
+                issuingCountry: passengers.issuingCountry,
+                availableUntil: passengers.availableUntil,
+              },
+            ],
+          },
+        });
+  
+        if (response.status === 200) {
+          // Panggil action creator yang sesuai untuk menyimpan data pemesanan ke Redux store
+          dispatch(setBooking(response.data.booking));
+          dispatch(setBookingDetails(response.data.bookingDetails));
+  
+          // Tampilkan pesan sukses
+          toast.success('Booking successful!');
+        } else {
+          // Tangani kesalahan jika permintaan tidak berhasil
+          throw new Error('Booking failed');
+        }
+      } catch (error) {
+        // Tangani kesalahan dan tampilkan pesan kesalahan yang relevan kepada pengguna
+        toast.error('An error occurred during booking');
+        console.error(error);
+      }
     };
-  
-    // Memanggil action creator postDataToApi untuk melakukan POST data ke API
-    postDataToApi(data);
-  };
 
-  const [data] = useState([
+  const [datasatu] = useState([
     { value: false },
     { value: false },
     { value: false },
@@ -149,9 +178,6 @@ const Biodata = () => {
   ]);
 
   return (
-    //300 = font-light
-    //500 = font-medium
-    //700 = font-bold
     <div>
       <div className='pt-[27px] sm:pt-[47px] pb-[20px] px-[50px] sm:px-[100px] xl:px-[260px] shadow-md'>
         <div className='text-stage text-[16px] sm:text-[20px] flex gap-[8px]'>
@@ -164,226 +190,94 @@ const Biodata = () => {
       </div>
       
       <div className='flex items-center w-full gap-[16px] pt-[25px] sm:pt-[30px] sm:w-full sm:justify-center sm:items-start xl:px-[285px] flex-col-reverse sm:flex-row'>
-        <div className='w-full sm:w-auto px-[20px]'>
-          <div className='isi_data border-[1px] border-[#8A8A8A] px-[12px] sm:px-[16px] pt-[26px] pb-[42px] rounded-[4px] sm:w-[518px]'>
-            <div className='data_pemesanan text-[18px] sm:text-[20px]'>
-              <h1 className='font-bold'>Isi Data Pemesanan</h1>
-            </div>
-            <div className='pt-[16px]'>
-              <div className='data_diri bg-[#3C3C3C] text-white font-medium py-[8px] px-[16px] sm:w-[486px] rounded-t-[10px]'>
-                <h1 className='font-medium text-[14px] sm:text-[16px]'>Data Diri Pemesan</h1>
+        <form onSubmit={handleSubmit}>
+          <div className='w-full sm:w-auto px-[20px]'>
+            <div className='isi_data border-[1px] border-[#8A8A8A] px-[12px] sm:px-[16px] pt-[26px] pb-[42px] rounded-[4px] sm:w-[518px]'>
+              <div className='data_pemesanan text-[18px] sm:text-[20px]'>
+                <h1 className='font-bold'>Isi Data Pemesanan</h1>
               </div>
-            </div>
-            <div className='px-[16px]'>
               <div className='pt-[16px]'>
-                <h1 className='text-[#4B1979] font-bold text-[12px] sm:text-[14px]'>Nama Lengkap</h1>
-              </div>
-              <div className='sm:w-[454px] pt-[4px]'>
-                <form className='border-[1px] border-[#D0D0D0] text-[12px] sm:text-[14px] font-medium rounded-[4px]'>
-                  <input
-                    type='text'
-                    value={customer.fullName}
-                    onChange={(e) => setFullName(e.target.value)}
-                    placeholder='Nama Lengkap'
-                    className='outline-none bg-transparent py-[8px] px-[16px]'
-                  />
-                </form>
-              </div>
-              <div className='pt-[12px] flex justify-between'>
-                <div>
-                  <h1 className='font-light text-[12px] sm:text-[14px]'>Punya Nama Keluarga?</h1>
-                </div>
-                <div>
-                  <Wrapper/>
+                <div className='data_diri bg-[#3C3C3C] text-white font-medium py-[8px] px-[16px] sm:w-[486px] rounded-t-[10px]'>
+                  <h1 className='font-medium text-[14px] sm:text-[16px]'>Data Diri Pemesan</h1>
                 </div>
               </div>
-              <div className='pt-[12px]'>
-                <h1 className='text-[#4B1979] font-bold text-[12px] sm:text-[14px]'>Nama Keluarga</h1>
-              </div>
-              <div className='sm:w-[454px] pt-[4px]'>
-                <form className='border-[1px] border-[#D0D0D0] font-medium rounded-[4px] text-[12px] sm:text-[14px]'>
-                  <input
-                    type='text'
-                    value={customer.familyName}
-                    onChange={(e) => setFamilyName(e.target.value)}
-                    placeholder='Nama Keluarga'
-                    className='outline-none bg-transparent py-[8px] px-[16px]'
-                  />
-                </form>
-              </div>
-              <div className='pt-[12px]'>
-                <h1 className='text-[#4B1979] font-bold text-[12px] sm:text-[14px]'>Nomor Telepon</h1>
-              </div>
-              <div className='sm:w-[454px] pt-[4px]'>
-                <form className='border-[1px] border-[#D0D0D0] font-medium rounded-[4px] text-[12px] sm:text-[14px]'>
-                  <input
-                    type='text'
-                    value={customer.phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    placeholder='Nomor Telepon'
-                    className='outline-none bg-transparent py-[8px] px-[16px]'
-                  />
-                </form>
-              </div>
-              <div className='pt-[12px]'>
-                <h1 className='text-[#4B1979] font-bold text-[12px] sm:text-[14px]'>Email</h1>
-              </div>
-              <div className='sm:w-[454px] pt-[4px]'>
-                <form className='border-[1px] border-[#D0D0D0] font-light rounded-[4px] text-[12px] sm:text-[14px]'>
-                  <input
-                    type='text'
-                    value={customer.email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder='Email'
-                    className='outline-none bg-transparent py-[8px] px-[16px]'
-                  />
-                </form>
-              </div>
-            </div>         
-          </div>
-          
-          <div className='pt-[24px]'>
-            <div className='isi_data border-[1px] border-[#8A8A8A] px-[16px] pt-[26px] pb-[42px] rounded-[4px] sm:w-[518px]'>
-              <div className='text-[12px]'>
-                <div className='data_pemesanan'>
-                  <h1 className='font-bold text-xl sm:text-[14px]'>Isi Data Penumpang</h1>
-                </div>
+              <div className='px-[16px]'>
                 <div className='pt-[16px]'>
-                  <div className='data_diri bg-[#3C3C3C] text-white font-medium py-[8px] px-[16px] sm:w-[486px] rounded-t-[10px]'>
-                    <h1 className='font-medium sm:text-[14px]'>Data Diri Penumpang 1 - Adult</h1>
+                  <h1 className='text-[#4B1979] font-bold text-[12px] sm:text-[14px]'>Nama Lengkap</h1>
+                </div>
+                <div className='sm:w-[454px] pt-[4px]'>
+                  <form className='border-[1px] border-[#D0D0D0] text-[12px] sm:text-[14px] font-medium rounded-[4px]'>
+                    <input
+                      type='text'
+                      value={customer.fullName}
+                      onChange={(event) => setCustomer({ ...customer, fullName: event.target.value })}
+                      placeholder='Nama Lengkap'
+                      className='outline-none bg-transparent py-[8px] px-[16px]'
+                    />
+                  </form>
+                </div>
+                <div className='pt-[12px] flex justify-between'>
+                  <div>
+                    <h1 className='font-light text-[12px] sm:text-[14px]'>Punya Nama Keluarga?</h1>
+                  </div>
+                  <div>
+                    <Wrapper/>
                   </div>
                 </div>
-                <div className='px-[16px]'>
+                <div className='pt-[12px]'>
+                  <h1 className='text-[#4B1979] font-bold text-[12px] sm:text-[14px]'>Nama Keluarga</h1>
+                </div>
+                <div className='sm:w-[454px] pt-[4px]'>
+                  <form className='border-[1px] border-[#D0D0D0] font-medium rounded-[4px] text-[12px] sm:text-[14px]'>
+                    <input
+                      type='text'
+                      value={customer.familyName}
+                      onChange={(event) => setCustomer({ ...customer, familyName: event.target.value })}
+                      placeholder='Nama Keluarga'
+                      className='outline-none bg-transparent py-[8px] px-[16px]'
+                    />
+                  </form>
+                </div>
+                <div className='pt-[12px]'>
+                  <h1 className='text-[#4B1979] font-bold text-[12px] sm:text-[14px]'>Nomor Telepon</h1>
+                </div>
+                <div className='sm:w-[454px] pt-[4px]'>
+                  <form className='border-[1px] border-[#D0D0D0] font-medium rounded-[4px] text-[12px] sm:text-[14px]'>
+                    <input
+                      type='text'
+                      value={customer.phone}
+                      placeholder='Nomor Telepon'
+                      onChange={(event) => setCustomer({ ...customer,phone: event.target.value })}
+                      className='outline-none bg-transparent py-[8px] px-[16px]'
+                    />
+                  </form>
+                </div>
+                <div className='pt-[12px]'>
+                  <h1 className='text-[#4B1979] font-bold text-[12px] sm:text-[14px]'>Email</h1>
+                </div>
+                <div className='sm:w-[454px] pt-[4px]'>
+                  <form className='border-[1px] border-[#D0D0D0] font-light rounded-[4px] text-[12px] sm:text-[14px]'>
+                    <input
+                      type='text'
+                      value={customer.email}
+                      onChange={(event) => setCustomer({ ...customer, email: event.target.value })}
+                      placeholder='Email'
+                      className='outline-none bg-transparent py-[8px] px-[16px]'
+                    />
+                  </form>
+                </div>
+              </div>         
+            </div>
+            
+            <div className='pt-[24px]'>
+              <div className='isi_data border-[1px] border-[#8A8A8A] px-[16px] pt-[26px] pb-[42px] rounded-[4px] sm:w-[518px]'>
+                <div className='text-[12px]'>
+                  <div className='data_pemesanan'>
+                    <h1 className='font-bold text-xl sm:text-[14px]'>Isi Data Penumpang</h1>
+                  </div>
                   <div className='pt-[16px]'>
-                    <h1 className='text-[#4B1979] font-bold sm:text-[14px]'>Title</h1>
-                  </div>
-                  <div className='sm:w-[454px] pt-[4px]'>
-                    <form className='border-[1px] border-[#D0D0D0] font-medium rounded-[4px] flex justify-between items-center sm:text-[14px]'>
-                      <input
-                        type='text'
-                        value={passengers.title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        placeholder='Mr.'
-                        className='outline-none bg-transparent py-[8px] px-[16px]'
-                      />
-                      <FiChevronDown  className='text-[24px] text-[#8A8A8A] pr-[10px]'/>
-                    </form>
-                  </div>
-                  <div className='pt-[12px]'>
-                    <h1 className='text-[#4B1979] font-bold sm:text-[14px]'>Nama Lengkap</h1>
-                  </div>
-                  <div className='sm:w-[454px] pt-[4px]'>
-                    <form className='border-[1px] border-[#D0D0D0] font-medium rounded-[4px] sm:text-[14px]'>
-                      <input
-                        type='text'
-                        value={passengers.fullName}
-                        onChange={(e) => setFullName(e.target.value)}
-                        placeholder='Harry'
-                        className='outline-none bg-transparent py-[8px] px-[16px]'
-                      />
-                    </form>
-                  </div>
-                  <div className='pt-[12px] flex justify-between'>
-                    <div>
-                      <h1 className='font-light sm:text-[14px]'>Punya Nama Keluarga?</h1>
-                    </div>
-                    <div>
-                      <Wrapper/>
-                    </div>
-                  </div>
-                  <div className='pt-[12px]'>
-                    <h1 className='text-[#4B1979] font-bold sm:text-[14px]'>Nama Keluarga</h1>
-                  </div>
-                  <div className='sm:w-[454px] pt-[4px]'>
-                    <form className='border-[1px] border-[#D0D0D0] font-medium rounded-[4px] sm:text-[14px]'>
-                      <input
-                        type='text'
-                        value={passengers.familyName}
-                        onChange={(e) => setFamilyName(e.target.value)}
-                        placeholder='Nama Keluarga'
-                        className='outline-none bg-transparent py-[8px] px-[16px]'
-                      />
-                    </form>
-                  </div>
-                  <div className='pt-[12px]'>
-                    <h1 className='text-[#4B1979] font-bold sm:text-[14px]'>Tanggal Lahir</h1>
-                  </div>
-                  <div className='sm:w-[454px] pt-[4px]'>
-                    <form className='border-[1px] border-[#D0D0D0] font-light rounded-[4px] flex justify-between items-center sm:text-[14px]'>
-                      <input
-                        type='text'
-                        value={passengers.birthDate}
-                        onChange={(e) => setBirthDate(e.target.value)}
-                        placeholder='dd/mm/yy'
-                        className='outline-none bg-transparent py-[8px] px-[16px] placeholder-[#D0D0D0]'
-                      />
-                      <FiCalendar className='text-[24px] text-[#8A8A8A] pr-[10px]'/>
-                    </form>
-                  </div>
-                  <div className='pt-[12px]'>
-                    <h1 className='text-[#4B1979] font-bold sm:text-[14px]'>Kewarganegaraan</h1>
-                  </div>
-                  <div className='sm:w-[454px] pt-[4px]'>
-                    <form className='border-[1px] border-[#D0D0D0] font-medium rounded-[4px] sm:text-[14px]'>
-                      <input
-                        type='text'
-                        value={passengers.nationaly}
-                        onChange={(e) => setNationaly(e.target.value)}
-                        placeholder='Indonesia'
-                        className='outline-none bg-transparent py-[8px] px-[16px] placeholder-[#3C3C3C]'
-                      />
-                    </form>
-                  </div>
-                  <div className='pt-[12px]'>
-                    <h1 className='text-[#4B1979] font-bold sm:text-[14px]'>KTP/Paspor</h1>
-                  </div>
-                  <div className='sm:w-[454px] pt-[4px]'>
-                    <form className='border-[1px] border-[#D0D0D0] font-light rounded-[4px] sm:text-[14px]'>
-                      <input
-                        type='text'
-                        value={passengers.identityNumber}
-                        onChange={(e) => setIdentityNumber(e.target.value)}
-                        placeholder=''
-                        className='outline-none bg-transparent py-[8px] px-[16px]'
-                      />
-                    </form>
-                  </div>
-                  <div className='pt-[12px]'>
-                    <h1 className='text-[#4B1979] font-bold sm:text-[14px]'>Negara Penerbit</h1>
-                  </div>
-                  <div className='sm:w-[454px] pt-[4px]'>
-                    <form className='border-[1px] border-[#D0D0D0] font-light rounded-[4px] flex justify-between items-center sm:text-[14px]'>
-                      <input
-                        type='text'
-                        value={passengers.issuingCountry}
-                        onChange={(e) => setIssuingCountry(e.target.value)}
-                        placeholder=''
-                        className='outline-none bg-transparent py-[8px] px-[16px]'
-                      />
-                      <FiChevronDown  className='text-[24px] text-[#8A8A8A] pr-[10px]'/>
-                    </form>
-                  </div>
-                  <div className='pt-[12px]'>
-                    <h1 className='text-[#4B1979] font-bold sm:text-[14px]'>Berlaku Sampai</h1>
-                  </div>
-                  <div className='sm:w-[454px] pt-[4px]'>
-                    <form className='border-[1px] border-[#D0D0D0] font-light rounded-[4px] flex justify-between items-center sm:text-[14px]'>
-                      <input
-                        type='text'
-                        value={passengers.availableUntil}
-                        onChange={(e) => setAvailableUntil(e.target.value)}
-                        placeholder='dd/mm/yy'
-                        className='outline-none bg-transparent py-[8px] px-[16px] placeholder-[#D0D0D0]'
-                      />
-                      <FiCalendar className='text-[24px] text-[#8A8A8A] pr-[10px]'/>
-                    </form>
-                  </div>
-                </div>   
-                
-                {/* <div>
-                  <div className='pt-[24px]'>
                     <div className='data_diri bg-[#3C3C3C] text-white font-medium py-[8px] px-[16px] sm:w-[486px] rounded-t-[10px]'>
-                      <h1 className='font-medium sm:text-[16px]'>Data Diri Penumpang 2 - Adult</h1>
+                      <h1 className='font-medium sm:text-[14px]'>Data Diri Penumpang 1 - Adult</h1>
                     </div>
                   </div>
                   <div className='px-[16px]'>
@@ -391,12 +285,15 @@ const Biodata = () => {
                       <h1 className='text-[#4B1979] font-bold sm:text-[14px]'>Title</h1>
                     </div>
                     <div className='sm:w-[454px] pt-[4px]'>
-                      <form className='border-[1px] border-[#D0D0D0] font-medium rounded-[4px] sm:text-[14px]'>
+                      <form className='border-[1px] border-[#D0D0D0] font-medium rounded-[4px] flex justify-between items-center sm:text-[14px]'>
                         <input
                           type='text'
+                          value={passengers.title}
+                          onChange={(event) => setPassengers({ ...passengers, title: event.target.value })}
                           placeholder='Mr.'
                           className='outline-none bg-transparent py-[8px] px-[16px]'
                         />
+                        <FiChevronDown  className='text-[24px] text-[#8A8A8A] pr-[10px]'/>
                       </form>
                     </div>
                     <div className='pt-[12px]'>
@@ -406,6 +303,8 @@ const Biodata = () => {
                       <form className='border-[1px] border-[#D0D0D0] font-medium rounded-[4px] sm:text-[14px]'>
                         <input
                           type='text'
+                          value={passengers.fullName}
+                          onChange={(event) => setPassengers({ ...passengers, fullName: event.target.value })}
                           placeholder='Harry'
                           className='outline-none bg-transparent py-[8px] px-[16px]'
                         />
@@ -426,6 +325,8 @@ const Biodata = () => {
                       <form className='border-[1px] border-[#D0D0D0] font-medium rounded-[4px] sm:text-[14px]'>
                         <input
                           type='text'
+                          value={passengers.familyName}
+                          onChange={(event) => setPassengers({ ...passengers, familyName: event.target.value })}
                           placeholder='Nama Keluarga'
                           className='outline-none bg-transparent py-[8px] px-[16px]'
                         />
@@ -438,6 +339,8 @@ const Biodata = () => {
                       <form className='border-[1px] border-[#D0D0D0] font-light rounded-[4px] flex justify-between items-center sm:text-[14px]'>
                         <input
                           type='text'
+                          value={passengers.birthDate}
+                          onChange={(event) => setPassengers({ ...passengers, birthDate: event.target.value })}
                           placeholder='dd/mm/yy'
                           className='outline-none bg-transparent py-[8px] px-[16px] placeholder-[#D0D0D0]'
                         />
@@ -451,6 +354,8 @@ const Biodata = () => {
                       <form className='border-[1px] border-[#D0D0D0] font-medium rounded-[4px] sm:text-[14px]'>
                         <input
                           type='text'
+                          value={passengers.nationality}
+                          onChange={(event) => setPassengers({ ...passengers, nationality: event.target.value })}
                           placeholder='Indonesia'
                           className='outline-none bg-transparent py-[8px] px-[16px] placeholder-[#3C3C3C]'
                         />
@@ -463,6 +368,8 @@ const Biodata = () => {
                       <form className='border-[1px] border-[#D0D0D0] font-light rounded-[4px] sm:text-[14px]'>
                         <input
                           type='text'
+                          value={passengers.identityNumber}
+                          onChange={(event) => setPassengers({ ...passengers, identityNumber: event.target.value })}
                           placeholder=''
                           className='outline-none bg-transparent py-[8px] px-[16px]'
                         />
@@ -475,6 +382,8 @@ const Biodata = () => {
                       <form className='border-[1px] border-[#D0D0D0] font-light rounded-[4px] flex justify-between items-center sm:text-[14px]'>
                         <input
                           type='text'
+                          value={passengers.issuingCountry}
+                          onChange={(event) => setPassengers({ ...passengers, issuingCountry: event.target.value })}
                           placeholder=''
                           className='outline-none bg-transparent py-[8px] px-[16px]'
                         />
@@ -488,86 +397,206 @@ const Biodata = () => {
                       <form className='border-[1px] border-[#D0D0D0] font-light rounded-[4px] flex justify-between items-center sm:text-[14px]'>
                         <input
                           type='text'
+                          value={passengers.availableUntil}
+                          onChange={(event) => setPassengers({ ...passengers, availableUntil: event.target.value })}
                           placeholder='dd/mm/yy'
                           className='outline-none bg-transparent py-[8px] px-[16px] placeholder-[#D0D0D0]'
                         />
                         <FiCalendar className='text-[24px] text-[#8A8A8A] pr-[10px]'/>
                       </form>
                     </div>
-                  </div>     
-                </div>   */}
-              </div>      
-            </div>
+                  </div>   
+                  
+                  {/* <div>
+                    <div className='pt-[24px]'>
+                      <div className='data_diri bg-[#3C3C3C] text-white font-medium py-[8px] px-[16px] sm:w-[486px] rounded-t-[10px]'>
+                        <h1 className='font-medium sm:text-[16px]'>Data Diri Penumpang 2 - Adult</h1>
+                      </div>
+                    </div>
+                    <div className='px-[16px]'>
+                      <div className='pt-[16px]'>
+                        <h1 className='text-[#4B1979] font-bold sm:text-[14px]'>Title</h1>
+                      </div>
+                      <div className='sm:w-[454px] pt-[4px]'>
+                        <form className='border-[1px] border-[#D0D0D0] font-medium rounded-[4px] sm:text-[14px]'>
+                          <input
+                            type='text'
+                            placeholder='Mr.'
+                            className='outline-none bg-transparent py-[8px] px-[16px]'
+                          />
+                        </form>
+                      </div>
+                      <div className='pt-[12px]'>
+                        <h1 className='text-[#4B1979] font-bold sm:text-[14px]'>Nama Lengkap</h1>
+                      </div>
+                      <div className='sm:w-[454px] pt-[4px]'>
+                        <form className='border-[1px] border-[#D0D0D0] font-medium rounded-[4px] sm:text-[14px]'>
+                          <input
+                            type='text'
+                            placeholder='Harry'
+                            className='outline-none bg-transparent py-[8px] px-[16px]'
+                          />
+                        </form>
+                      </div>
+                      <div className='pt-[12px] flex justify-between'>
+                        <div>
+                          <h1 className='font-light sm:text-[14px]'>Punya Nama Keluarga?</h1>
+                        </div>
+                        <div>
+                          <Wrapper/>
+                        </div>
+                      </div>
+                      <div className='pt-[12px]'>
+                        <h1 className='text-[#4B1979] font-bold sm:text-[14px]'>Nama Keluarga</h1>
+                      </div>
+                      <div className='sm:w-[454px] pt-[4px]'>
+                        <form className='border-[1px] border-[#D0D0D0] font-medium rounded-[4px] sm:text-[14px]'>
+                          <input
+                            type='text'
+                            placeholder='Nama Keluarga'
+                            className='outline-none bg-transparent py-[8px] px-[16px]'
+                          />
+                        </form>
+                      </div>
+                      <div className='pt-[12px]'>
+                        <h1 className='text-[#4B1979] font-bold sm:text-[14px]'>Tanggal Lahir</h1>
+                      </div>
+                      <div className='sm:w-[454px] pt-[4px]'>
+                        <form className='border-[1px] border-[#D0D0D0] font-light rounded-[4px] flex justify-between items-center sm:text-[14px]'>
+                          <input
+                            type='text'
+                            placeholder='dd/mm/yy'
+                            className='outline-none bg-transparent py-[8px] px-[16px] placeholder-[#D0D0D0]'
+                          />
+                          <FiCalendar className='text-[24px] text-[#8A8A8A] pr-[10px]'/>
+                        </form>
+                      </div>
+                      <div className='pt-[12px]'>
+                        <h1 className='text-[#4B1979] font-bold sm:text-[14px]'>Kewarganegaraan</h1>
+                      </div>
+                      <div className='sm:w-[454px] pt-[4px]'>
+                        <form className='border-[1px] border-[#D0D0D0] font-medium rounded-[4px] sm:text-[14px]'>
+                          <input
+                            type='text'
+                            placeholder='Indonesia'
+                            className='outline-none bg-transparent py-[8px] px-[16px] placeholder-[#3C3C3C]'
+                          />
+                        </form>
+                      </div>
+                      <div className='pt-[12px]'>
+                        <h1 className='text-[#4B1979] font-bold sm:text-[14px]'>KTP/Paspor</h1>
+                      </div>
+                      <div className='sm:w-[454px] pt-[4px]'>
+                        <form className='border-[1px] border-[#D0D0D0] font-light rounded-[4px] sm:text-[14px]'>
+                          <input
+                            type='text'
+                            placeholder=''
+                            className='outline-none bg-transparent py-[8px] px-[16px]'
+                          />
+                        </form>
+                      </div>
+                      <div className='pt-[12px]'>
+                        <h1 className='text-[#4B1979] font-bold sm:text-[14px]'>Negara Penerbit</h1>
+                      </div>
+                      <div className='sm:w-[454px] pt-[4px]'>
+                        <form className='border-[1px] border-[#D0D0D0] font-light rounded-[4px] flex justify-between items-center sm:text-[14px]'>
+                          <input
+                            type='text'
+                            placeholder=''
+                            className='outline-none bg-transparent py-[8px] px-[16px]'
+                          />
+                          <FiChevronDown  className='text-[24px] text-[#8A8A8A] pr-[10px]'/>
+                        </form>
+                      </div>
+                      <div className='pt-[12px]'>
+                        <h1 className='text-[#4B1979] font-bold sm:text-[14px]'>Berlaku Sampai</h1>
+                      </div>
+                      <div className='sm:w-[454px] pt-[4px]'>
+                        <form className='border-[1px] border-[#D0D0D0] font-light rounded-[4px] flex justify-between items-center sm:text-[14px]'>
+                          <input
+                            type='text'
+                            placeholder='dd/mm/yy'
+                            className='outline-none bg-transparent py-[8px] px-[16px] placeholder-[#D0D0D0]'
+                          />
+                          <FiCalendar className='text-[24px] text-[#8A8A8A] pr-[10px]'/>
+                        </form>
+                      </div>
+                    </div>     
+                  </div>   */}
+                </div>      
+              </div>
 
-            <div className='pt-[24px]'>
-              <div className='isi_data border-[1px] border-[#8A8A8A] px-[16px] pt-[26px] pb-[42px] rounded-[4px] sm:w-[518px]'>
-                <div className='data_kursi'>
-                  <h1 className='font-bold text-[18px] sm:text-[20px]'>Pilih Kursi</h1>
-                </div>
-                <div className='pt-[16px] flex items-center'>
-                  <div className='data_diri bg-[#73CA5C] text-white font-medium py-[8px] px-[16px] w-full sm:w-[486px] rounded-[4px] items-center'>
-                    <h1 className='font-medium text-center text-[12px] sm:text-[14px]'>Economy - 64 Seats Available</h1>
+              <div className='pt-[24px]'>
+                <div className='isi_data border-[1px] border-[#8A8A8A] px-[16px] pt-[26px] pb-[42px] rounded-[4px] sm:w-[518px]'>
+                  <div className='data_kursi'>
+                    <h1 className='font-bold text-[18px] sm:text-[20px]'>Pilih Kursi</h1>
                   </div>
-                </div>
-                <div className='angka sm:px-[80px] pt-[15px]'>
-                  <div className='flex justify-between items-center text-[#8A8A8A] font-medium'>
-                    <div className='flex justify-between text-[12px] gap-2 sm:text-[14px]'>
-                      <h1 className='mx-[15px]'>A</h1>
-                      <h1 className='mx-[15px]'>B</h1>
-                      <h1 className='mx-[15px]'>C</h1>
-                    </div>
-                    <div className='flex justify-between text-[12px] gap-2 sm:text-[14px]'>
-                      <h1 className='mx-[16px]'>D</h1>
-                      <h1 className='mx-[16px]'>E</h1>
-                      <h1 className='mx-[16px]'>F</h1>
+                  <div className='pt-[16px] flex items-center'>
+                    <div className='data_diri bg-[#73CA5C] text-white font-medium py-[8px] px-[16px] w-full sm:w-[486px] rounded-[4px] items-center'>
+                      <h1 className='font-medium text-center text-[12px] sm:text-[14px]'>Economy - 64 Seats Available</h1>
                     </div>
                   </div>
-                  <div className='flex justify-between items-center gap-[5px] sm:gap-[20px] pt-[12px]'>
-                    <div className='kotak1 grid grid-cols-3 gap-3 mt-2 text-[#F2F2F2]'>
-                      {data.map((item, index) => (
-                        <div
-                          className={`bg-${item.value ? '[#73CA5C]' : '[#D0D0D0]'} w-[36px] h-[36px] rounded flex justify-center items-center`}
-                          key={index}
-                          // onClick={() => handleClick(index)}
-                        >
-                          {item.value ? '' : 'X'}
-                        </div>
-                      ))}
+                  <div className='angka sm:px-[80px] pt-[15px]'>
+                    <div className='flex justify-between items-center text-[#8A8A8A] font-medium'>
+                      <div className='flex justify-between text-[12px] gap-2 sm:text-[14px]'>
+                        <h1 className='mx-[15px]'>A</h1>
+                        <h1 className='mx-[15px]'>B</h1>
+                        <h1 className='mx-[15px]'>C</h1>
+                      </div>
+                      <div className='flex justify-between text-[12px] gap-2 sm:text-[14px]'>
+                        <h1 className='mx-[16px]'>D</h1>
+                        <h1 className='mx-[16px]'>E</h1>
+                        <h1 className='mx-[16px]'>F</h1>
+                      </div>
                     </div>
+                    <div className='flex justify-between items-center gap-[5px] sm:gap-[20px] pt-[12px]'>
+                      <div className='kotak1 grid grid-cols-3 gap-3 mt-2 text-[#F2F2F2]'>
+                        {datasatu.map((item, index) => (
+                          <div
+                            className={`bg-${item.value ? '[#73CA5C]' : '[#D0D0D0]'} w-[36px] h-[36px] rounded flex justify-center items-center`}
+                            key={index}
+                            // onClick={() => handleClick(index)}
+                          >
+                            {item.value ? '' : 'X'}
+                          </div>
+                        ))}
+                      </div>
 
-                    <div className='kotak2 grid grid-cols-1 gap-3 mt-2 flex text-center text-[12px]'>
-                      {Array.from({ length: 12 }, (_, index) => (
-                        <div
-                          key={index + 1}
-                          className='bg-[#F2F2F2] px-[5px] text-[#8A8A8A] w-[16px] h-[36px] rounded flex justify-center items-center'
-                        >
-                          {index + 1}
-                        </div>
-                      ))}
-                    </div>
+                      <div className='kotak2 grid grid-cols-1 gap-3 mt-2 flex text-center text-[12px]'>
+                        {Array.from({ length: 12 }, (_, index) => (
+                          <div
+                            key={index + 1}
+                            className='bg-[#F2F2F2] px-[5px] text-[#8A8A8A] w-[16px] h-[36px] rounded flex justify-center items-center'
+                          >
+                            {index + 1}
+                          </div>
+                        ))}
+                      </div>
 
-                    <div className='kotak3 grid grid-cols-3 gap-3 mt-2 text-[#F2F2F2]'>
-                      {datadua.map((item, index) => (
-                        <div
-                          className={`bg-${item.value ? '[#73CA5C]' : '[#D0D0D0]'} w-[36px] h-[36px] rounded flex justify-center items-center`}
-                          key={index}
-                          // onClick={() => handleClick(index)}
-                        >
-                          {item.value ? '' : 'X'}
-                        </div>
-                      ))}
+                      <div className='kotak3 grid grid-cols-3 gap-3 mt-2 text-[#F2F2F2]'>
+                        {datadua.map((item, index) => (
+                          <div
+                            className={`bg-${item.value ? '[#73CA5C]' : '[#D0D0D0]'} w-[36px] h-[36px] rounded flex justify-center items-center`}
+                            key={index}
+                            // onClick={() => handleClick(index)}
+                          >
+                            {item.value ? '' : 'X'}
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className='pt-[34px] pb-[132px]'>
-              <div onClick={handleSubmit} className='text-center bg-[#7126B5] py-[16px] px-[10px] rounded-[12px] shadow-md' style={{ boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)' }}>
-                <h1 className='text-[14px] sm:text-[16px] text-[#FFFFFF]'>Simpan</h1>
+              <div className='pt-[34px] pb-[132px]'>
+                <div onClick={handleSubmit} className='text-center bg-[#7126B5] py-[16px] px-[10px] rounded-[12px] shadow-md' style={{ boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)' }}>
+                  <h1 type="submit" className='text-[14px] sm:text-[16px] text-[#FFFFFF]'>Simpan</h1>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </form>
+
 
         <div className='colom_nomor'>
           <div className='sm:pl-[28px]'>
@@ -683,5 +712,5 @@ const Biodata = () => {
   );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Biodata);
+export default Biodata
 
