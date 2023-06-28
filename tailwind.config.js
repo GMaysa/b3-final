@@ -3,7 +3,14 @@ module.exports = {
   content: ["./src/**/*.{html,js,jsx,ts,tsx}"],
   theme: {
     fontFamily: {
-      poppins: ["Poppins", "sans-serif"],
+      poppins: ["Poppins", "sans-serif"], 
+    },
+    screens: {
+      'sm': {'max': '425px'},
+      //maxwidth
+      'md': '768px',
+      'lg': '1024px',
+      'xl': '1440px',
     },
     extend: {},
   },
