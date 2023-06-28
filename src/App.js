@@ -13,14 +13,13 @@ function App() {
   return (
     <Provider store={store}>
       <BrowserRouter>
-        {/* <Header/> */}
         <Navbar />
         <Routes>
           <Route path="/edit" element={<EditProfile />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/notification" element={<Notification />} />
           <Route path="/history" element={<FlightTicketHistory />} />
-          <Route path="/detail" element={<DetailHistory />} />
+          <Route path="/detail/:bookingCode" element={<DetailHistory />} />
         </Routes>
       </BrowserRouter>
     </Provider>

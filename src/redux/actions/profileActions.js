@@ -1,12 +1,12 @@
 import axios from "axios";
 import { toast } from "react-toastify";
-import { setHistorys, setHistoryDetail } from "../reducers/historyReducers";
+import { setProfile, setAccesstoken } from "../reducers/profileReducers";
 
-export const getHistory = () => async (dispatch) => {
+export const getProfile = () => async (dispatch) => {
   try {
     const accesstoken = localStorage.getItem("accesstoken");
     const { data } = await axios.get(
-      "https://gcpflypal-l5tho6hrtq-as.a.run.app/api/v1/transactions/history",
+      "https://gcpflypal-l5tho6hrtq-as.a.run.app/api/v1/user/profile",
       {
         headers: {
           Authorization: `Bearer ${accesstoken}`,
@@ -14,9 +14,10 @@ export const getHistory = () => async (dispatch) => {
       }
     );
 
-    dispatch(setHistorys(data.data));
+    dispatch(setProfile(data.data[0]));
   } catch (error) {
     if (axios.isAxiosError(error)) {
+      console.log(error);
       toast.error(error?.response?.data?.message);
       return;
     }
@@ -24,11 +25,17 @@ export const getHistory = () => async (dispatch) => {
   }
 };
 
-export const getHistoryDetail = (bookingCode) => async (dispatch) => {
+export const editProfile = (updatedProfile) => async (dispatch, getState) => {
   try {
     const accesstoken = localStorage.getItem("accesstoken");
-    const { data } = await axios.get(
-      `https://gcpflypal-l5tho6hrtq-as.a.run.app/api/v1/transactions/detail/${bookingCode}`,
+    const { data } = await axios.post(
+      "https://gcpflypal-l5tho6hrtq-as.a.run.app/api/v1/user/profile",
+      {
+        name: updatedProfile.name || null,
+        phone: updatedProfile.phone || null,
+        gender: updatedProfile.gender,
+        birthDate: updatedProfile.birthDate,
+      },
       {
         headers: {
           Authorization: `Bearer ${accesstoken}`,
@@ -36,8 +43,9 @@ export const getHistoryDetail = (bookingCode) => async (dispatch) => {
       }
     );
 
-    dispatch(setHistoryDetail(data.data[0]));
+    dispatch(setProfile(data.data[0]));
     console.log(data);
+    console.log("Profile updated successfully!");
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.log(error);

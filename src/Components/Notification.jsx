@@ -1,87 +1,133 @@
-import React, { useState } from "react";
-import { BiFilterAlt, BiSearch } from "react-icons/bi";
+import React, { useState, useEffect } from "react";
+import { BiSearch } from "react-icons/bi";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import { IoMdNotifications } from "react-icons/io";
 import { AiOutlineClose } from "react-icons/ai";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import ModalSearch from "./ModalSearch";
+import {
+  getNotif,
+  getFilter,
+  updateStatus,
+} from "../redux/actions/notifActions";
 
 const Notification = () => {
-  const [open, setOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
+  const [open, setOpen] = useState(false);
+  const [selectedType, setSelectedType] = useState("all");
+  const [updatedNotifications, setUpdatedNotifications] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchHistory, setSearchHistory] = useState([]);
+
+  const { notifs, filter, status } = useSelector((state) => state.notif);
+
+  // Modal Search
   const handleSearchClick = () => {
     setOpen(true);
   };
 
   const handleCloseModal = () => {
     setOpen(false);
+    setSearchResults([]);
   };
 
-  const notifications = [
-    {
-      id: 1,
-      status: "Promosi",
-      date: "20 Maret, 14:04",
-      message: "Dapatkan Potongan 50% Tiket!",
-      desk: "Syarat dan Ketentuan berlaku!",
-      type: "promosi",
-    },
-    {
-      id: 2,
-      status: "Notifikasi",
-      date: "5 Maret, 14:04",
-      message:
-        "Terdapat perubahan pada jadwal penerbangan kode booking 45GT6. Cek jadwal perjalanan Anda disini!",
-      desk: "",
-      type: "notifikasi",
-    },
-  ];
-
-  const [selectedType, setSelectedType] = useState("all");
+  // Filtering
+  const notifications = selectedType === "all" ? notifs : filter;
+  useEffect(() => {
+    dispatch(getNotif());
+  }, [dispatch]);
 
   const handleFilterChange = (event) => {
     setSelectedType(event.target.value);
+    dispatch(getFilter(event.target.value));
   };
 
-  const filteredNotifications = notifications.filter((notification) => {
-    const typeMatch =
-      selectedType === "all" || notification.type === selectedType;
-    const queryMatch =
-      searchQuery === "" ||
-      notification.message.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      notification.desk.toLowerCase().includes(searchQuery.toLowerCase());
-    return typeMatch && queryMatch;
-  });
+  // Searching
+  const displayedNotifications = isSearching
+    ? searchResults
+    : notifications &&
+      updatedNotifications
+        .filter(
+          (notif) =>
+            selectedType === "all" ||
+            notif.categoryName.toLowerCase() === selectedType.toLowerCase()
+        )
+        .filter(
+          (notif) =>
+            notif.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            notif.content.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+
+  const handleSearch = () => {
+    const results = notifications.filter(
+      (notif) =>
+        notif.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        notif.content.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    setSearchResults(results);
+    handleCloseModal();
+    setSearchHistory((prevHistory) => [searchQuery, ...prevHistory]);
+  };
 
   const handleSearchQueryChange = (event) => {
     setSearchQuery(event.target.value);
   };
 
-  const handleSearchQueryKeyPress = (event) => {
+  const handleSearchQueryKeyUp = (event) => {
     if (event.key === "Enter") {
-      handleCloseModal();
+      handleSearch();
     }
   };
+
+  const handleClearSearchHistory = () => {
+    setSearchHistory([]);
+  };
+
+  // Status
+  const handleStatusChange = async (notificationId) => {
+    try {
+      dispatch(updateStatus(notificationId));
+      const updatedNotifs = notifs.map((notif) =>
+        notif.notificationId === notificationId
+          ? { ...notif, read: true }
+          : notif
+      );
+      setUpdatedNotifications(updatedNotifs);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    setUpdatedNotifications(notifs);
+  }, [notifs]);
 
   return (
     <section className="px-7 sm:px-20 sm:py-16 py-10 w-full mx-auto font-poppins">
       <h1 className="font-bold text-xl">Notifikasi</h1>
-      <div className="py-4 px-2 flex gap-4 items-center">
-        <button className="flex gap-4 w-full h-9 rounded-lg items-center px-6 text-white bg-[#A06ECE] text-md">
+      <div className="py-4 px-2 flex gap-4 items-center pb-8">
+        <button
+          className="flex gap-4 w-full h-9 rounded-lg items-center px-6 text-white bg-[#A06ECE] text-md"
+          onClick={() => navigate("/beranda")}
+        >
           <AiOutlineArrowLeft className="h-7" />
           Beranda
         </button>
-        <button className="">
+        <button>
           <select
             id="filter"
             value={selectedType}
             onChange={handleFilterChange}
             className="border border-[#A06ECE] hidden sm:flex gap-2  text-sm px-1 rounded-2xl w-28 h-8 justify-center items-center"
           >
-            <BiFilterAlt className="text-gray-500" />
             <option value="all">Filter</option>
-            <option value="promosi">Promosi</option>
-            <option value="notifikasi">Notification</option>
+            <option value="Promo">Promosi</option>
+            <option value="Info">Information</option>
           </select>
         </button>
         <BiSearch
@@ -102,7 +148,7 @@ const Notification = () => {
                 className="border border-gray-300 text-black placeholder:text-gray-500 placeholder:text-xs rounded-sm px-10 h-8 w-full"
                 value={searchQuery}
                 onChange={handleSearchQueryChange}
-                onKeyPress={handleSearchQueryKeyPress}
+                onKeyUp={handleSearchQueryKeyUp}
               />
             </div>
             <button
@@ -117,9 +163,19 @@ const Notification = () => {
             <div className="flex justify-between py-5 gap-6">
               <h1 className="text-xs">Pencarian Terkini</h1>
               <p className="text-red-600 text-xs justify-items-end flex">
-                Hapus
+                <button
+                  onClick={handleClearSearchHistory}
+                  className="underline focus:outline-none"
+                >
+                  Hapus
+                </button>
               </p>
             </div>
+            {searchHistory.map((query) => (
+              <p key={query} className="text-xs">
+                {query}
+              </p>
+            ))}
           </div>
         </ModalSearch>
       </div>
@@ -133,39 +189,48 @@ const Notification = () => {
           className="sm:hidden border border-[#A06ECE] text-sm px-1 rounded-2xl w-28 h-9 justify-center items-center"
         >
           <option value="all">Filter</option>
-          <option value="promosi">Promosi</option>
-          <option value="notifikasi">Notification</option>
+          <option value="Promo">Promo</option>
+          <option value="Info">Information</option>
         </select>
       </div>
 
       {/* body */}
-      {filteredNotifications.map((notification) => (
-        <div className="flex gap-4 px-4 pb-9 w-full" key={notification.id}>
+      {displayedNotifications.map((notif) => (
+        <div className="flex gap-4 px-4 pb-9 w-full" key={notif.notificationId}>
           <div className="pt-1">
-            <button className="bg-[#A06ECE] rounded-full p-1">
+            <button
+              className="bg-[#A06ECE] rounded-full p-1"
+              style={{
+                backgroundColor: notif.read ? "#73CA5C" : "red",
+              }}
+              onClick={() => {
+                if (!notif.read) {
+                  handleStatusChange(notif.notificationId);
+                }
+              }}
+            >
               <IoMdNotifications className="text-white" />
             </button>
           </div>
           <div className="w-full mx-auto">
             <div className="flex">
-              <h6 className="text-gray-500 ">{notification.status}</h6>
+              <h6 className="text-gray-500">{notif.categoryName}</h6>
               <p className="text-gray-500 justify-end flex gap-3 items-center text-sm w-full">
-                {notification.date}
-                <div
+                {new Date(notif.createdAt * 1000).toLocaleDateString("en-GB")}
+                <span
                   className={`rounded-full text-center justify-items-center p-1 h-1 items-center ${
-                    notification.type === "promosi"
-                      ? "bg-[#73CA5C]"
-                      : notification.type === "notifikasi"
-                      ? "bg-red-600"
-                      : notification.type === "error"
-                      ? "bg-red-100"
-                      : ""
+                    notif.read ? "bg-[#73CA5C]" : "bg-red-600"
                   }`}
-                ></div>
+                  onClick={() => {
+                    if (!notif.read) {
+                      handleStatusChange(notif.notificationId);
+                    }
+                  }}
+                ></span>
               </p>
             </div>
-            <p className="text-base font-medium">{notification.message}</p>
-            <p className="text-gray-500 text-sm"> {notification.desk}</p>
+            <p className="text-base font-medium">{notif.title}</p>
+            <p className="text-gray-500 text-sm"> {notif.content}</p>
           </div>
         </div>
       ))}

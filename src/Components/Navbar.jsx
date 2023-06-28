@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import { FiUser, FiList, FiBell, FiLogOut, FiEdit3 } from "react-icons/fi";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const location = useLocation();
 
   const [sticky, setSticky] = useState(false);
   const [isOpen, setIsOpen] = useState(false);

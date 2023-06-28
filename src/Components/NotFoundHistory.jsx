@@ -1,27 +1,7 @@
-import React, { useState } from "react";
-
-import { BiFilterAlt, BiSearch } from "react-icons/bi";
-import { AiOutlineArrowLeft, AiOutlineClose } from "react-icons/ai";
+import React from "react";
 import img from "../assets/error.png";
-import ModalSearch from "./ModalSearch";
-import DateRangeFilter from "./DateRangeFilter";
 
 const NotFoundHistory = () => {
-  const [open, setOpen] = useState(false);
-  const [showFilterModal, setShowFilterModal] = useState(false);
-
-  const handleSearchClick = () => {
-    setOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setOpen(false);
-  };
-
-  const handleFilterClick = () => {
-    setShowFilterModal(true);
-  };
-
   return (
     <section className="pt-16 sm:pt-20 px-7 sm:px-20 sm:py-16 py-10 w-full mx-auto font-poppins">
       <div className="flex flex-col text-center items-center justify-center">
