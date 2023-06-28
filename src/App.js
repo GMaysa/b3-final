@@ -1,12 +1,15 @@
-import './App.css';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Biodata from './pages/Biodata';
-import Header from './components/Header';
-import Payment from './pages/Payment';
-import PaymentSuccess from './pages/PaymentSuccess';
-import { Provider } from 'react-redux';
-import store from './redux/store';
+import "./App.css";
+import "react-toastify/dist/ReactToastify.css";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Biodata from "./pages/Biodata";
+import Header from "./components/Header";
+import Payment from "./pages/Payment";
+import PaymentSuccess from "./pages/PaymentSuccess";
+import { Provider } from "react-redux";
+import store from "./redux/store";
 import { useEffect } from "react";
+import PayConfirm from "./pages/PayConfirm";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   useEffect(() => {
@@ -28,17 +31,21 @@ function App() {
   return (
     <Provider store={store}>
       <BrowserRouter>
-      <Header/>
+        <Header />
         <Routes>
-          <Route path='/' element={<Biodata/>}></Route>
+          <Route path="/" element={<Biodata />}></Route>
         </Routes>
         <Routes>
-          <Route path='/pay' element={<Payment/>}></Route>
+          <Route path="/pay" element={<Payment />}></Route>
         </Routes>
         <Routes>
-          <Route path='/paysuccess' element={<PaymentSuccess/>}></Route>
+          <Route path="/payconfirm" element={<PayConfirm />}></Route>
+        </Routes>
+        <Routes>
+          <Route path="/paysuccess" element={<PaymentSuccess />}></Route>
         </Routes>
       </BrowserRouter>
+      <ToastContainer />
     </Provider>
   );
 }
