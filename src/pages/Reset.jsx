@@ -16,10 +16,10 @@ const Reset = () => {
   };
 
     return (
-      <div className='flex font-Poppins sm:block'>
-      <img src={wp} className='w-1/2 h-screen object-cover object-left-top md:block sm:hidden'/>
+      <div className='flex font-Poppins h-screen'>
+      <img src={wp} className='w-1/2 h-screen object-cover object-left-top smm:hidden '/>
   
-    <div className='w-1/2 my-auto sm:mx-auto sm:w-full'>
+    <div className='w-1/2 m-auto smm:m-auto smm:w-full'>
       <div className='max-w-lg m-auto p-10'>
       <h1 className="font-bold mb-6 text-[24px]"> Reset Password</h1>
   
