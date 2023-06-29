@@ -1,20 +1,28 @@
 import React, { useEffect, useState } from "react";
 import { BiFilterAlt, BiSearch } from "react-icons/bi";
-import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
-import { AiOutlineClose } from "react-icons/ai";
+import { AiOutlineArrowLeft, AiOutlineClose } from "react-icons/ai";
+import { FaPlaneDeparture, FaPlaneArrival, FaPlane } from "react-icons/fa";
 import Detail from "../pages/DetailHistory";
 import ModalSearch from "./ModalSearch";
 import DateRangeFilter from "./DateRangeFilter";
+import NotFoundHistory from "./NotFoundHistory";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { FaPlaneDeparture, FaPlaneArrival, FaPlane } from "react-icons/fa";
+import { getHistory, getHistoryDetail } from "../redux/actions/historyActions";
 
 const FlightTicketHistory = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { historys } = useSelector((state) => state.history);
+
+  useEffect(() => {
+    dispatch(getHistory());
+  }, [dispatch]);
 
   const [open, setOpen] = useState(false);
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [selectedDetailId, setSelectedDetailId] = useState(null);
   const [selectedCardId, setSelectedCardId] = useState(null);
 
   const handleSearchClick = () => {
@@ -25,11 +33,16 @@ const FlightTicketHistory = () => {
     setOpen(false);
   };
 
-  const handleClickDetail = (id) => {
+  const handleClickDetail = async (bookingCode) => {
     if (isMobile) {
-      navigate("/detail");
+      navigate(`/detail/${bookingCode}`);
     } else {
-      setSelectedCardId(id);
+      if (selectedCardId === bookingCode) {
+        setSelectedCardId(null);
+      } else {
+        setSelectedCardId(bookingCode);
+        dispatch(getHistoryDetail(bookingCode));
+      }
     }
   };
 
@@ -49,38 +62,6 @@ const FlightTicketHistory = () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-
-  // data
-  const data = [
-    {
-      id: 1,
-      status: "Issued",
-      class: "Economy Class",
-      from: "Jakarta",
-      dateFrom: "5 Maret 2023",
-      timeFrom: "19.10",
-      range: "4h 0m",
-      to: "Melbern",
-      dateTo: "5 Maret 2023",
-      timeTo: "20.10",
-      code: "6723y2GHK",
-      price: "9.850.000",
-    },
-    {
-      id: 2,
-      status: "Issued",
-      class: "Economy Class",
-      from: "Jakarta",
-      dateFrom: "5 Maret 2023",
-      timeFrom: "19.10",
-      range: "4h 0m",
-      to: "Melbern",
-      dateTo: "5 Maret 2023",
-      timeTo: "20.10",
-      code: "6723y2GHK",
-      price: "9.850.000",
-    },
-  ];
 
   return (
     <section className="pt-16 sm:pt-20 px-7 sm:px-20 sm:py-16 py-10 w-full mx-auto font-poppins">
@@ -160,96 +141,165 @@ const FlightTicketHistory = () => {
         </button>
       </div>
 
-      {data.map((item) => (
-        <div
-          className={`lg:flex ${isMobile ? "flex-col" : "gap-6"}`}
-          key={item.id}
-        >
-          {/* card-left */}
-          <div
-            className={`border hover:border-[#A06ECE] shadow-sm p-4 py-4 rounded-lg h-full w-full ${
-              isMobile ? "mb-7" : "mb-16"
-            }`}
-            onClick={() => handleClickDetail(item.id)}
-          >
-            <div className="flex justify-between gap-3 pb-8">
-              <div>
-                <button className="bg-[#73CA5C] text-white rounded-full px-3 py-1 text-sm">
-                  {item.status}
-                </button>
-              </div>
-
-              <div className="items-center flex gap-2">
-                <button className="bg-black rounded-full p-1 h-1 items-center"></button>
-                <p className="text-xs">{item.class}</p>
-              </div>
-            </div>
-
-            <div
-              className={`flex ${
-                isMobile ? "flex-row" : "flex-row"
-              } gap-3 pb-5 items-center`}
-            >
+      {historys.length > 0 ? (
+        <div className="flex gap-5 w-full mx-auto">
+          {/* left card */}
+          <div className="w-full lg:w-1/2">
+            {historys.map((history) => (
               <div
-                className={`flex gap-2 ${isMobile ? "mt-3" : "mx-auto"} w-1/2`}
+                className={`lg:flex ${isMobile ? "flex-col" : "gap-6"}`}
+                key={history.transactionId}
               >
-                <div className="pt-4 p-1 flex ">
-                  <FaPlaneDeparture className="h-4 text-gray-500" />
-                </div>
-                <div>
-                  <h6 className="text-black font-bold">{item.from}</h6>
-                  <p className="text-xs">{item.dateFrom}</p>
-                  <p className="text-xs">{item.timeFrom}</p>
-                </div>
-              </div>
-              <div className="flex flex-col items-center justify-items-center w-full">
-                <p className="pb-1 text-xs">{item.range}</p>
-                <div className="flex items-center justify-center w-full">
-                  <div className="w-1/3 border-b border-dashed border-[#A06ECE] h-px" />
-                  <FaPlane className="w-4 h-4 text-[#A06ECE]" />
-                  <div className="w-1/3 border-b border-dashed border-[#A06ECE] h-px" />
-                </div>
-              </div>
-              <div
-                className={`flex gap-2 ${isMobile ? "mt-3" : "mx-auto"} w-full`}
-              >
-                <div className="pt-4 p-1 flex">
-                  <FaPlaneArrival className="h-4 text-gray-500" />
-                </div>
-                <div>
-                  <h6 className="text-black font-bold">{item.to}</h6>
-                  <p className="text-xs">{item.dateTo}</p>
-                  <p className="text-xs">{item.timeTo}</p>
-                </div>
-              </div>
-            </div>
-            <hr className="w-full border-1 border-gray-200" />
-            <div className="flex flex-row justify-between gap-6 w-full py-5 px-3 items-center">
-              <div className="flex flex-col">
-                <p className="font-bold text-sm">Booking Code</p>
-                <p className="text-xs">{item.code}</p>
-              </div>
+                <div
+                  className={`border hover:border-[#A06ECE] shadow-sm p-2 sm:p-4 py-4 rounded-lg h-full w-full ${
+                    isMobile ? "mb-7" : "mb-10"
+                  }`}
+                  onClick={() => handleClickDetail(history.bookingCode)}
+                >
+                  <div className="flex justify-between gap-3 pb-8 cursor-pointer">
+                    <div>
+                      <button
+                        className={`rounded-full px-4 py-2 ${
+                          history.statusId === 1
+                            ? "bg-red-500 text-white"
+                            : history.statusId === 2
+                            ? "bg-gray-700 text-white"
+                            : ""
+                        }`}
+                      >
+                        {history.status}
+                      </button>
+                    </div>
 
-              <div className="font-bold text-[#4B1979] text-sm">
-                IDR {item.price}
+                    <div className="items-center flex gap-2">
+                      <button className="bg-black rounded-full p-1 h-1 items-center"></button>
+                      <p className="text-xs">
+                        {history.roundTrip ? "Round Trip" : "One Trip"}
+                      </p>
+                    </div>
+                  </div>
+                  <div
+                    className={`flex ${
+                      isMobile ? "flex-row" : "flex-row"
+                    } gap-3 pb-5 items-center`}
+                  >
+                    <div
+                      className={`flex gap-2 ${
+                        isMobile ? "mt-3" : "mx-auto"
+                      } w-1/2`}
+                    >
+                      <div className="pt-4 p-1 flex ">
+                        <FaPlaneDeparture className="h-4 text-gray-500" />
+                      </div>
+                      <div>
+                        <h6 className="text-black font-bold text-sm sm:text-base">
+                          {history.depCity}
+                        </h6>
+                        <p className="text-xs">
+                          {new Date(
+                            history.depDepDate * 1000
+                          ).toLocaleTimeString("en-US", {
+                            hour: "numeric",
+                            minute: "numeric",
+                            hour12: true,
+                          })}
+                        </p>
+                        <p className="text-xs">{history.depSeatClass}</p>
+                      </div>
+                    </div>
+                    <div className="flex flex-col items-center justify-items-center w-full">
+                      <p className="pb-1 text-xs">
+                        {(() => {
+                          const depDepDate = new Date(
+                            history.depDepDate * 1000
+                          );
+                          const depArrDate = new Date(
+                            history.depArrDate * 1000
+                          );
+
+                          const durationInMillis =
+                            depArrDate.getTime() - depDepDate.getTime();
+                          const durationInMinutes = Math.floor(
+                            durationInMillis / 60000
+                          );
+                          const hours = Math.floor(durationInMinutes / 60);
+                          const minutes = durationInMinutes % 60;
+
+                          return `${hours}h  ${minutes}m`;
+                        })()}
+                      </p>
+
+                      <div className="flex items-center justify-center w-full">
+                        <div className="w-1/3 border-b border-dashed border-[#A06ECE] h-px" />
+                        <FaPlane className="w-4 h-4 text-[#A06ECE]" />
+                        <div className="w-1/3 border-b border-dashed border-[#A06ECE] h-px" />
+                      </div>
+                    </div>
+                    <div
+                      className={`flex gap-2 ${
+                        isMobile ? "mt-3" : "mx-auto"
+                      } w-full`}
+                    >
+                      <div className="pt-4 p-1 flex">
+                        <FaPlaneArrival className="h-4 text-gray-500" />
+                      </div>
+                      <div>
+                        <h6 className="text-black font-bold text-xs sm:text-base">
+                          {history.arrCity}
+                        </h6>
+                        <p className="text-xs">
+                          {new Date(
+                            history.depArrDate * 1000
+                          ).toLocaleTimeString("en-US", {
+                            hour: "numeric",
+                            minute: "numeric",
+                            hour12: true,
+                          })}
+                        </p>
+                        <p className="text-xs">{history.arrSeatClass}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <hr className="w-full border-1 border-gray-200" />
+                  <div className="flex flex-row justify-between gap-6 w-full pt-5 px-5 items-center">
+                    <div className="flex flex-col">
+                      <p className="font-bold text-sm">Booking Code</p>
+                      <p className="text-xs">{history.bookingCode}</p>
+                    </div>
+
+                    <div className="font-bold text-[#4B1979] text-sm">
+                      IDR {history.totalPrice.toLocaleString()}
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div className="justify-end flex mx-auto pt-7 pb-6 sm:pb-2 text-white">
-              <button className="flex gap-1 rounded-full w-20 h-7 text-xs justify-center items-center bg-[#A06ECE]">
-                more
-                <AiOutlineArrowRight className="" />
-              </button>
-            </div>
+            ))}
           </div>
 
-          {/* card-right */}
-          {selectedCardId === item.id && !isMobile && (
-            <div className="lg:w-[80vw] lg:flex flex-col">
-              <Detail />
-            </div>
-          )}
+          {/* right card */}
+          <div
+            className={`rounded shadow w-1/2 justify-center flex ${
+              isMobile ? "hidden" : ""
+            }`}
+          >
+            {selectedCardId !== null && !isMobile ? (
+              <div className="lg:flex flex-col w-full x">
+                {historys ? (
+                  <Detail bookingCode={selectedCardId} />
+                ) : (
+                  <p>Loading detail...</p>
+                )}
+              </div>
+            ) : (
+              <p className="flex items-center justify-center text-xs">
+                Klik card untuk melihat detail
+              </p>
+            )}
+          </div>
         </div>
-      ))}
+      ) : (
+        <NotFoundHistory />
+      )}
     </section>
   );
 };

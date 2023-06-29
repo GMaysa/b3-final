@@ -18,7 +18,7 @@ import { ToastContainer } from "react-toastify";
 import RedirectIfProtected from "./Components/RedirectIfProtected";
 import Protected from "./Components/Protected";
 import Header from "./components/Header";
-
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
@@ -51,4 +51,5 @@ function App() {
     </Provider>
   );
 }
+
 export default App;
