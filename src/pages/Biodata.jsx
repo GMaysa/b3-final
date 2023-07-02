@@ -14,79 +14,180 @@ import {
 import { getSeatDetails, updateSeatStatus } from "../redux/actions/seatActions";
 
 const Biodata = () => {
+  const indexnya = 1;
   const dispatch = useDispatch();
-  const [costumer, setCostumer] = useState("");
-  const [passengers, setPassengers] = useState("");
-  const [fullName, setFullName] = useState("");
-  const [familyName, setFamilyName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
-  const [title, setTitle] = useState("");
-  const [nationality, setNationality] = useState("");
-  const [identityNumber, setIdentityNumber] = useState();
-  const [issuingCountry, setIssuingCountry] = useState("");
-  const [availableUntil, setAvailableUntil] = useState("");
-  const [birthDate, setBirthDate] = useState("");
+  const [selectedSeats, setSelectedSeats] = useState({});
+  const [fullNameCos, setFullNameCos] = useState("");
+  const [familyNameCos, setFamilyNameCos] = useState("");
+  const [phoneCos, setPhoneCos] = useState("");
+  const [emailCos, setEmailCos] = useState("");
 
+  const [fullNamePasValues, setFullNamePasValues] = useState(
+    Array.from({ length: indexnya }, () => "")
+  );
+  const [familyNamePasValues, setFamilyNamePasValues] = useState(
+    Array.from({ length: indexnya }, () => "")
+  );
+  const [birthDatePasValues, setBirthDatePasValues] = useState(
+    Array.from({ length: indexnya }, () => "")
+  );
+  const [nationalityPasValues, setNationalityPasValues] = useState(
+    Array.from({ length: indexnya }, () => "")
+  );
+  const [issuingCountryPasValues, setIssuingCountryPasValues] = useState(
+    Array.from({ length: indexnya }, () => "")
+  );
+  const [availableUntilPasValues, setAvailableUntilPasValues] = useState(
+    Array.from({ length: indexnya }, () => "")
+  );
+  const [identityNumberPasValues, setIdentityNumberPasValues] = useState(
+    Array.from({ length: indexnya }, () => "")
+  );
+
+  const [maxSelectedSeats, setMaxSelectedSeats] = useState(1);
+  const [showFamilyName, setShowFamilyName] = useState(false);
   const navigate = useNavigate();
   const { seatDetails } = useSelector((state) => state.seat);
+  // const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [departSeatIds, setDepartSeatIds] = useState([]);
 
-  const handleSeatClick = (seatId) => {
-    dispatch(updateSeatStatus(seatId));
+  const handleToggleSwitch = () => {
+    setShowFamilyName(!showFamilyName);
   };
 
-  const handleSubmit = (event) => {
+  const [selectedTitle, setSelectedTitle] = useState(
+    Array(indexnya).fill("Mr.")
+  );
+  const [isDropdownOpen, setIsDropdownOpen] = useState(
+    Array(indexnya).fill(false)
+  );
+
+  const handleToggleDropdown = (index) => {
+    setIsDropdownOpen((prevState) => {
+      const updatedState = [...prevState];
+      updatedState[index] = !updatedState[index];
+      return updatedState;
+    });
+  };
+
+  const handleTitleSelect = (title, index) => {
+    setSelectedTitle((prevState) => {
+      const updatedTitles = [...prevState];
+      updatedTitles[index] = title;
+      return updatedTitles;
+    });
+    setIsDropdownOpen((prevState) => {
+      const updatedState = [...prevState];
+      updatedState[index] = false;
+      return updatedState;
+    });
+  };
+
+  const toggleSeatSelection = (seatId) => {
+    const seatData = seatDetails.data.find((data) => data.seatId === seatId);
+    if (!seatData || seatData.booked) return;
+
+    const isSeatSelected = selectedSeats.hasOwnProperty(seatId);
+
+    setSelectedSeats((prevSelectedSeats) => {
+      if (isSeatSelected) {
+        const updatedSelectedSeats = { ...prevSelectedSeats };
+        delete updatedSelectedSeats[seatId];
+        return updatedSelectedSeats;
+      } else if (Object.keys(prevSelectedSeats).length < maxSelectedSeats) {
+        let updatedSelectedSeats = { ...prevSelectedSeats };
+        const seatNames = Object.values(prevSelectedSeats);
+        let seatNameToAdd = null;
+
+        for (let i = 1; i <= maxSelectedSeats; i++) {
+          const seatName = `P${i}`;
+
+          if (!seatNames.includes(seatName)) {
+            seatNameToAdd = seatName;
+            updatedSelectedSeats = {
+              ...updatedSelectedSeats,
+              [seatId]: seatName,
+            };
+            break;
+          }
+        }
+
+        if (seatNameToAdd !== null) {
+          return updatedSelectedSeats;
+        }
+      }
+      return prevSelectedSeats;
+    });
+
+    setDepartSeatIds((prevDepartSeatIds) => {
+      if (isSeatSelected) {
+        return prevDepartSeatIds.filter((id) => id !== seatId);
+      } else if (Object.keys(selectedSeats).length < maxSelectedSeats) {
+        return [...prevDepartSeatIds, seatId];
+      }
+      return prevDepartSeatIds;
+    });
+  };
+
+  console.log(departSeatIds);
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = {
-      booking: {
-        departFlightId: 1,
-        returnFlightId: 3,
-        departClassId: 1,
-        returnClassId: 2,
-        costumer: {
-          fullName: fullName,
-          familyName: familyName,
-          phone: phone,
-          email: email,
+
+    try {
+      // Update seat status for selected seats
+      await Promise.all(
+        departSeatIds.map((seatId) => dispatch(updateSeatStatus(seatId, true)))
+      );
+
+      const passengersData = fullNamePasValues.map((fullName, index) => ({
+        fullName: fullName,
+        familyName: familyNamePasValues[index],
+        title: selectedTitle[index],
+        birthDate: birthDatePasValues[index],
+        nationality: nationalityPasValues[index],
+        identityNumber: identityNumberPasValues[index],
+        issuingCountry: issuingCountryPasValues[index],
+        availableUntil: availableUntilPasValues[index],
+      }));
+
+      const data = {
+        booking: {
+          departFlightId: 4,
+          // returnFlightId: 3,
+          departClassId: 1,
+          //returnClassId: 2,
+          costumer: {
+            fullName: fullNameCos,
+            familyName: familyNameCos,
+            phone: phoneCos,
+            email: emailCos,
+          },
+          passengers: passengersData,
+          departSeatIds: departSeatIds.map((seatId) => seatId),
+          // returnSeatIds: [17, 17],
         },
-        passengers: [
-          {
-            fullName: fullName,
-            familyName: familyName,
-            title: title,
-            birthDate: birthDate,
-            nationality: nationality,
-            identityNumber: identityNumber,
-            issuingCountry: issuingCountry,
-            availableUntil: availableUntil,
-          },
-          {
-            fullName: fullName,
-            familyName: familyName,
-            title: title,
-            birthDate: birthDate,
-            nationality: nationality,
-            identityNumber: identityNumber,
-            issuingCountry: issuingCountry,
-            availableUntil: availableUntil,
-          },
-        ],
-        departSeatIds: [65, 65],
-        returnSeatIds: [65, 65],
-      },
-      payment: null,
-    };
-    dispatch(postBookingDetails(data, navigate));
+        payment: null,
+      };
+
+      // Dispatch action to send booking details to API
+      dispatch(postBookingDetails(data, navigate));
+    } catch (error) {
+      // Handle error
+    }
   };
 
   useEffect(() => {
     dispatch(getSeatDetails());
   }, [dispatch]);
 
-  const handleClick = (index) => {
-    // Handle click event here
-    // Modify the seatDetails or perform any desired action
-  };
+  function unixToDateString(unixTimestamp) {
+    const date = new Date(unixTimestamp * 1000);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  }
 
   const { booking } = useSelector((state) => state.book);
 
@@ -124,41 +225,57 @@ const Biodata = () => {
                 </h1>
               </div>
               <div className="sm:w-[454px] pt-[4px]">
-                <form className="border-[1px] border-[#D0D0D0] text-[12px] sm:text-[14px] font-medium rounded-[4px]">
+                <form className="text-[12px] sm:text-[14px] font-light rounded-[4px]">
                   <input
                     type="text"
-                    value={booking?.costumer?.fullName}
-                    onChange={(e) => setFullName(e.target.value)}
+                    value={booking?.costumer?.fullNameCos}
+                    onChange={(e) => setFullNameCos(e.target.value)}
                     placeholder="Nama Lengkap"
-                    className="outline-none bg-transparent py-[8px] px-[16px]"
+                    className="outline-none bg-transparent rounded-[4px] border-gray-300"
+                    style={{ width: "100%", maxWidth: "500px" }}
                   />
                 </form>
               </div>
-              <div className="pt-[12px] flex justify-between">
-                <div>
-                  <h1 className="font-light text-[12px] sm:text-[14px]">
-                    Punya Nama Keluarga?
-                  </h1>
+
+              <div>
+                <div className="pt-[12px] flex justify-between">
+                  <div>
+                    <h1 className="font-light text-[12px] sm:text-[14px]">
+                      Punya Nama Keluarga?
+                    </h1>
+                  </div>
+                  <div>
+                    <input
+                      className="mr-2 mt-[0.3rem] h-3.5 w-8 appearance-none rounded-[0.4375rem] bg-neutral-300 before:pointer-events-none before:absolute before:h-3.5 before:w-3.5 before:rounded-full before:bg-transparent before:content-[''] after:absolute after:z-[2] after:-mt-[0.1875rem] after:h-5 after:w-5 after:rounded-full after:border-none after:bg-neutral-100 after:shadow-[0_0px_3px_0_rgb(0_0_0_/_7%),_0_2px_2px_0_rgb(0_0_0_/_4%)] after:transition-[background-color_0.2s,transform_0.2s] after:content-[''] checked:bg-primary checked:after:absolute checked:after:z-[2] checked:after:-mt-[3px] checked:after:ml-[1.0625rem] checked:after:h-5 checked:after:w-5 checked:after:rounded-full checked:after:border-none checked:after:bg-primary checked:after:shadow-[0_3px_1px_-2px_rgba(0,0,0,0.2),_0_2px_2px_0_rgba(0,0,0,0.14),_0_1px_5px_0_rgba(0,0,0,0.12)] checked:after:transition-[background-color_0.2s,transform_0.2s] checked:after:content-[''] hover:cursor-pointer focus:outline-none focus:ring-0 focus:before:scale-100 focus:before:opacity-[0.12] focus:before:shadow-[3px_-1px_0px_13px_rgba(0,0,0,0.6)] focus:before:transition-[box-shadow_0.2s,transform_0.2s] focus:after:absolute focus:after:z-[1] focus:after:block focus:after:h-5 focus:after:w-5 focus:after:rounded-full focus:after:content-[''] checked:focus:border-primary checked:focus:bg-primary checked:focus:before:ml-[1.0625rem] checked:focus:before:scale-100 checked:focus:before:shadow-[3px_-1px_0px_13px_#3b71ca] checked:focus:before:transition-[box-shadow_0.2s,transform_0.2s] dark:bg-neutral-600 dark:after:bg-neutral-400 dark:checked:bg-primary dark:checked:after:bg-primary dark:focus:before:shadow-[3px_-1px_0px_13px_rgba(255,255,255,0.4)] dark:checked:focus:before:shadow-[3px_-1px_0px_13px_#3b71ca]"
+                      type="checkbox"
+                      role="switch"
+                      id="flexSwitchCheckDefault"
+                      onChange={handleToggleSwitch}
+                      checked={showFamilyName}
+                    />
+                  </div>
                 </div>
-                <div>
-                  <Wrapper />
-                </div>
-              </div>
-              <div className="pt-[12px]">
-                <h1 className="text-[#4B1979] font-bold text-[12px] sm:text-[14px]">
-                  Nama Keluarga
-                </h1>
-              </div>
-              <div className="sm:w-[454px] pt-[4px]">
-                <form className="border-[1px] border-[#D0D0D0] font-medium rounded-[4px] text-[12px] sm:text-[14px]">
-                  <input
-                    type="text"
-                    value={booking?.costumer?.familyName}
-                    onChange={(e) => setFamilyName(e.target.value)}
-                    placeholder="Nama Keluarga"
-                    className="outline-none bg-transparent py-[8px] px-[16px]"
-                  />
-                </form>
+                {showFamilyName && (
+                  <div>
+                    <div className="pt-[12px]">
+                      <h1 className="text-[#4B1979] font-bold text-[12px] sm:text-[14px]">
+                        Nama Keluarga
+                      </h1>
+                    </div>
+                    <div className="sm:w-[454px] pt-[4px]">
+                      <form className="font-light rounded-[4px] text-[12px] sm:text-[14px]">
+                        <input
+                          type="text"
+                          value={familyNameCos}
+                          onChange={(e) => setFamilyNameCos(e.target.value)}
+                          placeholder="Nama Keluarga"
+                          className="outline-none bg-transparent rounded-[4px] border-gray-300"
+                          style={{ width: "100%", maxWidth: "500px" }}
+                        />
+                      </form>
+                    </div>
+                  </div>
+                )}
               </div>
               <div className="pt-[12px]">
                 <h1 className="text-[#4B1979] font-bold text-[12px] sm:text-[14px]">
@@ -166,13 +283,14 @@ const Biodata = () => {
                 </h1>
               </div>
               <div className="sm:w-[454px] pt-[4px]">
-                <form className="border-[1px] border-[#D0D0D0] font-medium rounded-[4px] text-[12px] sm:text-[14px]">
+                <form className="font-light rounded-[4px] text-[12px] sm:text-[14px]">
                   <input
                     type="text"
-                    value={booking?.costumer?.phone}
+                    value={booking?.costumer?.phoneCos}
                     placeholder="Nomor Telepon"
-                    onChange={(e) => setPhone(e.target.value)}
-                    className="outline-none bg-transparent py-[8px] px-[16px]"
+                    onChange={(e) => setPhoneCos(e.target.value)}
+                    className="outline-none bg-transparent rounded-[4px] border-gray-300"
+                    style={{ width: "100%", maxWidth: "500px" }}
                   />
                 </form>
               </div>
@@ -182,334 +300,266 @@ const Biodata = () => {
                 </h1>
               </div>
               <div className="sm:w-[454px] pt-[4px]">
-                <form className="border-[1px] border-[#D0D0D0] font-light rounded-[4px] text-[12px] sm:text-[14px]">
+                <form className="font-light rounded-[4px] text-[12px] sm:text-[14px]">
                   <input
                     type="text"
-                    value={booking?.costumer?.email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    value={booking?.costumer?.emailCos}
+                    onChange={(e) => setEmailCos(e.target.value)}
                     placeholder="Email"
-                    className="outline-none bg-transparent py-[8px] px-[16px]"
+                    className="outline-none bg-transparent rounded-[4px] border-gray-300"
+                    style={{ width: "100%", maxWidth: "500px" }}
                   />
                 </form>
               </div>
             </div>
           </div>
 
-          <div className="pt-[24px]">
-            <div className="isi_data border-[1px] border-[#8A8A8A] px-[16px] pt-[26px] pb-[42px] rounded-[4px] sm:w-[518px]">
-              <div className="text-[12px]">
-                <div className="data_pemesanan">
-                  <h1 className="font-bold text-xl sm:text-[14px]">
-                    Isi Data Penumpang
-                  </h1>
-                </div>
-                <div className="pt-[16px]">
-                  <div className="data_diri bg-[#3C3C3C] text-white font-medium py-[8px] px-[16px] sm:w-[486px] rounded-t-[10px]">
-                    <h1 className="font-medium sm:text-[14px]">
-                      Data Diri Penumpang 1 - Adult
+          <div className="pt-[4px] outline-none">
+            {Array.from({ length: indexnya }).map((_, index) => (
+              <div
+                key={index}
+                className="mt-[30px] isi_data border-[1px] border-[#8A8A8A] px-[16px] pt-[26px] pb-[42px] rounded-[4px] sm:w-[518px]"
+              >
+                <div className="text-[12px]">
+                  <div className="data_pemesanan">
+                    <h1 className="font-bold text-xl sm:text-[14px]">
+                      Isi Data Penumpang
                     </h1>
                   </div>
-                </div>
-                <div className="px-[16px]">
                   <div className="pt-[16px]">
-                    <h1 className="text-[#4B1979] font-bold sm:text-[14px]">
-                      Title
-                    </h1>
-                  </div>
-                  <div className="sm:w-[454px] pt-[4px]">
-                    <form className="border-[1px] border-[#D0D0D0] font-medium rounded-[4px] flex justify-between items-center sm:text-[14px]">
-                      <input
-                        type="text"
-                        value={booking?.passengers?.title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        placeholder="Mr."
-                        className="outline-none bg-transparent py-[8px] px-[16px]"
-                      />
-                      <FiChevronDown className="text-[24px] text-[#8A8A8A] pr-[10px]" />
-                    </form>
-                  </div>
-                  <div className="pt-[12px]">
-                    <h1 className="text-[#4B1979] font-bold sm:text-[14px]">
-                      Nama Lengkap
-                    </h1>
-                  </div>
-                  <div className="sm:w-[454px] pt-[4px]">
-                    <form className="border-[1px] border-[#D0D0D0] font-medium rounded-[4px] sm:text-[14px]">
-                      <input
-                        type="text"
-                        value={booking?.passengers?.fullName}
-                        onChange={(e) => setFullName(e.target.value)}
-                        placeholder="Harry"
-                        className="outline-none bg-transparent py-[8px] px-[16px]"
-                      />
-                    </form>
-                  </div>
-                  <div className="pt-[12px] flex justify-between">
-                    <div>
-                      <h1 className="font-light sm:text-[14px]">
-                        Punya Nama Keluarga?
+                    <div className="data_diri bg-[#3C3C3C] text-white font-medium py-[8px] px-[16px] sm:w-[486px] rounded-t-[10px]">
+                      <h1 className="font-medium sm:text-[14px]">
+                        Data Diri Penumpang {index + 1}
                       </h1>
                     </div>
+                  </div>
+                  <div className="px-[16px]">
                     <div>
-                      <Wrapper />
+                      <div className="pt-[16px]">
+                        <h1 className="text-[#4B1979] font-bold sm:text-[14px]">
+                          Title
+                        </h1>
+                      </div>
+                      <div className="relative sm:w-[454px] pt-[4px]">
+                        <div className="flex rounded-[4px]">
+                          <input
+                            type="text"
+                            value={selectedTitle[index]}
+                            readOnly
+                            placeholder=""
+                            className="flex-1 outline-none bg-transparent py-[8px] pl-[12px] pr-[7px] rounded-[4px] border-gray-300 sm:pr-[230px]"
+                          />
+                          <div className="flex items-center pr-[10px]">
+                            <FiChevronDown
+                              className="text-[24px] text-[#8A8A8A] cursor-pointer"
+                              onClick={() => handleToggleDropdown(index)}
+                            />
+                          </div>
+                        </div>
+                        {isDropdownOpen[index] && (
+                          <div className="absolute top-full left-0 w-full bg-white border border-gray-300 mt-[4px] rounded-[4px]">
+                            <div
+                              className="py-[8px] px-[16px] cursor-pointer hover:bg-gray-200"
+                              onClick={() => handleTitleSelect("Mr", index)}
+                            >
+                              Mr.
+                            </div>
+                            <div
+                              className="py-[8px] px-[16px] cursor-pointer hover:bg-gray-200"
+                              onClick={() => handleTitleSelect("Mrs.", index)}
+                            >
+                              Mrs.
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                  <div className="pt-[12px]">
-                    <h1 className="text-[#4B1979] font-bold sm:text-[14px]">
-                      Nama Keluarga
-                    </h1>
-                  </div>
-                  <div className="sm:w-[454px] pt-[4px]">
-                    <form className="border-[1px] border-[#D0D0D0] font-medium rounded-[4px] sm:text-[14px]">
-                      <input
-                        type="text"
-                        value={booking?.passengers?.familyName}
-                        onChange={(e) => setFamilyName(e.target.value)}
-                        placeholder="Nama Keluarga"
-                        className="outline-none bg-transparent py-[8px] px-[16px]"
-                      />
-                    </form>
-                  </div>
-                  <div className="pt-[12px]">
-                    <h1 className="text-[#4B1979] font-bold sm:text-[14px]">
-                      Tanggal Lahir
-                    </h1>
-                  </div>
-                  <div className="sm:w-[454px] pt-[4px]">
-                    <form className="border-[1px] border-[#D0D0D0] font-light rounded-[4px] flex justify-between items-center sm:text-[14px]">
-                      <input
-                        type="text"
-                        value={booking?.passengers?.birthDate}
-                        onChange={(e) => setBirthDate(e.target.value)}
-                        placeholder=""
-                        className="outline-none bg-transparent py-[8px] px-[16px] placeholder-[#D0D0D0]"
-                      />
-                    </form>
-                  </div>
-                  <div className="pt-[12px]">
-                    <h1 className="text-[#4B1979] font-bold sm:text-[14px]">
-                      Kewarganegaraan
-                    </h1>
-                  </div>
-                  <div className="sm:w-[454px] pt-[4px]">
-                    <form className="border-[1px] border-[#D0D0D0] font-medium rounded-[4px] sm:text-[14px]">
-                      <input
-                        type="text"
-                        value={booking?.passengers?.nationality}
-                        onChange={(e) => setNationality(e.target.value)}
-                        placeholder="Indonesia"
-                        className="outline-none bg-transparent py-[8px] px-[16px] placeholder-[#3C3C3C]"
-                      />
-                    </form>
-                  </div>
-                  <div className="pt-[12px]">
-                    <h1 className="text-[#4B1979] font-bold sm:text-[14px]">
-                      KTP/Paspor
-                    </h1>
-                  </div>
-                  <div className="sm:w-[454px] pt-[4px]">
-                    <form className="border-[1px] border-[#D0D0D0] font-light rounded-[4px] sm:text-[14px]">
-                      <input
-                        type="text"
-                        value={booking?.passengers?.identityNumber}
-                        onChange={(e) => setIdentityNumber(e.target.value)}
-                        placeholder=""
-                        className="outline-none bg-transparent py-[8px] px-[16px]"
-                      />
-                    </form>
-                  </div>
-                  <div className="pt-[12px]">
-                    <h1 className="text-[#4B1979] font-bold sm:text-[14px]">
-                      Negara Penerbit
-                    </h1>
-                  </div>
-                  <div className="sm:w-[454px] pt-[4px]">
-                    <form className="border-[1px] border-[#D0D0D0] font-light rounded-[4px] flex justify-between items-center sm:text-[14px]">
-                      <input
-                        type="text"
-                        value={booking?.passengers?.issuingCountry}
-                        onChange={(e) => setIssuingCountry(e.target.value)}
-                        placeholder=""
-                        className="outline-none bg-transparent py-[8px] px-[16px]"
-                      />
-                      <FiChevronDown className="text-[24px] text-[#8A8A8A] pr-[10px]" />
-                    </form>
-                  </div>
-                  <div className="pt-[12px]">
-                    <h1 className="text-[#4B1979] font-bold sm:text-[14px]">
-                      Berlaku Sampai
-                    </h1>
-                  </div>
-                  <div className="sm:w-[454px] pt-[4px]">
-                    <form className="border-[1px] border-[#D0D0D0] font-light rounded-[4px] flex justify-between items-center sm:text-[14px]">
-                      <input
-                        type="text"
-                        value={booking?.passengers?.availableUntil}
-                        onChange={(e) => setAvailableUntil(e.target.value)}
-                        placeholder="dd/mm/yy"
-                        className="outline-none bg-transparent py-[8px] px-[16px] placeholder-[#D0D0D0]"
-                      />
-                    </form>
+                    <div className="pt-[12px]">
+                      <h1 className="text-[#4B1979] font-bold sm:text-[14px]">
+                        Nama Lengkap
+                      </h1>
+                    </div>
+                    <div className="sm:w-[454px] pt-[4px]">
+                      <form className="font-light rounded-[4px] sm:text-[14px]">
+                        <input
+                          type="text"
+                          value={fullNamePasValues[index] || ""} // Menggunakan index untuk mengakses nilai fullNamePas dari array fullNamePasValues
+                          onChange={(e) => {
+                            const newFullNamePasValues = [...fullNamePasValues];
+                            newFullNamePasValues[index] = e.target.value; // Mengubah nilai fullNamePas berdasarkan index
+                            setFullNamePasValues(newFullNamePasValues); // Mengupdate array fullNamePasValues dengan nilai yang diubah
+                          }}
+                          placeholder={`Passenger ${index + 1}`} // Placeholder menggunakan indeks untuk menunjukkan nomor penumpang
+                          className="outline-none bg-transparent rounded-[4px] border-gray-300"
+                          style={{ width: "100%", maxWidth: "500px" }}
+                        />
+                      </form>
+                    </div>
+                    <div className="pt-[12px]">
+                      <h1 className="text-[#4B1979] font-bold sm:text-[14px]">
+                        Nama Keluarga
+                      </h1>
+                    </div>
+                    <div className="sm:w-[454px] pt-[4px]">
+                      <form className="font-light rounded-[4px] sm:text-[14px]">
+                        <input
+                          type="text"
+                          value={familyNamePasValues[index] || ""} // Menggunakan index untuk mengakses nilai fullNamePas dari array fullNamePasValues
+                          onChange={(e) => {
+                            const newFamilyNamePasValues = [
+                              ...familyNamePasValues,
+                            ];
+                            newFamilyNamePasValues[index] = e.target.value; // Mengubah nilai fullNamePas berdasarkan index
+                            setFamilyNamePasValues(newFamilyNamePasValues); // Mengupdate array fullNamePasValues dengan nilai yang diubah
+                          }}
+                          placeholder={`Family Name ${index + 1}`} // Placeholder menggunakan indeks untuk menunjukkan nomor penumpang
+                          className="outline-none bg-transparent rounded-[4px] border-gray-300"
+                          style={{ width: "100%", maxWidth: "500px" }}
+                        />
+                      </form>
+                    </div>
+                    <div className="pt-[12px]">
+                      <h1 className="text-[#4B1979] font-bold sm:text-[14px]">
+                        Tanggal Lahir
+                      </h1>
+                    </div>
+                    <div className="sm:w-[454px] pt-[4px]">
+                      <form className="font-light rounded-[4px] flex justify-between items-center sm:text-[14px]">
+                        <input
+                          type="date"
+                          value={
+                            birthDatePasValues[index]
+                              ? unixToDateString(birthDatePasValues[index])
+                              : ""
+                          }
+                          onChange={(e) => {
+                            const newBirthDatePasValues = [
+                              ...birthDatePasValues,
+                            ];
+                            const selectedDate = new Date(e.target.value);
+                            const unixTimestamp = Math.floor(
+                              selectedDate.getTime() / 1000
+                            ); // Konversi ke timestamp unix
+                            newBirthDatePasValues[index] = unixTimestamp;
+                            setBirthDatePasValues(newBirthDatePasValues);
+                          }}
+                          placeholder={`BirthDate ${index + 1}`}
+                          className="outline-none bg-transparent rounded-[4px] border-gray-300"
+                          style={{ width: "100%", maxWidth: "500px" }}
+                        />
+                      </form>
+                    </div>
+
+                    <div className="pt-[12px]">
+                      <h1 className="text-[#4B1979] font-bold sm:text-[14px]">
+                        Kewarganegaraan
+                      </h1>
+                    </div>
+                    <div className="sm:w-[454px] pt-[4px]">
+                      <form className="font-light rounded-[4px] sm:text-[14px]">
+                        <input
+                          type="text"
+                          value={nationalityPasValues[index] || ""} // Menggunakan index untuk mengakses nilai fullNamePas dari array fullNamePasValues
+                          onChange={(e) => {
+                            const newNationalityPasValues = [
+                              ...nationalityPasValues,
+                            ];
+                            newNationalityPasValues[index] = e.target.value; // Mengubah nilai fullNamePas berdasarkan index
+                            setNationalityPasValues(newNationalityPasValues); // Mengupdate array fullNamePasValues dengan nilai yang diubah
+                          }}
+                          placeholder={`Kewarganegaraan ${index + 1}`}
+                          className="outline-none bg-transparent rounded-[4px] border-gray-300"
+                          style={{ width: "100%", maxWidth: "500px" }}
+                        />
+                      </form>
+                    </div>
+                    <div className="pt-[12px]">
+                      <h1 className="text-[#4B1979] font-bold sm:text-[14px]">
+                        KTP/Paspor
+                      </h1>
+                    </div>
+                    <div className="sm:w-[454px] pt-[4px]">
+                      <form className="font-light rounded-[4px] sm:text-[14px]">
+                        <input
+                          type="text"
+                          value={identityNumberPasValues[index] || ""} // Menggunakan index untuk mengakses nilai fullNamePas dari array fullNamePasValues
+                          onChange={(e) => {
+                            const newIdentityNumberPasValues = [
+                              ...identityNumberPasValues,
+                            ];
+                            newIdentityNumberPasValues[index] = e.target.value; // Mengubah nilai fullNamePas berdasarkan index
+                            setIdentityNumberPasValues(
+                              newIdentityNumberPasValues
+                            ); // Mengupdate array fullNamePasValues dengan nilai yang diubah
+                          }}
+                          placeholder={`Nomor Identitas ${index + 1}`}
+                          className="outline-none bg-transparent rounded-[4px] border-gray-300"
+                          style={{ width: "100%", maxWidth: "500px" }}
+                        />
+                      </form>
+                    </div>
+                    <div className="pt-[12px]">
+                      <h1 className="text-[#4B1979] font-bold sm:text-[14px]">
+                        Negara Penerbit
+                      </h1>
+                    </div>
+                    <div className="sm:w-[454px] pt-[4px]">
+                      <form className="font-light rounded-[4px] flex justify-between items-center sm:text-[14px]">
+                        <input
+                          type="text"
+                          value={issuingCountryPasValues[index] || ""} // Menggunakan index untuk mengakses nilai fullNamePas dari array fullNamePasValues
+                          onChange={(e) => {
+                            const newIssuingCountryPasValues = [
+                              ...issuingCountryPasValues,
+                            ];
+                            newIssuingCountryPasValues[index] = e.target.value; // Mengubah nilai fullNamePas berdasarkan index
+                            setIssuingCountryPasValues(
+                              newIssuingCountryPasValues
+                            ); // Mengupdate array fullNamePasValues dengan nilai yang diubah
+                          }}
+                          placeholder={`Negara Penerbit ${index + 1}`}
+                          className="outline-none bg-transparent rounded-[4px] border-gray-300"
+                          style={{ width: "100%", maxWidth: "500px" }}
+                        />
+                      </form>
+                    </div>
+                    <div className="pt-[12px]">
+                      <h1 className="text-[#4B1979] font-bold sm:text-[14px]">
+                        Berlaku Sampai
+                      </h1>
+                    </div>
+                    <div className="sm:w-[454px] pt-[4px]">
+                      <form className="font-light rounded-[4px] flex justify-between items-center sm:text-[14px]">
+                        <input
+                          type="date"
+                          value={
+                            availableUntilPasValues[index]
+                              ? unixToDateString(availableUntilPasValues[index])
+                              : ""
+                          }
+                          onChange={(e) => {
+                            const newAvailableUntilPasValues = [
+                              ...availableUntilPasValues,
+                            ];
+                            const selectedDate = new Date(e.target.value);
+                            const unixTimestamp = Math.floor(
+                              selectedDate.getTime() / 1000
+                            ); // Konversi ke timestamp unix
+                            newAvailableUntilPasValues[index] = unixTimestamp;
+                            setAvailableUntilPasValues(
+                              newAvailableUntilPasValues
+                            );
+                          }}
+                          placeholder={`Berlaku Sampai ${index + 1}`}
+                          className="outline-none bg-transparent rounded-[4px] border-gray-300"
+                          style={{ width: "100%", maxWidth: "500px" }}
+                        />
+                      </form>
+                    </div>
                   </div>
                 </div>
               </div>
-              <div className="text-[12px]">
-                <div className="data_pemesanan">
-                  <h1 className="font-bold text-xl sm:text-[14px]">
-                    Isi Data Penumpang
-                  </h1>
-                </div>
-                <div className="pt-[16px]">
-                  <div className="data_diri bg-[#3C3C3C] text-white font-medium py-[8px] px-[16px] sm:w-[486px] rounded-t-[10px]">
-                    <h1 className="font-medium sm:text-[14px]">
-                      Data Diri Penumpang 1 - Adult
-                    </h1>
-                  </div>
-                </div>
-                <div className="px-[16px]">
-                  <div className="pt-[16px]">
-                    <h1 className="text-[#4B1979] font-bold sm:text-[14px]">
-                      Title
-                    </h1>
-                  </div>
-                  <div className="sm:w-[454px] pt-[4px]">
-                    <form className="border-[1px] border-[#D0D0D0] font-medium rounded-[4px] flex justify-between items-center sm:text-[14px]">
-                      <input
-                        type="text"
-                        value={booking?.passengers?.title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        placeholder="Mr."
-                        className="outline-none bg-transparent py-[8px] px-[16px]"
-                      />
-                      <FiChevronDown className="text-[24px] text-[#8A8A8A] pr-[10px]" />
-                    </form>
-                  </div>
-                  <div className="pt-[12px]">
-                    <h1 className="text-[#4B1979] font-bold sm:text-[14px]">
-                      Nama Lengkap
-                    </h1>
-                  </div>
-                  <div className="sm:w-[454px] pt-[4px]">
-                    <form className="border-[1px] border-[#D0D0D0] font-medium rounded-[4px] sm:text-[14px]">
-                      <input
-                        type="text"
-                        value={booking?.passengers?.fullName}
-                        onChange={(e) => setFullName(e.target.value)}
-                        placeholder="Harry"
-                        className="outline-none bg-transparent py-[8px] px-[16px]"
-                      />
-                    </form>
-                  </div>
-                  <div className="pt-[12px] flex justify-between">
-                    <div>
-                      <h1 className="font-light sm:text-[14px]">
-                        Punya Nama Keluarga?
-                      </h1>
-                    </div>
-                    <div>
-                      <Wrapper />
-                    </div>
-                  </div>
-                  <div className="pt-[12px]">
-                    <h1 className="text-[#4B1979] font-bold sm:text-[14px]">
-                      Nama Keluarga
-                    </h1>
-                  </div>
-                  <div className="sm:w-[454px] pt-[4px]">
-                    <form className="border-[1px] border-[#D0D0D0] font-medium rounded-[4px] sm:text-[14px]">
-                      <input
-                        type="text"
-                        value={booking?.passengers?.familyName}
-                        onChange={(e) => setFamilyName(e.target.value)}
-                        placeholder="Nama Keluarga"
-                        className="outline-none bg-transparent py-[8px] px-[16px]"
-                      />
-                    </form>
-                  </div>
-                  <div className="pt-[12px]">
-                    <h1 className="text-[#4B1979] font-bold sm:text-[14px]">
-                      Tanggal Lahir
-                    </h1>
-                  </div>
-                  <div className="sm:w-[454px] pt-[4px]">
-                    <form className="border-[1px] border-[#D0D0D0] font-light rounded-[4px] flex justify-between items-center sm:text-[14px]">
-                      <input
-                        type="text"
-                        value={booking?.passengers?.birthDate}
-                        onChange={(e) => setBirthDate(e.target.value)}
-                        placeholder=""
-                        className="outline-none bg-transparent py-[8px] px-[16px] placeholder-[#D0D0D0]"
-                      />
-                    </form>
-                  </div>
-                  <div className="pt-[12px]">
-                    <h1 className="text-[#4B1979] font-bold sm:text-[14px]">
-                      Kewarganegaraan
-                    </h1>
-                  </div>
-                  <div className="sm:w-[454px] pt-[4px]">
-                    <form className="border-[1px] border-[#D0D0D0] font-medium rounded-[4px] sm:text-[14px]">
-                      <input
-                        type="text"
-                        value={booking?.passengers?.nationality}
-                        onChange={(e) => setNationality(e.target.value)}
-                        placeholder="Indonesia"
-                        className="outline-none bg-transparent py-[8px] px-[16px] placeholder-[#3C3C3C]"
-                      />
-                    </form>
-                  </div>
-                  <div className="pt-[12px]">
-                    <h1 className="text-[#4B1979] font-bold sm:text-[14px]">
-                      KTP/Paspor
-                    </h1>
-                  </div>
-                  <div className="sm:w-[454px] pt-[4px]">
-                    <form className="border-[1px] border-[#D0D0D0] font-light rounded-[4px] sm:text-[14px]">
-                      <input
-                        type="text"
-                        value={booking?.passengers?.identityNumber}
-                        onChange={(e) => setIdentityNumber(e.target.value)}
-                        placeholder=""
-                        className="outline-none bg-transparent py-[8px] px-[16px]"
-                      />
-                    </form>
-                  </div>
-                  <div className="pt-[12px]">
-                    <h1 className="text-[#4B1979] font-bold sm:text-[14px]">
-                      Negara Penerbit
-                    </h1>
-                  </div>
-                  <div className="sm:w-[454px] pt-[4px]">
-                    <form className="border-[1px] border-[#D0D0D0] font-light rounded-[4px] flex justify-between items-center sm:text-[14px]">
-                      <input
-                        type="text"
-                        value={booking?.passengers?.issuingCountry}
-                        onChange={(e) => setIssuingCountry(e.target.value)}
-                        placeholder=""
-                        className="outline-none bg-transparent py-[8px] px-[16px]"
-                      />
-                      <FiChevronDown className="text-[24px] text-[#8A8A8A] pr-[10px]" />
-                    </form>
-                  </div>
-                  <div className="pt-[12px]">
-                    <h1 className="text-[#4B1979] font-bold sm:text-[14px]">
-                      Berlaku Sampai
-                    </h1>
-                  </div>
-                  <div className="sm:w-[454px] pt-[4px]">
-                    <form className="border-[1px] border-[#D0D0D0] font-light rounded-[4px] flex justify-between items-center sm:text-[14px]">
-                      <input
-                        type="text"
-                        value={booking?.passengers?.availableUntil}
-                        onChange={(e) => setAvailableUntil(e.target.value)}
-                        placeholder="dd/mm/yy"
-                        className="outline-none bg-transparent py-[8px] px-[16px] placeholder-[#D0D0D0]"
-                      />
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
+            ))}
 
             <div className="pt-[24px]">
               <div className="isi_data border-[1px] border-[#8A8A8A] px-[16px] pt-[26px] pb-[42px] rounded-[4px] sm:w-[518px]">
@@ -539,42 +589,84 @@ const Biodata = () => {
                   <div className="flex justify-between items-center gap-[5px] sm:gap-[20px] pt-[12px]">
                     <div className="kotak1 grid grid-cols-1 gap-3 mt-2 text-[#F2F2F2]">
                       {seatDetails?.data.length > 0 &&
-                        seatDetails.data.slice(0, 12).map((data, index) => (
-                          <div
-                            key={data?.seatId}
-                            className={`bg-${
-                              data.booked ? "[#D0D0D0]" : "[#73CA5C]"
-                            } w-[36px] h-[36px] rounded flex justify-center items-center`}
-                          >
-                            {index + 1}
-                          </div>
-                        ))}
+                        seatDetails.data.slice(0, 12).map((data, index) => {
+                          const seatId = data.seatId;
+                          const isSelected =
+                            selectedSeats.hasOwnProperty(seatId);
+                          const seatName = isSelected
+                            ? selectedSeats[seatId]
+                            : index + 1;
+
+                          return (
+                            <div
+                              key={seatId}
+                              className={`bg-${
+                                data.booked
+                                  ? "gray-300"
+                                  : isSelected
+                                  ? "[#7126B5]"
+                                  : "[#73CA5C]"
+                              } w-[36px] h-[36px] rounded flex justify-center items-center`}
+                              onClick={() => toggleSeatSelection(seatId)}
+                            >
+                              {seatName}
+                            </div>
+                          );
+                        })}
                     </div>
                     <div className="kotak1 grid grid-cols-1 gap-3 mt-2 text-[#F2F2F2]">
                       {seatDetails?.data.length > 0 &&
-                        seatDetails.data.slice(12, 24).map((data, index) => (
-                          <div
-                            key={data?.seatId}
-                            className={`bg-${
-                              data.booked ? "[#D0D0D0]" : "[#73CA5C]"
-                            } w-[36px] h-[36px] rounded flex justify-center items-center`}
-                          >
-                            {index + 13}
-                          </div>
-                        ))}
+                        seatDetails.data.slice(12, 24).map((data, index) => {
+                          const seatId = data.seatId;
+                          const isSelected =
+                            selectedSeats.hasOwnProperty(seatId);
+                          const seatName = isSelected
+                            ? selectedSeats[seatId]
+                            : index + 13;
+
+                          return (
+                            <div
+                              key={seatId}
+                              className={`bg-${
+                                data.booked
+                                  ? "gray-300"
+                                  : isSelected
+                                  ? "[#7126B5]"
+                                  : "[#73CA5C]"
+                              } w-[36px] h-[36px] rounded flex justify-center items-center`}
+                              onClick={() => toggleSeatSelection(seatId)}
+                            >
+                              {seatName}
+                            </div>
+                          );
+                        })}
                     </div>
                     <div className="kotak1 grid grid-cols-1 gap-3 mt-2 text-[#F2F2F2]">
                       {seatDetails?.data.length > 0 &&
-                        seatDetails.data.slice(24, 36).map((data, index) => (
-                          <div
-                            key={data?.seatId}
-                            className={`bg-${
-                              data.booked ? "[#D0D0D0]" : "[#73CA5C]"
-                            } w-[36px] h-[36px] rounded flex justify-center items-center`}
-                          >
-                            {index + 25}
-                          </div>
-                        ))}
+                        seatDetails.data.slice(24, 36).map((data, index) => {
+                          const seatId = data.seatId;
+                          const isSelected =
+                            selectedSeats.hasOwnProperty(seatId);
+                          const seatName = isSelected
+                            ? selectedSeats[seatId]
+                            : index + 25;
+
+                          return (
+                            <div
+                              key={seatId}
+                              className={`bg-${
+                                data.booked
+                                  ? "gray-300"
+                                  : isSelected
+                                  ? "[#7126B5]"
+                                  : "[#73CA5C]"
+                              } w-[36px] h-[36px] rounded flex justify-center items-center`}
+                              onClick={() => toggleSeatSelection(seatId)}
+                            >
+                              {seatName}
+                            </div>
+                          );
+                        })}
                     </div>
 
                     <div className="kotak2 grid grid-cols-1 gap-3 mt-2 flex text-center text-[12px]">
@@ -590,42 +682,84 @@ const Biodata = () => {
 
                     <div className="kotak1 grid grid-cols-1 gap-3 mt-2 text-[#F2F2F2]">
                       {seatDetails?.data.length > 0 &&
-                        seatDetails.data.slice(36, 48).map((data, index) => (
-                          <div
-                            key={data?.seatId}
-                            className={`bg-${
-                              data.booked ? "[#D0D0D0]" : "[#73CA5C]"
-                            } w-[36px] h-[36px] rounded flex justify-center items-center`}
-                          >
-                            {index + 37}
-                          </div>
-                        ))}
+                        seatDetails.data.slice(36, 48).map((data, index) => {
+                          const seatId = data.seatId;
+                          const isSelected =
+                            selectedSeats.hasOwnProperty(seatId);
+                          const seatName = isSelected
+                            ? selectedSeats[seatId]
+                            : index + 37;
+
+                          return (
+                            <div
+                              key={seatId}
+                              className={`bg-${
+                                data.booked
+                                  ? "gray-300"
+                                  : isSelected
+                                  ? "[#7126B5]"
+                                  : "[#73CA5C]"
+                              } w-[36px] h-[36px] rounded flex justify-center items-center`}
+                              onClick={() => toggleSeatSelection(seatId)}
+                            >
+                              {seatName}
+                            </div>
+                          );
+                        })}
                     </div>
                     <div className="kotak1 grid grid-cols-1 gap-3 mt-2 text-[#F2F2F2]">
                       {seatDetails?.data.length > 0 &&
-                        seatDetails.data.slice(48, 60).map((data, index) => (
-                          <div
-                            key={data?.seatId}
-                            className={`bg-${
-                              data.booked ? "[#D0D0D0]" : "[#73CA5C]"
-                            } w-[36px] h-[36px] rounded flex justify-center items-center`}
-                          >
-                            {index + 49}
-                          </div>
-                        ))}
+                        seatDetails.data.slice(48, 60).map((data, index) => {
+                          const seatId = data.seatId;
+                          const isSelected =
+                            selectedSeats.hasOwnProperty(seatId);
+                          const seatName = isSelected
+                            ? selectedSeats[seatId]
+                            : index + 49;
+
+                          return (
+                            <div
+                              key={seatId}
+                              className={`bg-${
+                                data.booked
+                                  ? "gray-300"
+                                  : isSelected
+                                  ? "[#7126B5]"
+                                  : "[#73CA5C]"
+                              } w-[36px] h-[36px] rounded flex justify-center items-center`}
+                              onClick={() => toggleSeatSelection(seatId)}
+                            >
+                              {seatName}
+                            </div>
+                          );
+                        })}
                     </div>
                     <div className="kotak1 grid grid-cols-1 gap-3 mt-2 text-[#F2F2F2]">
                       {seatDetails?.data.length > 0 &&
-                        seatDetails.data.slice(60, 72).map((data, index) => (
-                          <div
-                            key={data?.seatId}
-                            className={`bg-${
-                              data.booked ? "[#D0D0D0]" : "[#73CA5C]"
-                            } w-[36px] h-[36px] rounded flex justify-center items-center`}
-                          >
-                            {index + 61}
-                          </div>
-                        ))}
+                        seatDetails.data.slice(60, 72).map((data, index) => {
+                          const seatId = data.seatId;
+                          const isSelected =
+                            selectedSeats.hasOwnProperty(seatId);
+                          const seatName = isSelected
+                            ? selectedSeats[seatId]
+                            : index + 61;
+
+                          return (
+                            <div
+                              key={seatId}
+                              className={`bg-${
+                                data.booked
+                                  ? "gray-300"
+                                  : isSelected
+                                  ? "[#7126B5]"
+                                  : "[#73CA5C]"
+                              } w-[36px] h-[36px] rounded flex justify-center items-center`}
+                              onClick={() => toggleSeatSelection(seatId)}
+                            >
+                              {seatName}
+                            </div>
+                          );
+                        })}
                     </div>
                   </div>
                 </div>
@@ -678,7 +812,7 @@ const Biodata = () => {
               </h1>
             </div>
             <div className="line pt-[16px]">
-              <div className="border-[1px] border-[#D0D0D0]"></div>
+              <div className="border-[1px] border-gray-300"></div>
             </div>
             <div className="pt-[8px] flex jutify-between items-center gap-[8px]">
               <div>
@@ -712,7 +846,7 @@ const Biodata = () => {
               </div>
             </div>
             <div className="line pt-[8px]">
-              <div className="border-[1px] border-[#D0D0D0]"></div>
+              <div className="border-[1px] border-gray-300"></div>
             </div>
             <div className="pt-[12px]">
               <div className="flex justify-between">
@@ -737,7 +871,7 @@ const Biodata = () => {
               </div>
             </div>
             <div className="line pt-[16px]">
-              <div className="border-[1px] border-[#D0D0D0]"></div>
+              <div className="border-[1px] border-gray-300"></div>
             </div>
             <div className="pt-[8px] text-[12px] sm:text-[14px]">
               <div>
@@ -757,7 +891,7 @@ const Biodata = () => {
               </div>
             </div>
             <div className="line pt-[4px]">
-              <div className="border-[1px] border-[#D0D0D0]"></div>
+              <div className="border-[1px] border-gray-300"></div>
             </div>
             <div className="flex justify-between pt-[8px]">
               <div className="text-[14px] sm:text-[16px]">

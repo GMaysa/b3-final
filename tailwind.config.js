@@ -3,6 +3,7 @@ module.exports = {
   content: [
     "./src/**/*.{html,js,jsx}",
     "./node_modules/tw-elements/dist/js/**/*.js",
+    "./node_modules/flowbite/**/*.js",
   ],
   theme: {
     screens: {
@@ -13,5 +14,5 @@ module.exports = {
     },
     extend: {},
   },
-  plugins: [require("tw-elements/dist/plugin.cjs")],
+  plugins: [require("tw-elements/dist/plugin.cjs", "flowbite/plugin")],
 };

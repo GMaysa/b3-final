@@ -1,13 +1,11 @@
 import axios from "axios";
 import { toast } from "react-toastify";
-import { setSeatDetails } from "../reducers/seatReducers";
+import { setSeatDetails, setUpdateSeat } from "../reducers/seatReducers";
 
 export const getSeatDetails = () => async (dispatch) => {
   try {
-    const accesstoken =
-      "eyJhbGciOiJIUzI1NiJ9.eyJwaG9uZU51bWJlciI6IjM0ODIzNDAyMzQiLCJyb2xlIjoiQ09TVFVNRVIiLCJzdWIiOiJnaWxhbmc0NUBnbWFpbC5jb20iLCJpYXQiOjE2ODc4ODA3NzksImV4cCI6MTY4Nzk2NzE3OX0.N5x31Esz56Say84UB3Twh4nXwIi1-CufBeYt9ZZUP1E";
     const response = await axios.get(
-      `${process.env.REACT_APP_POSTS_API}/flight/seats?class=ECONOMY&flight_code=GA-3992`
+      `${process.env.REACT_APP_POSTS_API}/flight/seats?class=BUSSINESS&flight_code=GA-1011`
     );
     console.log("berhasil");
     dispatch(setSeatDetails(response.data));
@@ -20,11 +18,11 @@ export const getSeatDetails = () => async (dispatch) => {
   }
 };
 
-// Di dalam seatActions.js
 export const updateSeatStatus = (seatId, booked) => async (dispatch) => {
   try {
     const accesstoken =
-      "eyJhbGciOiJIUzI1NiJ9.eyJwaG9uZU51bWJlciI6IjA4MzQ4MzQyMyIsInJvbGUiOiJDT1NUVU1FUiIsInN1YiI6Im1hYmFsaWJveTQ1QGdtYWlsLmNvbSIsImlhdCI6MTY4Nzg2OTY3OSwiZXhwIjoxNjg3OTU2MDc5fQ.HU4_FRSWOWpyzQgcgzSErDqsjCtw4ZF729pHfc1C4oE";
+      localStorage.getItem("token") ||
+      document.cookie.match(/(?<=token=)[^;]+/)?.[0];
     const response = await axios.put(
       `${process.env.REACT_APP_POSTS_API}/flight/seats/${seatId}`,
       {
@@ -37,7 +35,7 @@ export const updateSeatStatus = (seatId, booked) => async (dispatch) => {
       }
     );
 
-    dispatch(setSeatDetails(response.data));
+    dispatch(setUpdateSeat(response.data));
     toast.success("Seat status updated successfully.");
   } catch (error) {
     if (axios.isAxiosError(error)) {

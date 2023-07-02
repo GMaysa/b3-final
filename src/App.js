@@ -10,6 +10,7 @@ import store from "./redux/store";
 import { useEffect } from "react";
 import PayConfirm from "./pages/PayConfirm";
 import { ToastContainer } from "react-toastify";
+import Login from "./pages/Login";
 
 function App() {
   useEffect(() => {
@@ -31,9 +32,12 @@ function App() {
   return (
     <Provider store={store}>
       <BrowserRouter>
-        <Header />
+        {/* <Header /> */}
         <Routes>
-          <Route path="/" element={<Biodata />}></Route>
+          <Route path="/" element={<Login />}></Route>
+        </Routes>
+        <Routes>
+          <Route path="/bio" element={<Biodata />}></Route>
         </Routes>
         <Routes>
           <Route path="/pay" element={<Payment />}></Route>

@@ -2,20 +2,22 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { setPayconfirm } from "../reducers/payconfirmReducers";
 
-export const getPayconfirm = (payconfirm, navigate) => async (dispatch) => {
+export const getPayconfirm = (formData, navigate) => async (dispatch) => {
   try {
     const accesstoken =
-      "eyJhbGciOiJIUzI1NiJ9.eyJwaG9uZU51bWJlciI6IjM0ODIzNDAyMzQiLCJyb2xlIjoiQURNSU4iLCJzdWIiOiJqb2huZG9lQGZseXBhbC5jb20iLCJpYXQiOjE2ODcyOTQ0MjgsImV4cCI6MTY4NzI5NDQyOH0.SU5NIXnv-AfqXaOuEvW7XEZNc4k4zc90sWql6c9eZyA";
+      localStorage.getItem("token") ||
+      document.cookie.match(/(?<=token=)[^;]+/)?.[0];
     const response = await axios.post(
       `${process.env.REACT_APP_POSTS_API}/transactions/confirm`,
-      payconfirm,
+      formData,
       {
         headers: {
           Authorization: `Bearer ${accesstoken}`,
+          "Content-Type": "multipart/form-data",
         },
       }
     );
-    console.log(payconfirm);
+    console.log(formData);
     console.log("berhasilconfirm");
     dispatch(setPayconfirm(response.data));
     navigate("/paysuccess");
