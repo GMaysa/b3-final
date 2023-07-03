@@ -63,11 +63,15 @@ const Header = () => {
               <FiUser />
               <p className='text-[16px]'>User</p>
             </div>
+
+            <button>
             <div className='bell_icon text-[20px] flex items-center gap-[12px]'
             onClick={() => dispatch(logout(navigate) )}>
               <TbLogout />
               <p className='text-[16px]'>Log Out</p>
             </div>
+            </button>
+            
           </div>
 
           </div>

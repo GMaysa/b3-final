@@ -20,7 +20,11 @@ function Register ()   {
   
   const data= { email,password, name, phoneNumber };
 
+  localStorage.setItem("email", email)
+    // menyimpan inputan email ke local storage
+
   dispatch(register(data, navigate))
+
 };
     return (
       <div className='flex font-Poppins  h-screen'>
@@ -57,7 +61,9 @@ function Register ()   {
                       />
 
                       <span className="block text-xs mb-1 text-slate-700">Buat Password</span>
-                      <input type="password" 
+                      <input 
+                      // type="password" 
+                      type="text" 
                        value={password}
                        onChange={(e) => setPassword (e.target.value)}
                        placeholder="Masukan Password"
