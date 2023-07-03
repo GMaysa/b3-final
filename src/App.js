@@ -20,7 +20,6 @@ import Register from "./pages/Register";
 import Reset from "./pages/Reset";
 import Home from "./pages/Home";
 import SearchResults from "./pages/SearchResults";
-import { Provider } from "react-redux";
 import store from "./redux/store";
 import { ToastContainer } from "react-toastify";
 import RedirectIfProtected from "./Components/RedirectIfProtected";
