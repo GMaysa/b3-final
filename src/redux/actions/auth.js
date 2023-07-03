@@ -19,11 +19,11 @@ export const login = (data, navigate) => async (dispatch) =>{
     // biasanya passing melalui komponen saja 
   } catch (error) {
     if (axios.isAxiosError(error)){
-      toast.error(error?.response?.data?.message)
+      // toast.error(error?.response?.data?.message)
       // eror?.response.data.message;
       return;
     }
-    toast.error(error.message)
+    // toast.error(error.message)
   // muncul kaya pop up toast.error(error message)
 
   }
@@ -35,27 +35,65 @@ export const register = (data, navigate) => async (dispatch) =>{
       const response = await axios.post('https://gcpflypal-l5tho6hrtq-as.a.run.app/api/v1/user/register', data
       );
       const { accessToken } = response?.data.data[0];
-  
-      dispatch(setToken(accessToken))
-      dispatch(setIsLogeedIn(true))
-  
-      navigate("/pay")
+
+      navigate("/otp")
     } catch (error) {
       if (axios.isAxiosError(error)){
-        toast.error(error?.response?.data?.message)
+        // toast.error(error?.response?.data?.message)
         return;
       }
-      toast.error(error.message)
+      // toast.error(error.message)
     }
-  };
+};
 
-
-  export const logout = (navigate) => async (dispatch) => {
+export const logout = (navigate) => async (dispatch) => {
     dispatch(setToken(null));
     dispatch(setIsLogeedIn(false));
     dispatch(setUser(null));
   
     // redirect to login
-    if (navigate) navigate("/login");
-  };
-  
+    if (navigate) navigate("/");
+};
+
+export const reset = (data, navigate) => async (dispatch) =>{
+
+  try {
+    const response = await axios.post('https://gcpflypal-l5tho6hrtq-as.a.run.app/api/v1/user/forgot-password', data
+    );
+    const { accessToken } = response?.data.data[0];
+
+    dispatch(setToken(accessToken))
+    dispatch(setIsLogeedIn(true))
+    
+    navigate("/")
+  } catch (error) {
+    if (axios.isAxiosError(error)){
+      // toast.error(error?.response?.data?.message)
+      return; 
+    }
+    // toast.error(error.message)
+  }
+};
+
+
+
+export const otpcode = (data, navigate) => async (dispatch) =>{
+
+  try {
+    const response = await axios.post('https://gcpflypal-l5tho6hrtq-as.a.run.app/api/v1/user/activate', data
+    );
+    const { accessToken } = response?.data.data[0];
+
+    dispatch(setToken(accessToken))
+    dispatch(setIsLogeedIn(true))
+
+    navigate("/")
+    // kelogin
+  } catch (error) {
+    if (axios.isAxiosError(error)){
+      // toast.error(error?.response?.data?.message)
+      return;
+    }
+    // toast.error(error.message)
+  }
+};

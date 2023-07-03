@@ -8,6 +8,7 @@ import Profile from "./pages/Profile";
 import DetailHistory from "./pages/DetailHistory";
 import Biodata from './pages/Biodata';
 import Payment from './pages/Payment';
+import Otp from "./pages/Otp";
 import PaymentSuccess from './pages/PaymentSuccess';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -16,7 +17,8 @@ import { Provider } from "react-redux";
 import store from "./redux/store";
 import { ToastContainer } from "react-toastify";
 import RedirectIfProtected from "./Components/RedirectIfProtected";
-import Protected from "./Components/Protected";
+// import RedirectIfProtected from "./Components/RedirectIfProtected";
+// import Protected from "./Components/Protected";
 import Header from "./components/Header";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -24,14 +26,15 @@ function App() {
   return (
     <Provider store={store}>
     <BrowserRouter>
-    {/* <Header/> */}
-    
+
+    <Header/>
       <Routes>
         <Route path='/' element={<Login/>}></Route>
         <Route path='/reset' element={<Reset/>}></Route>
         <Route path='/register' element={<Register/>}></Route>
         <Route path="/edit" element={<EditProfile />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/otp" element={<Otp />} />
         {/* <Route path="/notification" element={<Notification />} />  */}
         {/* <Route path="/history" element={<FlightTicketHistory />} />  */}
         {/* <Route path="/detail" element={<DetailHistory />} /> */}

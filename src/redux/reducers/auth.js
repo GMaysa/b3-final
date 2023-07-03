@@ -27,7 +27,9 @@ const authSlicer = createSlice({
             state.isLoggedIn = action.payload;
         },setUser: (state,action) => {
             state.user = action.payload;
-        },
+        },forgotPassword:(state,action) => {
+            // state.isLoggedIn = action
+        }
     }
 })
 // dari contohnya state action dari post mas reza
