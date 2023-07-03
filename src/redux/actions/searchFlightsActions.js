@@ -7,7 +7,7 @@ export const getAllFlightSearchResult =
       const response = await axios.get(
         `${process.env.REACT_APP_API}/api/v1/flight/search?seat_class=${seatClass}&dep_airport=${depAirport}&arr_airport=${arrAirport}&flight_date=${flightDate}`
       );
-      console.log(response)
+      // console.log(response)
       navigate('/search')
       
       dispatch(setFlight(response.data));

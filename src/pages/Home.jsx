@@ -177,7 +177,7 @@ function Home() {
                           className="w-full px-2 py-1 z-40 cursor-pointer hover:bg-violet-300 hover:text-white"
                           key={id}
                           onClick={() => {
-                            console.log(data);
+                            // console.log(data);
                             setSearchTerm((prev) => ({
                               ...prev,
                               from: data,
