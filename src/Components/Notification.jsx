@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useState, useEffect } from "react";
 import { BiSearch } from "react-icons/bi";
 import { AiOutlineArrowLeft } from "react-icons/ai";
@@ -19,6 +21,7 @@ const Notification = () => {
   const [open, setOpen] = useState(false);
   const [selectedType, setSelectedType] = useState("all");
   const [updatedNotifications, setUpdatedNotifications] = useState([]);
+
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -78,17 +81,19 @@ const Notification = () => {
     setSearchQuery(event.target.value);
   };
 
+  //  Jika dienter muncul hasil search
   const handleSearchQueryKeyUp = (event) => {
     if (event.key === "Enter") {
       handleSearch();
     }
   };
 
+  // Delete history Search
   const handleClearSearchHistory = () => {
     setSearchHistory([]);
   };
 
-  // Status
+  // Status Change
   const handleStatusChange = async (notificationId) => {
     try {
       dispatch(updateStatus(notificationId));
@@ -130,6 +135,7 @@ const Notification = () => {
             <option value="Info">Information</option>
           </select>
         </button>
+
         <BiSearch
           className="h-8 w-8 text-[#A06ECE] font-bold"
           onClick={handleSearchClick}
@@ -172,7 +178,10 @@ const Notification = () => {
               </p>
             </div>
             {searchHistory.map((query) => (
-              <p key={query} className="text-xs">
+              <p
+                key={query}
+                className="text-xs border-b-2 border-gray-400 py-2"
+              >
                 {query}
               </p>
             ))}

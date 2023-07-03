@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
@@ -71,16 +73,6 @@ const Navbar = () => {
                         <FiUser className="text-[#A06ECE]" />
                       </span>
                       Profile
-                    </button>
-
-                    <button
-                      className="flex gap-2 pb-3 text-sm"
-                      onClick={handleClickEdit}
-                    >
-                      <span className="pt-1">
-                        <FiEdit3 className="text-[#A06ECE]" />
-                      </span>
-                      Edit Profile
                     </button>
 
                     <button className="flex gap-2 text-sm">
