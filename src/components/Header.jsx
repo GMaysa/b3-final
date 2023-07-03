@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
 import { ReactComponent as Logo } from '../assets/logo.svg';
-import { FiBell,FiUser,FiList,FiSearch,FiX } from "react-icons/fi";
-
+import { FiBell,FiUser,FiList,FiSearch,FiX, } from "react-icons/fi";
+import { TbLogout } from "react-icons/tb";
+import { logout } from '../redux/actions/auth';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Header = () => {
   const [isActive, setIsActive] = useState(false);
-    
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const { IsLogeedIn,token, user } = useSelector  ((state) => state.auth)
   const divClasses = `tglBtn flex flex-col p-[20px] sm:hidden  ${isActive ? 'active' : ''}`;
   //300 = font-light
   //500 = font-medium
@@ -55,6 +60,15 @@ const Header = () => {
               <FiUser />
               <p className='text-[16px]'>User</p>
             </div>
+
+            <button>
+            <div className='bell_icon text-[20px] flex items-center gap-[12px]'
+            onClick={() => dispatch(logout(navigate) )}>
+              <TbLogout />
+              <p className='text-[16px]'>Log Out</p>
+            </div>
+            </button>
+            
           </div>
 
           </div>

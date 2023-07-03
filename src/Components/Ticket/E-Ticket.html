@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unicons.iconscout.com/release/v2.1.6/css/unicons.css"
+    />
+    <title>E-Ticket</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Poppins", sans-serif;
+      }
+
+      body {
+        background: linear-gradient(
+          180deg,
+          rgba(255, 233, 202, 0) 5%,
+          #dec9ff 100%
+        );
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background-color: #fff;
+        border-radius: 10px;
+        padding: 30px;
+        margin-top: 40px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .logo {
+        width: 70px;
+      }
+
+      .ticket-details {
+        padding: 20px;
+        border: 1px solid #e6e6e6;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        position: relative;
+      }
+
+      .timeline {
+        position: relative;
+      }
+
+      .timeline::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 12px;
+        height: 63%;
+        border-left: 2px dashed #7126b5;
+      }
+
+      .flight-info {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 20px;
+      }
+
+      .info {
+        margin-left: 40px;
+      }
+
+      .flight-info p {
+        margin: 0;
+      }
+
+      .booking-code {
+        padding-bottom: 20px;
+      }
+
+      .booking-code p {
+        font-size: 14px;
+        color: #8a8a8a;
+      }
+
+      .booking-code h2 {
+        color: #7126b5;
+        font-size: 18px;
+      }
+
+      .airline {
+        padding-bottom: 18px;
+      }
+
+      .airline h4 {
+        font-size: 18px;
+        margin: 0;
+      }
+
+      .airline p {
+        font-size: 14px;
+      }
+
+      .passenger {
+        display: flex;
+        align-items: center;
+        margin-bottom: 9px;
+        gap: 8px;
+        font-weight: bold;
+      }
+
+      .passenger-info {
+        padding-left: 32px;
+      }
+
+      .price-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 20px;
+      }
+
+      .price-info p {
+        font-weight: bold;
+        font-size: 16px;
+        margin: 0;
+      }
+
+      .barcode {
+        text-align: center;
+        margin-top: 20px;
+      }
+
+      .barcode img {
+        width: 150px;
+      }
+
+      /* Responsiveness for mobile devices */
+      @media only screen and (max-width: 600px) {
+        .container {
+          padding: 15px;
+          margin-top: 20px;
+        }
+
+        .logo {
+          width: 70px;
+        }
+
+        .ticket-details {
+          padding: 15px;
+          margin-bottom: 15px;
+        }
+
+        .booking-code h2 {
+          font-size: 16px;
+        }
+
+        .airline h4 {
+          font-size: 16px;
+        }
+
+        .airline p {
+          font-size: 12px;
+        }
+
+        .flight-info p {
+          font-size: 12px;
+        }
+
+        .info {
+          margin-left: 50px;
+        }
+
+        .passenger h4 {
+          font-size: 16px;
+        }
+
+        .passenger-info p {
+          font-size: 12px;
+        }
+
+        .price-info p {
+          font-size: 14px;
+        }
+
+        .barcode img {
+          width: 120px;
+        }
+      }
+
+      /* Responsiveness for tablet devices */
+      @media only screen and (min-width: 601px) and (max-width: 1024px) {
+        .container {
+          max-width: 700px;
+          padding: 25px;
+          margin-top: 30px;
+        }
+
+        .booking-code h2 {
+          font-size: 16px;
+        }
+
+        .airline h4 {
+          font-size: 16px;
+        }
+
+        .airline p {
+          font-size: 12px;
+        }
+
+        .flight-info p {
+          font-size: 12px;
+        }
+
+        .info {
+          margin-left: 50px;
+        }
+
+        .passenger h4 {
+          font-size: 16px;
+        }
+
+        .passenger-info p {
+          font-size: 12px;
+        }
+
+        .price-info p {
+          font-size: 14px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <img class="logo" src="/src/assets/logo.png" />
+        <h2>E-Ticket</h2>
+      </div>
+
+      <!-- card -->
+      <div class="ticket-details">
+        <div class="booking-code">
+          <p>Airline Booking Code</p>
+          <h2>6723y2GHK</h2>
+        </div>
+        <div class="airline">
+          <h4>Jet Air JT-2023</h4>
+          <p>Economy Class</p>
+        </div>
+
+        <div class="timeline">
+          <!-- take off -->
+          <div class="flight-info">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="19px"
+              viewBox="0 0 640 512"
+              style="
+                fill: #a063ce;
+                background-color: #fff;
+                position: absolute;
+                padding-left: 3px;
+                padding-top: 2px;
+                border: 3px solid #fff;
+              "
+            >
+              <path
+                d="M381 114.9L186.1 41.8c-16.7-6.2-35.2-5.3-51.1 2.7L89.1 67.4C78 73 77.2 88.5 87.6 95.2l146.9 94.5L136 240 77.8 214.1c-8.7-3.9-18.8-3.7-27.3 .6L18.3 230.8c-9.3 4.7-11.8 16.8-5 24.7l73.1 85.3c6.1 7.1 15 11.2 24.3 11.2H248.4c5 0 9.9-1.2 14.3-3.4L535.6 212.2c46.5-23.3 82.5-63.3 100.8-112C645.9 75 627.2 48 600.2 48H542.8c-20.2 0-40.2 4.8-58.2 14L381 114.9zM0 480c0 17.7 14.3 32 32 32H608c17.7 0 32-14.3 32-32s-14.3-32-32-32H32c-17.7 0-32 14.3-32 32z"
+              />
+            </svg>
+
+            <div class="info">
+              <h4 class="city">Jakarta</h4>
+              <p class="time">19.10</p>
+              <p class="date">5 Maret 2023</p>
+              <p class="location">Soekarno Hatta - Terminal 1A Domestik</p>
+            </div>
+          </div>
+
+          <!-- landing-->
+          <div class="flight-info">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="18px"
+              viewBox="0 0 640 512"
+              style="
+                fill: #a063ce;
+                background-color: #fff;
+                position: absolute;
+                padding-left: 3px;
+                border: 3px solid #fff;
+              "
+            >
+              <path
+                d="M.3 166.9L0 68C0 57.7 9.5 50.1 19.5 52.3l35.6 7.9c10.6 2.3 19.2 9.9 23 20L96 128l127.3 37.6L181.8 20.4C178.9 10.2 186.6 0 197.2 0h40.1c11.6 0 22.2 6.2 27.9 16.3l109 193.8 107.2 31.7c15.9 4.7 30.8 12.5 43.7 22.8l34.4 27.6c24 19.2 18.1 57.3-10.7 68.2c-41.2 15.6-86.2 18.1-128.8 7L121.7 289.8c-11.1-2.9-21.2-8.7-29.3-16.9L9.5 189.4c-5.9-6-9.3-14-9.3-22.5zM32 448H608c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32zm96-80a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zm128-16a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"
+              />
+            </svg>
+
+            <div class="info">
+              <h4 class="city">Jakarta</h4>
+              <p class="time">19.10</p>
+              <p class="date">5 Maret 2023</p>
+              <p class="location">Soekarno Hatta - Terminal 1A Domestik</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- passenger -->
+        <div class="passenger">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 48 48"
+            width="24"
+            height="24"
+            id="Information"
+          >
+            <path fill="none" d="M0 0h48v48H0z"></path>
+            <path
+              d="M24 4C12.95 4 4 12.95 4 24s8.95 20 20 20 20-8.95 20-20S35.05 4 24 4zm2 30h-4V22h4v12zm0-16h-4v-4h4v4z"
+              fill="#d8a353"
+              class="color000000 svgShape"
+            ></path>
+          </svg>
+          <p>Passenger</p>
+        </div>
+        <div class="passenger-info">
+          <div style="display: flex; justify-content: space-between">
+            <p>Mr. Harry Potter</p>
+            <p>Dewasa</p>
+          </div>
+          <p style="padding-bottom: 10px">ID: 1234567</p>
+          <div style="display: flex; justify-content: space-between">
+            <p>Mr. Harry Potter</p>
+            <p>Dewasa</p>
+          </div>
+          <p>ID: 1234567</p>
+        </div>
+
+        <!-- price -->
+        <div class="price-info">
+          <p>Total Price:</p>
+          <p>IDR 1,500,000</p>
+        </div>
+
+        <!-- barcode -->
+        <div class="barcode">
+          <img src="/src/assets/frame.png" alt="Barcode" />
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
