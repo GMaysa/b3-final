@@ -1,12 +1,22 @@
+
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-* {
+*{
   font-family: Poppins;
   font-weight: inherit;
   font-size: inherit;
+}
+
+body {
+  @apply m-0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.gradient {
+  background: linear-gradient(180deg, rgba(255, 233, 202, 0) 5%, #DEC9FF 100%);
 }
 
 .tglBtn {
@@ -22,3 +32,12 @@
 .tglBtn.active {
   right: 0%;
 }
+
+@layer base {
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+/* manage style input */
