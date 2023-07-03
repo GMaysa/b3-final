@@ -14,7 +14,7 @@ import {
 import { getSeatDetails, updateSeatStatus } from "../redux/actions/seatActions";
 
 const Biodata = () => {
-  const indexnya = 1;
+  const indexnya = 2;
   const dispatch = useDispatch();
   const [selectedSeats, setSelectedSeats] = useState({});
   const [fullNameCos, setFullNameCos] = useState("");
@@ -44,7 +44,7 @@ const Biodata = () => {
     Array.from({ length: indexnya }, () => "")
   );
 
-  const [maxSelectedSeats, setMaxSelectedSeats] = useState(1);
+  const [maxSelectedSeats, setMaxSelectedSeats] = useState(2);
   const [showFamilyName, setShowFamilyName] = useState(false);
   const navigate = useNavigate();
   const { seatDetails } = useSelector((state) => state.seat);

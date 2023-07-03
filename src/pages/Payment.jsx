@@ -96,7 +96,6 @@ const Payment = () => {
       phoneNumber: phoneNumber,
     };
     dispatch(getTransDetailsGo(paygo, navigate));
-    navigate("/payconfirm");
   };
 
   const handleDataVA = (e) => {
@@ -108,7 +107,6 @@ const Payment = () => {
       bankVa: bankVa,
     };
     dispatch(getTransDetailsVA(payva, navigate));
-    navigate("/payconfirm");
   };
 
   const handleData = (e) => {
@@ -122,7 +120,6 @@ const Payment = () => {
       cardHolderName: cardHolderName,
     };
     dispatch(getTransDetails(pay, navigate));
-    navigate("/payconfirm");
   };
 
   useEffect(() => {
