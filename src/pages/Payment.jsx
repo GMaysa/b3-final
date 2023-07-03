@@ -11,7 +11,7 @@ import {
   getTransDetailsGo,
   getTransDetailsVA,
 } from "../redux/actions/transactionActions";
-import "flowbite";
+
 import { getBooking } from "../redux/actions/bookingActions";
 
 const Payment = () => {
