@@ -14,7 +14,7 @@ import {
 import { getSeatDetails, updateSeatStatus } from "../redux/actions/seatActions";
 
 const Biodata = () => {
-  const indexnya = 2;
+  const indexnya = 1;
   const dispatch = useDispatch();
   const [selectedSeats, setSelectedSeats] = useState({});
   const [fullNameCos, setFullNameCos] = useState("");
@@ -44,7 +44,7 @@ const Biodata = () => {
     Array.from({ length: indexnya }, () => "")
   );
 
-  const [maxSelectedSeats, setMaxSelectedSeats] = useState(2);
+  const [maxSelectedSeats, setMaxSelectedSeats] = useState(1);
   const [showFamilyName, setShowFamilyName] = useState(false);
   const navigate = useNavigate();
   const { seatDetails } = useSelector((state) => state.seat);
@@ -56,7 +56,7 @@ const Biodata = () => {
   };
 
   const [selectedTitle, setSelectedTitle] = useState(
-    Array(indexnya).fill("Mr.")
+    Array(indexnya).fill("Pilih Title")
   );
   const [isDropdownOpen, setIsDropdownOpen] = useState(
     Array(indexnya).fill(false)
@@ -341,20 +341,15 @@ const Biodata = () => {
                         </h1>
                       </div>
                       <div className="relative sm:w-[454px] pt-[4px]">
-                        <div className="flex rounded-[4px]">
+                        <div className="font-medium flex rounded-[4px]">
                           <input
+                            onClick={() => handleToggleDropdown(index)}
                             type="text"
                             value={selectedTitle[index]}
                             readOnly
                             placeholder=""
                             className="flex-1 outline-none bg-transparent py-[8px] pl-[12px] pr-[7px] rounded-[4px] border-gray-300 sm:pr-[230px]"
                           />
-                          <div className="flex items-center pr-[10px]">
-                            <FiChevronDown
-                              className="text-[24px] text-[#8A8A8A] cursor-pointer"
-                              onClick={() => handleToggleDropdown(index)}
-                            />
-                          </div>
                         </div>
                         {isDropdownOpen[index] && (
                           <div className="absolute top-full left-0 w-full bg-white border border-gray-300 mt-[4px] rounded-[4px]">
@@ -444,7 +439,7 @@ const Biodata = () => {
                             setBirthDatePasValues(newBirthDatePasValues);
                           }}
                           placeholder={`BirthDate ${index + 1}`}
-                          className="outline-none bg-transparent rounded-[4px] border-gray-300"
+                          className="outline-none bg-transparent rounded-[4px] border-gray-300 text-gray-400"
                           style={{ width: "100%", maxWidth: "500px" }}
                         />
                       </form>
@@ -551,7 +546,7 @@ const Biodata = () => {
                             );
                           }}
                           placeholder={`Berlaku Sampai ${index + 1}`}
-                          className="outline-none bg-transparent rounded-[4px] border-gray-300"
+                          className="outline-none bg-transparent rounded-[4px] border-gray-300 text-gray-400"
                           style={{ width: "100%", maxWidth: "500px" }}
                         />
                       </form>

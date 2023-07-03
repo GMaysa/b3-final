@@ -23,6 +23,8 @@ const Payment = () => {
   const [cardHolderName, setCardHolderName] = useState("");
   const [cardCvv, setCardCvv] = useState("");
   const [bankVa, setBankVa] = useState("");
+  const [selectedBank, setSelectedBank] = useState("");
+
   const [phoneNumber, setPhoneNumber] = useState("");
   const dispatch = useDispatch();
   const bookingCode = bookingMessage.data[0].booking.bookingCode;
@@ -100,12 +102,32 @@ const Payment = () => {
 
   const handleDataVA = (e) => {
     e.preventDefault();
+    let bankVaValue;
+
+    switch (selectedBank) {
+      case "BCA":
+        bankVaValue = 1;
+        break;
+      case "BRI":
+        bankVaValue = 2;
+        break;
+      case "Mandiri":
+        bankVaValue = 3;
+        break;
+      case "BNI":
+        bankVaValue = 4;
+        break;
+      default:
+        bankVaValue = 0;
+    }
+
     const payva = {
       bookingCode: bookingCode,
       method: "bank_va",
       amount: totalPrice,
-      bankVa: bankVa,
+      bankVa: bankVaValue,
     };
+
     dispatch(getTransDetailsVA(payva, navigate));
   };
 
@@ -172,7 +194,7 @@ const Payment = () => {
 
       <div className="flex flex-col-reverse items-center sm:flex-row gap-[16px] pt-[30px] sm:w-full sm:justify-center sm:items-start xl:px-[285px]">
         <div className="pembayaran">
-          <div className="px-[16px] sm:w-[518px]">
+          <div className="px-[16px] sm:w-[518px] w-[350px]">
             <div className="data_pembayaran text-[18px] sm:text-[20px]">
               <h1 className="font-bold">Isi Data Pembayaran</h1>
             </div>
@@ -243,14 +265,17 @@ const Payment = () => {
                         </div>
                         <div>
                           <form className="font-light">
-                            <input
-                              type="text"
-                              value={bankVa}
-                              name="bankVa"
-                              onChange={(e) => setBankVa(e.target.value)}
-                              placeholder="4480 0000 0000 0000"
-                              className="outline-none rounded-[5px] sm:rounded-[5px] bg-transparent py-[8px] border-b border-[#D0D0D0] w-[296px]"
-                            />
+                            <select
+                              value={selectedBank}
+                              onChange={(e) => setSelectedBank(e.target.value)}
+                              className="outline-none rounded-[5px] sm:rounded-[5px] bg-transparent py-[8px] border-b border-[#D0D0D0] w-[296px] focus:bg-white"
+                            >
+                              <option value="">Pilih bank</option>
+                              <option value="BCA">BCA</option>
+                              <option value="BRI">BRI</option>
+                              <option value="Mandiri">Mandiri</option>
+                              <option value="BNI">BNI</option>
+                            </select>
                           </form>
                         </div>
                       </div>
