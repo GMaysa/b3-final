@@ -50,17 +50,17 @@ function App() {
           <Route
             path="/edit"
             element={
-              <RedirectIfProtected>
-                <EditProfile />
-              </RedirectIfProtected>
+              // <RedirectIfProtected>
+              <EditProfile />
+              // </RedirectIfProtected>
             }
           />
           <Route
             path="/profile"
             element={
-              <RedirectIfProtected>
-                <Profile />
-              </RedirectIfProtected>
+              // <RedirectIfProtected>
+              <Profile />
+              // </RedirectIfProtected>
             }
           />
           {/* <Route path="/notification" element={<Notification />} />  */}
@@ -70,33 +70,33 @@ function App() {
           <Route
             path="/bio"
             element={
-              <RedirectIfProtected>
-                <Biodata />
-              </RedirectIfProtected>
+              // <RedirectIfProtected>
+              <Biodata />
+              // </RedirectIfProtected>
             }
           />
           <Route
             path="/payconfirm"
             element={
-              <RedirectIfProtected>
-                <PayConfirm />
-              </RedirectIfProtected>
+              // <RedirectIfProtected>
+              <PayConfirm />
+              // </RedirectIfProtected>
             }
           />
           <Route
             path="/pay"
             element={
-              <RedirectIfProtected>
-                <Payment />
-              </RedirectIfProtected>
+              // <RedirectIfProtected>
+              <Payment />
+              // </RedirectIfProtected>
             }
           />
           <Route
             path="/paysuccess"
             element={
-              <RedirectIfProtected>
-                <PaymentSuccess />
-              </RedirectIfProtected>
+              // <RedirectIfProtected>
+              <PaymentSuccess />
+              // </RedirectIfProtected>
             }
           />
         </Routes>
