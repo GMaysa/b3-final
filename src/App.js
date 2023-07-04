@@ -19,7 +19,7 @@ import Otp from "./pages/Otp";
 import Register from "./pages/Register";
 import Reset from "./pages/Reset";
 import { ToastContainer } from "react-toastify";
-import RedirectIfProtected from "./components/RedirectIfProtected";
+import RedirectIfProtected from "./Components/RedirectIfProtected";
 
 function App() {
   useEffect(() => {
