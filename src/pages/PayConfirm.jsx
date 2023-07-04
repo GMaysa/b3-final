@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { getPayconfirm } from "../redux/actions/payconfirmActions";
 import Crown from "../assets/crown.svg";
 import { useNavigate } from "react-router-dom";
 
 const PayConfirm = () => {
   const navigate = useNavigate();
-  const { bookingDetails } = useSelector((state) => state);
   const bookingMessage = JSON.parse(localStorage.getItem("bookingMessage"));
   const [photo_confirmation, setPhoto_confirmation] = useState(null);
   const dispatch = useDispatch();
@@ -48,7 +47,7 @@ const PayConfirm = () => {
     const seconds = date.getSeconds();
     return `${hours}:${minutes}${seconds}`;
   };
-  const arrivalDate = bookingMessage.data[0].booking.departFlight.arrivalDate;
+  // const arrivalDate = bookingMessage.data[0].booking.departFlight.arrivalDate;
   const arrivalTime = bookingMessage.data[0].booking.departFlight.arrivalDate;
   const departureDate =
     bookingMessage.data[0].booking.departFlight.departureDate;
@@ -197,7 +196,7 @@ const PayConfirm = () => {
           <div className="pt-[8px] flex jutify-between items-center gap-[8px] text-[12px] sm:text-[14px]">
             <div>
               <div>
-                <img src={Crown} />
+                <img src={Crown} alt="tranferimage" />
               </div>
             </div>
             <div className="informasi">

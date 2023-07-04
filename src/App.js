@@ -16,10 +16,10 @@ import Profile from "./pages/Profile";
 // import FlightTicketHistory from "./Components/FlightTicketHistory";
 import DetailHistory from "./pages/DetailHistory";
 import Otp from "./pages/Otp";
-import Register from './pages/Register';
-import Reset from './pages/Reset'; s
+import Register from "./pages/Register";
+import Reset from "./pages/Reset";
 import { ToastContainer } from "react-toastify";
-import RedirectIfProtected from "./Components/RedirectIfProtected";
+import RedirectIfProtected from "./components/RedirectIfProtected";
 
 function App() {
   useEffect(() => {
@@ -41,31 +41,35 @@ function App() {
   return (
     <Provider store={store}>
       <BrowserRouter>
-    <Header/>
-      <Routes>
-        <Route path='/' element={<Login/>} />
-        <Route path='/reset' element={<Reset/>} />
-        <Route path='/register' element={<Register/>} />
-        <Route path="/edit" element={<EditProfile />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/otp" element={<Otp />} />
-        {/* <Route path="/notification" element={<Notification />} />  */}
-        {/* <Route path="/history" element={<FlightTicketHistory />} />  */}
-        {/* <Route path="/detail" element={<DetailHistory />} /> */}
+        <Header />
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/reset" element={<Reset />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/edit" element={<EditProfile />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/otp" element={<Otp />} />
+          {/* <Route path="/notification" element={<Notification />} />  */}
+          {/* <Route path="/history" element={<FlightTicketHistory />} />  */}
+          {/* <Route path="/detail" element={<DetailHistory />} /> */}
 
-        <Route 
-          path='/biodata' 
-          element={
-          <RedirectIfProtected> <Biodata/></RedirectIfProtected>
-        }/>
-          <Route path="/bio" element={<Biodata />}/>
-          <Route path="/payconfirm" element={<PayConfirm />}/>
-        <Route path='/pay' element={<Payment/>}/>
-        <Route path='/paysuccess' element={<PaymentSuccess/>}/>
-      </Routes>
+          <Route
+            path="/biodata"
+            element={
+              <RedirectIfProtected>
+                {" "}
+                <Biodata />
+              </RedirectIfProtected>
+            }
+          />
+          <Route path="/bio" element={<Biodata />} />
+          <Route path="/payconfirm" element={<PayConfirm />} />
+          <Route path="/pay" element={<Payment />} />
+          <Route path="/paysuccess" element={<PaymentSuccess />} />
+        </Routes>
 
-      <ToastContainer theme="colored"/>
-    </BrowserRouter>
+        <ToastContainer theme="colored" />
+      </BrowserRouter>
     </Provider>
   );
 }

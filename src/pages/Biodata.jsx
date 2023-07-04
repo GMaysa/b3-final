@@ -1,15 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { ReactComponent as Wrapper } from "../assets/Wrapper.svg";
 import Crown from "../assets/crown.svg";
-import { FiCalendar, FiChevronDown } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 
-import {
-  postBooking,
-  postBookingDetails,
-} from "../redux/actions/bookingActions";
+import { postBookingDetails } from "../redux/actions/bookingActions";
 
 import { getSeatDetails, updateSeatStatus } from "../redux/actions/seatActions";
 
@@ -44,7 +38,7 @@ const Biodata = () => {
     Array.from({ length: indexnya }, () => "")
   );
 
-  const [maxSelectedSeats, setMaxSelectedSeats] = useState(1);
+  const maxSelectedSeats = 1;
   const [showFamilyName, setShowFamilyName] = useState(false);
   const navigate = useNavigate();
   const { seatDetails } = useSelector((state) => state.seat);
@@ -812,7 +806,7 @@ const Biodata = () => {
             <div className="pt-[8px] flex jutify-between items-center gap-[8px]">
               <div>
                 <div>
-                  <img src={Crown} />
+                  <img src={Crown} alt="transferimage" />
                 </div>
               </div>
               <div className="informasi text-[12px] sm:text-[14px]">

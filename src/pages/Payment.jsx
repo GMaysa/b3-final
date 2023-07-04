@@ -15,14 +15,14 @@ import {
 import { getBooking } from "../redux/actions/bookingActions";
 
 const Payment = () => {
-  const { bookingDetails } = useSelector((state) => state);
+  // const { bookingDetails } = useSelector((state) => state);
   const { booking } = useSelector((state) => state);
   const bookingMessage = JSON.parse(localStorage.getItem("bookingMessage"));
   console.log(booking);
   const [cardNumber, setCardNumber] = useState("");
   const [cardHolderName, setCardHolderName] = useState("");
   const [cardCvv, setCardCvv] = useState("");
-  const [bankVa, setBankVa] = useState("");
+  // const [bankVa, setBankVa] = useState("");
   const [selectedBank, setSelectedBank] = useState("");
 
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -454,7 +454,7 @@ const Payment = () => {
           <div className="pt-[8px] flex jutify-between items-center gap-[8px] text-[12px] sm:text-[14px]">
             <div>
               <div>
-                <img src={Crown} />
+                <img src={Crown} alt="transferimage" />
               </div>
             </div>
             <div className="informasi">
