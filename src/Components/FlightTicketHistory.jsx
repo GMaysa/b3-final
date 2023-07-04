@@ -151,7 +151,7 @@ const FlightTicketHistory = () => {
 
   return (
     <section className="pt-16 sm:pt-20 px-7 sm:px-20 sm:py-16 py-10 w-full mx-auto font-poppins">
-      <h1 className="font-bold text-xl">Riwayat Pemesanan</h1>
+      <h1 className="font-bold text-xl px-2">Riwayat Pemesanan</h1>
       <div className="py-4 px-2 flex gap-5 items-center">
         <button className="flex gap-4 w-full h-9 rounded-lg items-center px-6 text-white bg-[#A06ECE] text-lg">
           <AiOutlineArrowLeft className="h-7" />
@@ -264,7 +264,7 @@ const FlightTicketHistory = () => {
                 }
                 key={id}
                 bookingCode={history.bookingCode || history.booking.bookingCode}
-                status={history.status || history?.status?.name}
+                status={history?.status || history?.status?.name}
                 departureAirport={
                   history.depCity ||
                   history.booking.departFlight.departureAirport.city

@@ -96,13 +96,13 @@ const Notification = () => {
   // Status Change
   const handleStatusChange = async (notificationId) => {
     try {
-      dispatch(updateStatus(notificationId));
-      const updatedNotifs = notifs.map((notif) =>
+      const updatedNotifs = updatedNotifications.map((notif) =>
         notif.notificationId === notificationId
           ? { ...notif, read: true }
           : notif
       );
       setUpdatedNotifications(updatedNotifs);
+      dispatch(updateStatus(notificationId));
     } catch (error) {
       console.log(error);
     }
@@ -114,7 +114,7 @@ const Notification = () => {
 
   return (
     <section className="px-7 sm:px-20 sm:py-16 py-10 w-full mx-auto font-poppins">
-      <h1 className="font-bold text-xl">Notifikasi</h1>
+      <h1 className="font-bold text-xl px-2">Notifikasi</h1>
       <div className="py-4 px-2 flex gap-4 items-center pb-8">
         <button
           className="flex gap-4 w-full h-9 rounded-lg items-center px-6 text-white bg-[#A06ECE] text-md"

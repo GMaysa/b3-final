@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useEffect } from "react";
 import img from "../assets/img.png";
 import { FaUser, FaPhone, FaTransgender } from "react-icons/fa";
@@ -39,6 +41,7 @@ const Profile = () => {
       <div className="bg-white rounded-2xl shadow-lg ">
         <div className="flex flex-col py-6">
           <div className="justify-center flex">
+            {/* <img src={profile?.image} className="w-1/2" /> */}
             <img src={img} className="w-1/2 " />
           </div>
           <div className="px-8 p-3 py-5">

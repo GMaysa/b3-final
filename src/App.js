@@ -12,6 +12,7 @@ import Notification from "./Components/Notification";
 import FlightTicketHistory from "./Components/FlightTicketHistory";
 import DetailHistory from "./pages/DetailHistory";
 import PopupNotif from "./Components/PopupNotif";
+import Navbar from "./Components/Navbar";
 
 function App() {
   const [showPopup, setShowPopup] = useState(true);
@@ -22,7 +23,8 @@ function App() {
   return (
     <Provider store={store}>
       <BrowserRouter>
-        {/* {showPopup && <PopupNotif onClose={handleClosePopup} />} */}
+        <Navbar />
+        {showPopup && <PopupNotif onClose={handleClosePopup} />}
         <Routes>
           <Route path="/edit" element={<EditProfile />} />
           <Route path="/profile" element={<Profile />} />
