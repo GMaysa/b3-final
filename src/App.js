@@ -46,26 +46,59 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/reset" element={<Reset />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/edit" element={<EditProfile />} />
-          <Route path="/profile" element={<Profile />} />
           <Route path="/otp" element={<Otp />} />
+          <Route
+            path="/edit"
+            element={
+              <RedirectIfProtected>
+                <EditProfile />
+              </RedirectIfProtected>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <RedirectIfProtected>
+                <Profile />
+              </RedirectIfProtected>
+            }
+          />
           {/* <Route path="/notification" element={<Notification />} />  */}
           {/* <Route path="/history" element={<FlightTicketHistory />} />  */}
           {/* <Route path="/detail" element={<DetailHistory />} /> */}
 
           <Route
-            path="/biodata"
+            path="/bio"
             element={
               <RedirectIfProtected>
-                {" "}
                 <Biodata />
               </RedirectIfProtected>
             }
           />
-          <Route path="/bio" element={<Biodata />} />
-          <Route path="/payconfirm" element={<PayConfirm />} />
-          <Route path="/pay" element={<Payment />} />
-          <Route path="/paysuccess" element={<PaymentSuccess />} />
+          <Route
+            path="/payconfirm"
+            element={
+              <RedirectIfProtected>
+                <PayConfirm />
+              </RedirectIfProtected>
+            }
+          />
+          <Route
+            path="/pay"
+            element={
+              <RedirectIfProtected>
+                <Payment />
+              </RedirectIfProtected>
+            }
+          />
+          <Route
+            path="/paysuccess"
+            element={
+              <RedirectIfProtected>
+                <PaymentSuccess />
+              </RedirectIfProtected>
+            }
+          />
         </Routes>
 
         <ToastContainer theme="colored" />
