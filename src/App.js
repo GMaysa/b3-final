@@ -9,30 +9,17 @@ import { Provider } from "react-redux";
 import store from "./redux/store";
 import { useEffect } from "react";
 import PayConfirm from "./pages/PayConfirm";
-import { ToastContainer } from "react-toastify";
 import Login from "./pages/Login";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
 import EditProfile from "./pages/EditProfile";
 import Profile from "./pages/Profile";
 // import Notification from "./Components/Notification";
-// import Notification from "./Components/Notification.jsx";
 // import FlightTicketHistory from "./Components/FlightTicketHistory";
 import DetailHistory from "./pages/DetailHistory";
-import Biodata from './pages/Biodata';
-import Payment from './pages/Payment';
 import Otp from "./pages/Otp";
-import PaymentSuccess from './pages/PaymentSuccess';
-import Login from './pages/Login';
 import Register from './pages/Register';
-import Reset from './pages/Reset'; 
-import { Provider } from "react-redux";
-import store from "./redux/store";
+import Reset from './pages/Reset'; s
 import { ToastContainer } from "react-toastify";
 import RedirectIfProtected from "./Components/RedirectIfProtected";
-// import RedirectIfProtected from "./Components/RedirectIfProtected";
-// import Protected from "./Components/Protected";
-import Header from "./components/Header";
-import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   useEffect(() => {
@@ -54,31 +41,11 @@ function App() {
   return (
     <Provider store={store}>
       <BrowserRouter>
-        {/* <Header /> */}
-        <Routes>
-          <Route path="/" element={<Login />}></Route>
-        </Routes>
-        <Routes>
-          <Route path="/bio" element={<Biodata />}></Route>
-        </Routes>
-        <Routes>
-          <Route path="/pay" element={<Payment />}></Route>
-        </Routes>
-        <Routes>
-          <Route path="/payconfirm" element={<PayConfirm />}></Route>
-        </Routes>
-        <Routes>
-          <Route path="/paysuccess" element={<PaymentSuccess />}></Route>
-        </Routes>
-      </BrowserRouter>
-      <ToastContainer />
-    <BrowserRouter>
-
     <Header/>
       <Routes>
-        <Route path='/' element={<Login/>}></Route>
-        <Route path='/reset' element={<Reset/>}></Route>
-        <Route path='/register' element={<Register/>}></Route>
+        <Route path='/' element={<Login/>} />
+        <Route path='/reset' element={<Reset/>} />
+        <Route path='/register' element={<Register/>} />
         <Route path="/edit" element={<EditProfile />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/otp" element={<Otp />} />
@@ -90,10 +57,11 @@ function App() {
           path='/biodata' 
           element={
           <RedirectIfProtected> <Biodata/></RedirectIfProtected>
-        }></Route>
-
-        <Route path='/pay' element={<Payment/>}></Route>
-        <Route path='/paysuccess' element={<PaymentSuccess/>}></Route>
+        }/>
+          <Route path="/bio" element={<Biodata />}/>
+          <Route path="/payconfirm" element={<PayConfirm />}/>
+        <Route path='/pay' element={<Payment/>}/>
+        <Route path='/paysuccess' element={<PaymentSuccess/>}/>
       </Routes>
 
       <ToastContainer theme="colored"/>
