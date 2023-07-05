@@ -7,7 +7,7 @@ import {
 } from "react-icons/bs";
 import { MdSwapHoriz } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import Accordion from "../components/Accordion";
+import Accordion from "../Components/Accordion";
 import { useNavigate } from "react-router-dom";
 
 function SearchResults() {
