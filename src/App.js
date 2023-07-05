@@ -15,8 +15,8 @@ import PayConfirm from "./pages/PayConfirm";
 import Login from "./pages/Login";
 import EditProfile from "./pages/EditProfile";
 import Profile from "./pages/Profile";
-import Notification from "./components/Notification";
-import FlightTicketHistory from "./components/FlightTicketHistory";
+import Notification from "./Components/Notification";
+import FlightTicketHistory from "./Components/FlightTicketHistory";
 import DetailHistory from "./pages/DetailHistory";
 import Home from "./pages/Home";
 import SearchResults from "./pages/SearchResults";
@@ -25,7 +25,7 @@ import SearchResults from "./pages/SearchResults";
 // import RedirectIfProtected from "./Components/RedirectIfProtected";
 // import Protected from "./Components/Protected";
 // import Header from "./components/Header";
-import PopupNotif from "./components/PopupNotif";
+import PopupNotif from "./Components/PopupNotif";
 import Reset from "./pages/Reset";
 
 function App() {
