@@ -18,13 +18,14 @@ import Profile from "./pages/Profile";
 import Notification from "./Components/Notification";
 import FlightTicketHistory from "./Components/FlightTicketHistory";
 import DetailHistory from "./pages/DetailHistory";
-// import Otp from "./pages/Otp";
-// import Register from "./pages/Register";
 import Home from "./pages/Home";
 import SearchResults from "./pages/SearchResults";
+// import Otp from "./pages/Otp";
+// import Register from "./pages/Register";
 // import RedirectIfProtected from "./Components/RedirectIfProtected";
 // import Protected from "./Components/Protected";
 // import Header from "./components/Header";
+
 import PopupNotif from "./Components/PopupNotif";
 import Reset from "./pages/Reset";
 
@@ -53,6 +54,7 @@ function App() {
   return (
     <Provider store={store}>
       <BrowserRouter>
+        {showPopup && <PopupNotif onClose={handleClosePopup} />}
         <Header />
         <Routes>
           <Route path="/" element={<Home />}></Route>
@@ -75,9 +77,9 @@ function App() {
               // </RedirectIfProtected>
             }
           />
-          {/* <Route path="/notification" element={<Notification />} />  */}
-          {/* <Route path="/history" element={<FlightTicketHistory />} />  */}
-          {/* <Route path="/detail" element={<DetailHistory />} /> */}
+          {/*  <Route path="/notification" element={<Notification />} />  */}
+          {/*  <Route path="/history" element={<FlightTicketHistory />} />  */}
+          {/*   <Route path="/detail/:bookingCode" element={<DetailHistory />} /> */}
 
           <Route
             path="/bio"
