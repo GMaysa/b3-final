@@ -1,0 +1,126 @@
+<!-- @format -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PopUp</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+    ></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
+    <style>
+      /* Tambahkan style CSS berikut */
+      .flex-container {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+      }
+
+      .message {
+        background-color: #f0f0f0;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+      }
+
+      .notification {
+        display: flex;
+        gap: 1rem;
+        padding: 0.5rem;
+        width: 100%;
+      }
+
+      .notification-content {
+        flex: 1;
+      }
+    </style>
+    <script>
+      var stompClient = null;
+      var privateStompClient = null;
+
+      var socket = new SockJS(
+        "https://gcpflypal-l5tho6hrtq-as.a.run.app/api/v1/ws"
+      );
+      stompClient = Stomp.over(socket);
+      stompClient.connect({}, function (frame) {
+        console.log(frame);
+        stompClient.subscribe("/public/all", function (result) {
+          show(JSON.parse(result.body));
+        });
+      });
+
+      socket = new SockJS(
+        "https://gcpflypal-l5tho6hrtq-as.a.run.app/api/v1/ws"
+      );
+      privateStompClient = Stomp.over(socket);
+      privateStompClient.connect({}, function (frame) {
+        console.log(frame);
+        privateStompClient.subscribe("/user/private", function (result) {
+          console.log(result.body);
+          show(JSON.parse(result.body));
+        });
+      });
+
+      function show(message) {
+        var response = document.getElementById("messages");
+        var div = document.createElement("div");
+        div.className = "notification";
+        var divContent = document.createElement("div");
+        divContent.className = "notification-content";
+        var pCategory = document.createElement("h6");
+        pCategory.className = "text-gray-500";
+        pCategory.innerText = message.categoryName;
+        var pTitle = document.createElement("p");
+        pTitle.className = "text-base font-medium";
+        pTitle.innerText = message.title;
+        var pContent = document.createElement("p");
+        pContent.className = "text-gray-500 text-sm";
+        pContent.innerText = message.content;
+
+        divContent.appendChild(pCategory);
+        divContent.appendChild(pTitle);
+        divContent.appendChild(pContent);
+        div.appendChild(divContent);
+        response.appendChild(div);
+      }
+
+      // // Data sementara notifikasi
+      // var temporaryData = {
+      //   categoryName: "Notification",
+      //   title: "New Message",
+      //   content: "You have a new message.",
+      // };
+
+      // // Menampilkan data sementara pada notifikasi
+      // window.addEventListener("DOMContentLoaded", function () {
+      //   show(temporaryData);
+      // });
+    </script>
+  </head>
+
+  <body>
+    <div
+      class="absolute font-medium bg-white rounded-md shadow-lg w-1/2 px-3 py-2 top-10 right-0 z-50"
+    >
+      <div class="justify-end flex mx-auto">
+        <ion-icon name="close-outline"></ion-icon>
+      </div>
+      <div></div>
+
+      <div id="messages" class="mt-4"></div>
+    </div>
+  </body>
+</html>

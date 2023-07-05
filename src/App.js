@@ -1,8 +1,11 @@
+/** @format */
+
 import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
+import React, { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Biodata from "./pages/Biodata";
-import Header from "./components/Header";
+import Header from "./Components/Header";
 import Payment from "./pages/Payment";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import { Provider } from "react-redux";
@@ -12,14 +15,11 @@ import PayConfirm from "./pages/PayConfirm";
 import Login from "./pages/Login";
 import EditProfile from "./pages/EditProfile";
 import Profile from "./pages/Profile";
-// import Notification from "./Components/Notification";
-// import FlightTicketHistory from "./Components/FlightTicketHistory";
+import Notification from "./Components/Notification";
+import FlightTicketHistory from "./Components/FlightTicketHistory";
 import DetailHistory from "./pages/DetailHistory";
-import Otp from "./pages/Otp";
-import Register from "./pages/Register";
 import Reset from "./pages/Reset";
 import { ToastContainer } from "react-toastify";
-import RedirectIfProtected from "./Components/RedirectIfProtected";
 
 function App() {
   useEffect(() => {
@@ -38,6 +38,11 @@ function App() {
     };
   }, []);
 
+  const [showPopup, setShowPopup] = useState(true);
+  const handleClosePopup = () => {
+    setShowPopup(false);
+  };
+
   return (
     <Provider store={store}>
       <BrowserRouter>
@@ -45,8 +50,6 @@ function App() {
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/reset" element={<Reset />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/otp" element={<Otp />} />
           <Route
             path="/edit"
             element={

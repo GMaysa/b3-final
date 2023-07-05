@@ -1,3 +1,5 @@
+/** @format */
+
 import { combineReducers } from "@reduxjs/toolkit";
 import book from "./bookingReducers";
 import trans from "./transactionReducers";
