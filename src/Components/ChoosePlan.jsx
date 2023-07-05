@@ -8,7 +8,7 @@ import { FaBaby, FaChildDress, FaPerson } from "react-icons/fa6";
 import { MdOutlineAirlineSeatReclineExtra, MdSwapHoriz } from "react-icons/md";
 import { DateRange } from "react-date-range";
 import { getAirport } from "../redux/actions/airportActions";
-import { printThisDate, thisDate } from "../components/DateView";
+import { printThisDate, thisDate } from "../Components/DateView";
 import { getAllFlightSearchResult } from "../redux/actions/searchFlightsActions";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
