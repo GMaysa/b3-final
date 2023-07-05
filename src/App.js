@@ -12,7 +12,7 @@ import { Provider } from "react-redux";
 import store from "./redux/store";
 import { useEffect } from "react";
 import PayConfirm from "./pages/PayConfirm";
-// import Login from "./pages/Login";
+import Login from "./pages/Login";
 import EditProfile from "./pages/EditProfile";
 import Profile from "./pages/Profile";
 import Notification from "./Components/Notification";
@@ -112,8 +112,6 @@ function App() {
             }
           />
         </Routes>
-
-        <ToastContainer theme="colored" />
       </BrowserRouter>
     </Provider>
   );
