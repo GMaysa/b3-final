@@ -1,6 +1,6 @@
 import axios from "axios";
 import { toast } from "react-toastify";
-import { setProfile, setAccesstoken } from "../reducers/profileReducers";
+import { setProfile } from "../reducers/profileReducers";
 
 export const getProfile = () => async (dispatch) => {
   try {
