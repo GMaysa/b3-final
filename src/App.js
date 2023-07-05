@@ -18,8 +18,15 @@ import Profile from "./pages/Profile";
 import Notification from "./Components/Notification";
 import FlightTicketHistory from "./Components/FlightTicketHistory";
 import DetailHistory from "./pages/DetailHistory";
+// import Otp from "./pages/Otp";
+// import Register from "./pages/Register";
+import Home from "./pages/Home";
+import SearchResults from "./pages/SearchResults";
+// import RedirectIfProtected from "./Components/RedirectIfProtected";
+// import Protected from "./Components/Protected";
+// import Header from "./components/Header";
+import PopupNotif from "./Components/PopupNotif";
 import Reset from "./pages/Reset";
-import { ToastContainer } from "react-toastify";
 
 function App() {
   useEffect(() => {
@@ -48,8 +55,10 @@ function App() {
       <BrowserRouter>
         <Header />
         <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/reset" element={<Reset />} />
+          <Route path="/" element={<Home />}></Route>
+          <Route path="/search" element={<SearchResults />}></Route>
+          // <Route path="/login" element={<Login />} />
+          // <Route path="/reset" element={<Reset />} />
           <Route
             path="/edit"
             element={
@@ -103,8 +112,6 @@ function App() {
             }
           />
         </Routes>
-
-        <ToastContainer theme="colored" />
       </BrowserRouter>
     </Provider>
   );
