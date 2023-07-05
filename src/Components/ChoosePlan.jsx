@@ -322,7 +322,7 @@ function ChoosePlan() {
                     }
                     disabled={!arrival}
                     readOnly
-                    className={`w-full text-neutral-700 outline-none bg-white ${!arrival && ' text-neutral-300'}`}
+                    className={`w-full text-neutral-700 outline-none bg-white ${!arrival && '!text-neutral-300'}`}
                   />
                 </div>
               </div>

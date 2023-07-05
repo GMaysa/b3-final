@@ -8,12 +8,9 @@ import { useDispatch, useSelector } from 'react-redux';
 
 const Header = () => {
   const [isActive, setIsActive] = useState(false);
-
   const navigate = useNavigate()
   const dispatch = useDispatch()
-
   const { IsLogeedIn,token, user } = useSelector  ((state) => state.auth)
-
   const divClasses = `tglBtn flex flex-col p-[20px] sm:hidden  ${isActive ? 'active' : ''}`;
   //300 = font-light
   //500 = font-medium

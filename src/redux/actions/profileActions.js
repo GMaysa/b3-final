@@ -1,6 +1,8 @@
+/** @format */
+
 import axios from "axios";
 import { toast } from "react-toastify";
-import { setProfile, setAccesstoken } from "../reducers/profileReducers";
+import { setProfile } from "../reducers/profileReducers";
 
 export const getProfile = () => async (dispatch) => {
   try {
@@ -44,7 +46,7 @@ export const editProfile = (updatedProfile) => async (dispatch, getState) => {
     );
 
     dispatch(setProfile(data.data[0]));
-    console.log(data);
+
     console.log("Profile updated successfully!");
   } catch (error) {
     if (axios.isAxiosError(error)) {
