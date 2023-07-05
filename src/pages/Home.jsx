@@ -13,7 +13,7 @@ import { getAirport } from "../redux/actions/airportActions";
 import "react-date-range/dist/theme/default.css";
 import "react-date-range/dist/styles.css";
 import { DateRange } from "react-date-range";
-import { printThisDate, thisDate } from "../components/DateView";
+import { printThisDate, thisDate } from "../Components/DateView";
 import { useNavigate } from "react-router-dom";
 import { getAllFlightSearchResult } from "../redux/actions/searchFlightsActions";
 
