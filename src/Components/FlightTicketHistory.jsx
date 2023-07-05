@@ -150,7 +150,7 @@ const FlightTicketHistory = () => {
   }, [isSearching, historySearch, historyFilter, historys]);
 
   return (
-    <section className="pt-16 sm:pt-20 px-7 sm:px-20 sm:py-16 py-10 w-full mx-auto font-poppins">
+    <section className="pt-16 md:pt-20 px-7 md:px-20 md:py-16 py-10 w-full mx-auto font-poppins">
       <h1 className="font-bold text-xl px-2">Riwayat Pemesanan</h1>
       <div className="py-4 px-2 flex gap-5 items-center">
         <button className="flex gap-4 w-full h-9 rounded-lg items-center px-6 text-white bg-[#A06ECE] text-lg">
@@ -159,7 +159,7 @@ const FlightTicketHistory = () => {
         </button>
 
         <button
-          className="border border-[#A06ECE] hidden sm:flex gap-2 rounded-full w-28 h-8 justify-center items-center"
+          className="border border-[#A06ECE] hidden md:flex gap-2 rounded-full w-28 h-8 justify-center items-center"
           onClick={handleFilterClick}
         >
           <BiFilterAlt className="text-gray-500" />
@@ -239,9 +239,9 @@ const FlightTicketHistory = () => {
           </div>
         </ModalSearch>
       </div>
-      <div className="justify-end flex mx-auto pt-7 pb-6 sm:pb-2">
+      <div className="justify-end flex mx-auto pt-7 pb-6 md:pb-2">
         <button
-          className="sm:hidden border border-[#A06ECE] flex gap-2 rounded-full w-24 h-8 justify-center items-center"
+          className="md:hidden border border-[#A06ECE] flex gap-2 rounded-full w-24 h-8 justify-center items-center"
           onClick={handleFilterClick}
         >
           <BiFilterAlt className="text-gray-500" />

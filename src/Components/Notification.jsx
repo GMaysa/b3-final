@@ -113,7 +113,7 @@ const Notification = () => {
   }, [notifs]);
 
   return (
-    <section className="px-7 sm:px-20 sm:py-16 py-10 w-full mx-auto font-poppins">
+    <section className="px-7 md:px-20 md:py-16 py-10 w-full mx-auto font-poppins">
       <h1 className="font-bold text-xl px-2">Notifikasi</h1>
       <div className="py-4 px-2 flex gap-4 items-center pb-8">
         <button
@@ -128,7 +128,7 @@ const Notification = () => {
             id="filter"
             value={selectedType}
             onChange={handleFilterChange}
-            className="border border-[#A06ECE] hidden sm:flex gap-2  text-sm px-1 rounded-2xl w-28 h-8 justify-center items-center"
+            className="border border-[#A06ECE] hidden md:flex gap-2  text-sm px-1 rounded-2xl w-28 h-8 justify-center items-center"
           >
             <option value="all">Filter</option>
             <option value="Promo">Promosi</option>
@@ -190,12 +190,12 @@ const Notification = () => {
       </div>
 
       {/* filter mobile */}
-      <div className="justify-end flex mx-auto pt-3 pb-10 sm:pb-2 gap-2">
+      <div className="justify-end flex mx-auto pt-3 pb-10 md:pb-2 gap-2">
         <select
           id="filter"
           value={selectedType}
           onChange={handleFilterChange}
-          className="sm:hidden border border-[#A06ECE] text-sm px-1 rounded-2xl w-28 h-9 justify-center items-center"
+          className="md:hidden border border-[#A06ECE] text-sm px-1 rounded-2xl w-28 h-9 justify-center items-center"
         >
           <option value="all">Filter</option>
           <option value="Promo">Promo</option>
