@@ -25,7 +25,6 @@ import SearchResults from "./pages/SearchResults";
 // import RedirectIfProtected from "./Components/RedirectIfProtected";
 // import Protected from "./Components/Protected";
 // import Header from "./components/Header";
-
 import PopupNotif from "./Components/PopupNotif";
 import Reset from "./pages/Reset";
 
