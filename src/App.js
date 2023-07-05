@@ -77,10 +77,9 @@ function App() {
               // </RedirectIfProtected>
             }
           />
-          {/*  <Route path="/notification" element={<Notification />} />  */}
-          {/*  <Route path="/history" element={<FlightTicketHistory />} />  */}
-          {/*   <Route path="/detail/:bookingCode" element={<DetailHistory />} /> */}
-
+          <Route path="/notification" element={<Notification />} />
+          <Route path="/history" element={<FlightTicketHistory />} />
+          <Route path="/detail/:bookingCode" element={<DetailHistory />} />
           <Route
             path="/bio"
             element={
