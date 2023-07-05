@@ -55,7 +55,7 @@ const Reset = () => {
               />
 {/*==================== Confirmm PASSWORD ===================================*/}
 
-        <p className='mb-1 text-xs'>Ulangi Password baru</p>
+        <p className='mt-9 mb-1 text-xs'>Ulangi Password baru</p>
           <input 
             type="text" 
             value={confirmPassword}

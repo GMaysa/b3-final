@@ -51,20 +51,20 @@ const handlePasswordChange = (e) => {
               <Link to="/reset" className='inline-block align-baseline font-bold text-sm text-[#7126B5]'>Lupa kata sandi?</Link>
             </div>
 
-              {/* <div className='relative'> */}
+              <div className='relative'>
                 <input 
-                  type="text" 
+                  type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Masukan Password" 
                   className="px-3 py-2 border rounded-2xl w-full block text-sm placeholder:text-slate-200 focus:outline-none focus:ring-1 focus:ring-[#7126B5] focus:border-[#7126B5] invalid:text-piink-700 invalid:focus:ring-pink-700 invalid:focus:border-pink-700 peer:" />
 
-                  {/* <label
+                  <label
                     className="absolute top-1/2 -translate-y-1/2 right-5 cursor-pointer"
                     onClick={togglePasswordVisibility}>
                     {showPassword ? (<FaEyeSlash className='text-gray-700'/>) : (<FaEye className="text-gray-500" />)}
-                  </label> */}
-                {/* </div> */}
+                  </label>
+                </div>
 
                 <button className="bg-[#7126B5] text-sm hover:bg-[#35095c] text-white mx-auto font-bold py-2 px-2 mt-6 rounded m-auto w-full" type="submit"> Masuk </button>
           </form>
