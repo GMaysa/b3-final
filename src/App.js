@@ -12,17 +12,16 @@ import { Provider } from "react-redux";
 import store from "./redux/store";
 import { useEffect } from "react";
 import PayConfirm from "./pages/PayConfirm";
-import Login from "./pages/Login";
+// import Login from "./pages/Login";
 import EditProfile from "./pages/EditProfile";
 import Profile from "./pages/Profile";
 import Notification from "./Components/Notification";
 import FlightTicketHistory from "./Components/FlightTicketHistory";
 import DetailHistory from "./pages/DetailHistory";
-//import Otp from "./pages/Otp";
-//import Register from "./pages/Register";
+// import Otp from "./pages/Otp";
+// import Register from "./pages/Register";
 import Home from "./pages/Home";
 import SearchResults from "./pages/SearchResults";
-import RedirectIfProtected from "./Components/RedirectIfProtected";
 // import RedirectIfProtected from "./Components/RedirectIfProtected";
 // import Protected from "./Components/Protected";
 // import Header from "./components/Header";
@@ -58,8 +57,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />}></Route>
           <Route path="/search" element={<SearchResults />}></Route>
-          <Route path="/login" element={<Login />} />
-          <Route path="/reset" element={<Reset />} />
+          // <Route path="/login" element={<Login />} />
+          // <Route path="/reset" element={<Reset />} />
           <Route
             path="/edit"
             element={
