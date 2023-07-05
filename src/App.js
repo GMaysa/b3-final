@@ -18,6 +18,8 @@ import Profile from "./pages/Profile";
 import Notification from "./Components/Notification";
 import FlightTicketHistory from "./Components/FlightTicketHistory";
 import DetailHistory from "./pages/DetailHistory";
+import Home from "./pages/Home";
+import SearchResults from "./pages/SearchResults";
 // import Otp from "./pages/Otp";
 // import Register from "./pages/Register";
 // import RedirectIfProtected from "./Components/RedirectIfProtected";
