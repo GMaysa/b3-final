@@ -1,30 +1,37 @@
 import React, { useEffect, useState } from "react";
-import { MdOutlineAirlineSeatReclineExtra, MdSwapHoriz } from "react-icons/md";
 import {
   BiCalendar,
   BiSolidPlaneLand,
   BiSolidPlaneTakeOff,
 } from "react-icons/bi";
 import { FaBaby, FaChildDress, FaPerson } from "react-icons/fa6";
+import { MdOutlineAirlineSeatReclineExtra, MdSwapHoriz } from "react-icons/md";
 import { DateRange } from "react-date-range";
+import { getAirport } from "../redux/actions/airportActions";
+import { printThisDate, thisDate } from "../components/DateView";
+import { getAllFlightSearchResult } from "../redux/actions/searchFlightsActions";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import "react-date-range/dist/theme/default.css";
 import "react-date-range/dist/styles.css";
-import { useDispatch, useSelector } from "react-redux";
-import { getAirport } from "../redux/actions/airportActions";
-import { printThisDate, thisDate } from "../Components/DateView";
-import { useNavigate } from "react-router-dom";
-import { getAllFlightSearchResult } from "../redux/actions/searchFlightsActions";
 
 function ChoosePlan() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [searchTerm, setSearchTerm] = useState({
+  const { airportData } = useSelector((state) => state.airportData);
+
+  useEffect(() => {
+    dispatch(getAirport());
+  }, [dispatch]);
+
+  // Input Handle & Memory
+  const [searchMemory, setSearchMemory] = useState({
     from: {
-      airportId: 5941,
-      city: "Jakarta",
+      airportId: 5862,
+      iata: "SUB",
+      name: "Juanda International Airport",
+      city: "Surabaya",
       country: "ID",
-      iata: "HLP",
-      name: "Halim Perdanakusuma International Airport",
     },
     to: {
       airportId: 5793,
@@ -34,11 +41,36 @@ function ChoosePlan() {
       country: "ID",
     },
   });
-  const flight = {
-    from: searchTerm.from.city,
-    to: searchTerm.to.city,
+  // console.log(searchMemory);
+  const [searchInput, setSearchInput] = useState({
+    from: searchMemory.from.city,
+    to: searchMemory.to.city,
+  });
+  const [searchResults, setSearchResults] = useState({ from: {}, to: {} });
+  const handleInputChange = (e) => {
+    e.preventDefault();
+    const { name, value } = e.target;
+    setSearchInput((prev) => ({ ...prev, [name]: value }));
+    const results = airportData?.data?.filter(
+      (item) =>
+        item.city.toLowerCase().includes(value.toLowerCase()) ||
+        item.iata.toLowerCase().includes(value.toLowerCase())
+    );
+
+    setShowOptions((prev) => {
+      const updatedOptions = Object.keys(prev).reduce((acc, key) => {
+        acc[key] = false;
+        return acc;
+      }, {});
+      return { ...updatedOptions, [name]: true };
+    });
+    // console.log(airportData);
+    setSearchResults((prev) => ({ ...prev, [name]: results }));
   };
-  const [searchResults, setSearchResults] = useState({ from: "", to: "" });
+
+  // arrival
+  const [arrival, setArrival] = useState(false)
+
   const [showOptions, setShowOptions] = useState({
     from: false,
     to: false,
@@ -53,6 +85,8 @@ function ChoosePlan() {
       key: "selection",
     },
   ]);
+
+  // console.log(datePick[0].startDate)
   const [passengers, setPassengers] = useState({
     adult: 2,
     child: 0,
@@ -61,47 +95,25 @@ function ChoosePlan() {
   const passengerCount = passengers.adult + passengers.child;
   const [seatClass, setSeatClass] = useState("Bussiness");
 
-  const { airportData } = useSelector((state) => state.airportData);
-
   useEffect(() => {
-    dispatch(getAirport());
+    dispatch(getAirport);
   }, [dispatch]);
 
-  const handleInputChange = (e) => {
-    e.preventDefault();
-    const { name, value } = e.target;
-    setSearchTerm((prev) => ({ ...prev, [name]: value }));
-    const results = airportData?.data?.filter(
-      (item) =>
-        item.city.toLowerCase().includes(value.toLowerCase()) ||
-        item.iata.toLowerCase().includes(value.toLowerCase())
-    );
-    // setInputChange((prev) => ({ ...prev, [name]: results }));
-    setShowOptions((prev) => {
-      const updatedOptions = Object.keys(prev).reduce((acc, key) => {
-        acc[key] = false;
-        return acc;
-      }, {});
-      return { ...updatedOptions, [name]: true };
-    });
-    setSearchResults((prev) => ({ ...prev, [name]: results }));
-  };
-
   const handleSwap = () => {
-    const updatedData = { ...searchTerm };
+    const updatedData = { ...searchInput };
     const temp = updatedData.from;
     updatedData.from = updatedData.to;
     updatedData.to = temp;
 
-    setSearchTerm(updatedData);
+    setSearchInput(updatedData);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     let data = JSON.stringify({
-      dep_airport: searchTerm.from,
-      arr_airport: searchTerm.to,
+      dep_airport: searchMemory.from,
+      arr_airport: searchMemory.to,
       seat_class: seatClass,
       passengers: {
         passengers_detail: passengers,
@@ -109,15 +121,15 @@ function ChoosePlan() {
       },
       dep_flight_date: datePick[0].startDate,
       arr_flight_date: datePick[0].endDate,
-      arrival: false,
+      arrival: arrival,
     });
 
     localStorage.setItem("search_flight_data", data);
     dispatch(
       getAllFlightSearchResult(
         seatClass.toUpperCase(),
-        searchTerm.from.iata,
-        searchTerm.to.iata,
+        searchMemory.from.iata,
+        searchMemory.to.iata,
         thisDate(datePick[0].startDate),
         navigate
       )
@@ -146,23 +158,27 @@ function ChoosePlan() {
               <input
                 name="from"
                 type="text"
-                value={flight.from}
+                value={searchInput.from}
                 onChange={handleInputChange}
                 autoComplete="off"
                 className="w-full bg-white text-lg border-b-2 py-2 text-neutral-700 outline-none"
               />
-              <div className="w-full absolute top-12 text-lg">
-                {showOptions.from && searchResults.from.length > 0 && (
+              <div className="w-full absolute top-12 text-lg z-50">
+                {showOptions.from && (
                   <div className="w-9/12 bg-white shadow-md">
-                    {searchResults?.from.slice(0, 3).map((data, id) => (
+                    {searchResults?.from?.slice(0, 3).map((data, id) => (
                       <div
                         className="w-full px-2 py-1 z-40 cursor-pointer hover:bg-violet-300 hover:text-white"
                         key={id}
                         onClick={() => {
                           // console.log(data);
-                          setSearchTerm((prev) => ({
+                          setSearchMemory((prev) => ({
                             ...prev,
                             from: data,
+                          }));
+                          setSearchInput((prev) => ({
+                            ...prev,
+                            from: data.city,
                           }));
                           setShowOptions((prev) => ({
                             ...prev,
@@ -195,22 +211,27 @@ function ChoosePlan() {
               <input
                 name="to"
                 type="text"
-                value={flight.to}
+                value={searchInput.to}
                 onChange={handleInputChange}
                 autoComplete="off"
                 className="w-full bg-white text-lg border-b-2 py-2 text-neutral-700 outline-none"
               />
-              <div className="w-full absolute top-12 text-lg">
-                {showOptions.to && searchResults.to.length > 0 && (
+              <div className="w-full absolute top-12 text-lg z-50">
+                {showOptions.to && (
                   <div className="w-9/12 bg-white shadow-md">
-                    {searchResults?.to.slice(0, 3).map((data, id) => (
+                    {searchResults?.to?.slice(0, 3).map((data, id) => (
                       <div
-                        className="w-full px-2 py-1 cursor-pointer hover:bg-violet-300 hover:text-white"
+                        className="w-full px-2 py-1 z-40 cursor-pointer hover:bg-violet-300 hover:text-white"
                         key={id}
                         onClick={() => {
-                          setSearchTerm((prev) => ({
+                          // console.log(data);
+                          setSearchMemory((prev) => ({
                             ...prev,
                             to: data,
+                          }));
+                          setSearchInput((prev) => ({
+                            ...prev,
+                            to: data.city,
                           }));
                           setShowOptions((prev) => ({
                             ...prev,
@@ -271,6 +292,7 @@ function ChoosePlan() {
                     onChange={(item) => setDatePick([item.selection])}
                     moveRangeOnFirstSelection={false}
                     ranges={datePick}
+                    selectsStart
                     rangeColors={["#8b5cf6"]}
                     className="absolute shadow-[0_0_8px_rgba(0,0,0,0.15)] top-[67px] dayToday"
                   />
@@ -278,14 +300,14 @@ function ChoosePlan() {
               </div>
               {/* Return */}
               <div className="w-full font-medium text-[#8a8a8a]">
-                <label className="checkbox-container">
-                  <input type="checkbox" name="" />
-                  <span className="checkmark" /> Arrival
+                <label className={`checkbox-container relative ${!arrival && 'text-neutral-300'}`}>
+                  <input type="checkbox" name="" onClick={()=> setArrival(!arrival)} />
+                  <span className={`checkmark ${!arrival && '!border-neutral-300'}`} /> Arrival
                 </label>
                 <div className="w-full flex border-b-2 py-2 outline-none">
                   <input
                     type="text"
-                    value={printThisDate(datePick[0].endDate)}
+                    value={arrival ? printThisDate(datePick[0].endDate):'disabled'}
                     onClick={() =>
                       setShowOptions((prev) => {
                         const updatedOptions = Object.keys(prev).reduce(
@@ -298,8 +320,9 @@ function ChoosePlan() {
                         return { ...updatedOptions, date: !showOptions.date };
                       })
                     }
+                    disabled={!arrival}
                     readOnly
-                    className="w-full text-neutral-700 outline-none"
+                    className={`w-full text-neutral-700 outline-none bg-white ${!arrival && ' text-neutral-300'}`}
                   />
                 </div>
               </div>
