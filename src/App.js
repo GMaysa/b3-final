@@ -5,7 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import React, { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Biodata from "./pages/Biodata";
-import Header from "./Components/Header";
+import Header from "./components/Header";
 import Payment from "./pages/Payment";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import { Provider } from "react-redux";
