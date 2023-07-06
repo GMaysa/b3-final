@@ -8,9 +8,12 @@ import { useDispatch, useSelector } from 'react-redux';
 
 const Header = () => {
   const [isActive, setIsActive] = useState(false);
+
   const navigate = useNavigate()
   const dispatch = useDispatch()
+
   const { IsLogeedIn,token, user } = useSelector  ((state) => state.auth)
+
   const divClasses = `tglBtn flex flex-col p-[20px] sm:hidden  ${isActive ? 'active' : ''}`;
   //300 = font-light
   //500 = font-medium
@@ -43,9 +46,11 @@ const Header = () => {
           <div className='hidden sm:block bell_icon text-[24px]'>
             <FiBell />
           </div>
-          <div className='hidden sm:block user_icon text-[24px]'>
+          <button>
+          <div className='hidden sm:block user_icon text-[24px]' onClick={() => dispatch(logout(navigate) )}>
             <FiUser />
           </div>
+          </button>
         </div>
         <div className={divClasses}>  
           <div className='user_icon text-[24px] flex justify-end' onClick={() => setIsActive(!isActive)}>

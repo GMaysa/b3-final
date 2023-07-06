@@ -72,7 +72,7 @@ function Register ()   {
                       <button className="bg-[#7126B5] text-sm hover:bg-[#35095c] text-white mx-auto font-bold py-2 px-2 mt-6 rounded m-auto w-full" type="submit"> Masuk </button>
             </form>
   
-            <p className="mt-4 text-center text-sm ">Sudah punya akun? <Link to="/"> <span className="text-[#7126B5] text-sm font-bold"> Masuk disini </span></Link></p>
+            <p className="mt-4 text-center text-sm ">Sudah punya akun? <Link to="/login"> <span className="text-[#7126B5] text-sm font-bold"> Masuk disini </span></Link></p>
             </div>
           </div>
       </div>

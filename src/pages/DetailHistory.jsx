@@ -1,19 +1,27 @@
+/** @format */
+
 import React, { useEffect } from "react";
 import { HiInformationCircle } from "react-icons/hi";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { GiReturnArrow } from "react-icons/gi";
-import { getHistoryDetail } from "../redux/actions/historyActions";
+import { getHistoryDetail, getTicket } from "../redux/actions/historyActions";
 
 const DetailHistory = () => {
   const dispatch = useDispatch();
 
   const { bookingCode } = useParams();
-  const { historyDetail } = useSelector((state) => state.history);
+  const { historyDetail, historyTicket } = useSelector(
+    (state) => state.history
+  );
 
   useEffect(() => {
     dispatch(getHistoryDetail(bookingCode));
   }, [dispatch, bookingCode]);
+
+  const handleSendTicketToEmail = () => {
+    dispatch(getTicket(bookingCode));
+  };
 
   return (
     <section className="px-10 py-20 sm:py-0 lg:pb-16 mx-auto w-full font-poppins mt-10">
@@ -24,6 +32,16 @@ const DetailHistory = () => {
             historyDetail?.status?.statusId === 1
               ? "bg-red-500 text-white"
               : historyDetail?.status?.statusId === 2
+              ? "bg-green-500 text-white"
+              : historyDetail?.status?.statusId === 7
+              ? "bg-gray-400 text-white"
+              : historyDetail?.status?.statusId === 3
+              ? "bg-black text-white"
+              : historyDetail?.status?.statusId === 4
+              ? "bg-green-400 text-white"
+              : historyDetail?.status?.statusId === 5
+              ? "bg-red-700 text-white"
+              : historyDetail?.status?.statusId === 6
               ? "bg-gray-700 text-white"
               : ""
           }`}
@@ -218,8 +236,16 @@ const DetailHistory = () => {
       </div>
 
       <div className="pt-10 text-center">
-        <button className="bg-[#4B1979] py-3 px-9 rounded-xl text-white">
-          Cetak Tiket
+        <button
+          className="bg-[#4B1979] py-3 px-9 rounded-xl text-white"
+          onClick={handleSendTicketToEmail}
+          disabled={getTicket === "loading"}
+        >
+          {historyTicket
+            ? "Cetak Tiket"
+            : getTicket === "loading"
+            ? "Mengirim..."
+            : "Ticket Fetched"}
         </button>
       </div>
     </section>

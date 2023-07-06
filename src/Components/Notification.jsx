@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useState, useEffect } from "react";
 import { BiSearch } from "react-icons/bi";
 import { AiOutlineArrowLeft } from "react-icons/ai";
@@ -19,6 +21,7 @@ const Notification = () => {
   const [open, setOpen] = useState(false);
   const [selectedType, setSelectedType] = useState("all");
   const [updatedNotifications, setUpdatedNotifications] = useState([]);
+
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -78,26 +81,28 @@ const Notification = () => {
     setSearchQuery(event.target.value);
   };
 
+  //  Jika dienter muncul hasil search
   const handleSearchQueryKeyUp = (event) => {
     if (event.key === "Enter") {
       handleSearch();
     }
   };
 
+  // Delete history Search
   const handleClearSearchHistory = () => {
     setSearchHistory([]);
   };
 
-  // Status
+  // Status Change
   const handleStatusChange = async (notificationId) => {
     try {
-      dispatch(updateStatus(notificationId));
-      const updatedNotifs = notifs.map((notif) =>
+      const updatedNotifs = updatedNotifications.map((notif) =>
         notif.notificationId === notificationId
           ? { ...notif, read: true }
           : notif
       );
       setUpdatedNotifications(updatedNotifs);
+      dispatch(updateStatus(notificationId));
     } catch (error) {
       console.log(error);
     }
@@ -109,7 +114,7 @@ const Notification = () => {
 
   return (
     <section className="px-7 sm:px-20 sm:py-16 py-10 w-full mx-auto font-poppins">
-      <h1 className="font-bold text-xl">Notifikasi</h1>
+      <h1 className="font-bold text-xl px-2">Notifikasi</h1>
       <div className="py-4 px-2 flex gap-4 items-center pb-8">
         <button
           className="flex gap-4 w-full h-9 rounded-lg items-center px-6 text-white bg-[#A06ECE] text-md"
@@ -130,6 +135,7 @@ const Notification = () => {
             <option value="Info">Information</option>
           </select>
         </button>
+
         <BiSearch
           className="h-8 w-8 text-[#A06ECE] font-bold"
           onClick={handleSearchClick}
@@ -172,7 +178,10 @@ const Notification = () => {
               </p>
             </div>
             {searchHistory.map((query) => (
-              <p key={query} className="text-xs">
+              <p
+                key={query}
+                className="text-xs border-b-2 border-gray-400 py-2"
+              >
                 {query}
               </p>
             ))}

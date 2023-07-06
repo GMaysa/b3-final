@@ -18,8 +18,6 @@ function Otp () {
     const onSubmit = (e) => {
       e.preventDefault();
 
-
-
     const data= { otpCode:otp, email:emailLocal };
     // memasukan otpcode di endpoint ke otp 24
     dispatch(otpcode(data, navigate))
@@ -47,9 +45,9 @@ function Otp () {
 
 
   return (
-    <div className='font-Poppins h-full max-w-2xl mx-auto my-auto '>
+    <div className='font-Poppins h-full max-w-2xl mx-auto my-auto smm:p-7'>
 {/* <div className='h-20 w-20 bg-yellow-400'></div> */}
-      <Link to="/" >
+      <Link to="/login" >
         <MdOutlineKeyboardBackspace className='mt-24 text-3xl'/>
       </Link>
         <h1 className='mt-5  font-bold text-[24px]'>Masukan Otp</h1>

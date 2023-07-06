@@ -10,7 +10,7 @@ const EditProfile = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const handleClickEdit = () => {
+  const handleClickCancel = () => {
     navigate(`/profile`);
   };
 
@@ -41,6 +41,10 @@ const EditProfile = () => {
       setPhone(profile.phone || "");
       setGender(profile.gender || "");
       setBirthDate(profile.birthDate || "");
+      // profile.name && setName(profile.name);
+      // profile.phone && setPhone(profile.phone);
+      // profile.gender && setGender(profile.gender);
+      // profile.birthDate && setBirthDate(profile.birthDate);
     }
   }, [profile]);
 
@@ -133,7 +137,10 @@ const EditProfile = () => {
                 </div>
 
                 <div className="mt-7 mb-3 text-center flex gap-4">
-                  <button className="bg-red-600 w-1/2 h-9 rounded-lg text-white hover:scale-110">
+                  <button
+                    className="bg-red-600 w-1/2 h-9 rounded-lg text-white hover:scale-110"
+                    onClick={handleClickCancel}
+                  >
                     <span className="flex gap-2 justify-center items-center">
                       <MdOutlineClose className="text-white h-6" /> Cancel
                     </span>
