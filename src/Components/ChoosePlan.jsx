@@ -136,7 +136,7 @@ function ChoosePlan() {
     <div className="w-full rounded-xl bg-white shadow-[0_0_8px_rgba(0,0,0,0.15)] relative top-[-10px] border-[1.5px] border-[#dedede]">
       <p className="px-[34px] pt-[24px] font-medium  text-xl text-neutral-800">
         Choose a special flight schedule on
-        <span className="text-purple-800 font-bold italic"> FlyPal</span>
+        <span className="text-purple-800 font-bold italic"> Tiketku</span>
       </p>
 
       {/* FORM */}
@@ -642,3 +642,4 @@ function ChoosePlan() {
 }
 
 export default ChoosePlan;
+

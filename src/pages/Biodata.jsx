@@ -150,9 +150,9 @@ const Biodata = () => {
 
       const data = {
         booking: {
-          departFlightId: 2,
+          departFlightId: flightData.flight_data.dep.flightId,
           // returnFlightId: 3,
-          departClassId: 1,
+          departClassId: flightData.flight_data.dep.seatClassId,
           //returnClassId: 2,
           costumer: {
             fullName: fullNameCos,
@@ -640,7 +640,7 @@ const Biodata = () => {
                               key={seatId}
                               className={`bg-${
                                 data.booked
-                                  ? "gray-300"
+                                  ? " bg-gray-300"
                                   : isSelected
                                   ? "[#7126B5]"
                                   : "[#73CA5C]"
@@ -667,7 +667,7 @@ const Biodata = () => {
                               key={seatId}
                               className={`bg-${
                                 data.booked
-                                  ? "gray-300"
+                                  ? " bg-gray-300"
                                   : isSelected
                                   ? "[#7126B5]"
                                   : "[#73CA5C]"
@@ -694,7 +694,7 @@ const Biodata = () => {
                               key={seatId}
                               className={`bg-${
                                 data.booked
-                                  ? "gray-300"
+                                  ? " bg-gray-300"
                                   : isSelected
                                   ? "[#7126B5]"
                                   : "[#73CA5C]"
@@ -733,7 +733,7 @@ const Biodata = () => {
                               key={seatId}
                               className={`bg-${
                                 data.booked
-                                  ? "gray-300"
+                                  ? " bg-gray-300"
                                   : isSelected
                                   ? "[#7126B5]"
                                   : "[#73CA5C]"
@@ -760,7 +760,7 @@ const Biodata = () => {
                               key={seatId}
                               className={`bg-${
                                 data.booked
-                                  ? "gray-300"
+                                  ? " bg-gray-300"
                                   : isSelected
                                   ? "[#7126B5]"
                                   : "[#73CA5C]"
@@ -787,7 +787,7 @@ const Biodata = () => {
                               key={seatId}
                               className={`bg-${
                                 data.booked
-                                  ? "gray-300"
+                                  ? " bg-gray-300"
                                   : isSelected
                                   ? "[#7126B5]"
                                   : "[#73CA5C]"
@@ -929,8 +929,12 @@ const Biodata = () => {
                     Adult
                   </h1>
                   <h1 className="font-light">
-                    {flightData.user_data.passengers.passengers_detail.baby}{" "}
+                    {flightData.user_data.passengers.passengers_detail.child}{" "}
                     Baby
+                  </h1>
+                  <h1 className="font-light">
+                    {flightData.user_data.passengers.passengers_detail.baby}{" "}
+                    Anak
                   </h1>
                   <h1 className="font-light"></h1>
                 </div>

@@ -1,27 +1,45 @@
 /** @format */
 
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import logo from "../assets/logo.png";
-import { FiUser, FiList, FiBell, FiLogOut, FiEdit3 } from "react-icons/fi";
+import { useSelector, useDispatch } from "react-redux";
+import { CgLogIn } from "react-icons/cg";
+import { FiUser, FiList, FiBell, FiLogOut, FiMenu } from "react-icons/fi";
+import { logout } from "../redux/actions/auth";
 
 const Navbar = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const isLogin = location.pathname === "/login";
+  const isRegister = location.pathname === "/register";
 
   const [sticky, setSticky] = useState(false);
+  const [open, setOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-
-  const handleClickEdit = () => {
-    navigate(`/edit`);
-  };
 
   const handleClikProfile = () => {
     navigate(`/profile`);
   };
 
+  const handleClikHome = () => {
+    navigate(`/`);
+  };
+
+  const handleClikHistory = () => {
+    navigate(`/history`);
+  };
+  const handleClikNotif = () => {
+    navigate(`/notification`);
+  };
+
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
+
+  const { isLoggedIn } = useSelector((state) => state.auth);
 
   useEffect(() => {
     window.addEventListener("scroll", () => {
@@ -31,64 +49,162 @@ const Navbar = () => {
   }, []);
 
   return (
-    <nav
-      className={`w-full left-0 top-0 p-8 md:px-16 z-10 border-b shadow-md
-      ${sticky ? "bg-white text-black h-28 items-center" : "text-black"}
-      `}
-    >
-      <div className="flex items-center justify-between z-10 gap-8 cursor-pointer drop-shadow-lg">
-        <img src={logo} className="w-20 items-center" />
-        <div className="items-center relative">
-          <ul className="flex items-center gap-4 text-gray-800 text-md">
-            <li>
-              <Link to="/history" smooth={true} offset={-200} duration={500}>
-                <FiList />
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/notification"
-                smooth={true}
-                offset={-200}
-                duration={500}
-              >
-                <FiBell />
-              </Link>
-            </li>
-            <li>
-              <div className="relative">
-                <div
-                  className="flex gap-0 items-center"
-                  onClick={toggleDropdown}
-                >
-                  <FiUser />
-                </div>
-                {isOpen && (
-                  <div className="absolute font-medium bg-white rounded-md shadow-lg w-36 px-3 py-2 top-10 right-0 text-center z-50">
-                    <button
-                      className="flex gap-2 pb-3 text-sm"
-                      onClick={handleClikProfile}
-                    >
-                      <span className="pt-1">
-                        <FiUser className="text-[#A06ECE]" />
-                      </span>
-                      Profile
-                    </button>
+    <>
+      {!isLogin && !isRegister && (
+        <div className="pb-10 sm:p-9">
+          <nav
+            className={`fixed w-full left-0 top-0  md:px-10 drop-shadow-lg z-10 
+    ${sticky ? "bg-gray-50 text-black h-20 items-center" : "text-black"}`}
+          >
+            <div className="flex items-center justify-between z-10 gap-8 cursor-pointer drop-shadow-lg h-14 px-6 py-10">
+              <img
+                src={logo}
+                className="w-20 items-center"
+                onClick={handleClikHome}
+              />
+              <div className="items-center relative">
+                <div className={`text-gray-900 md:block hidden `}>
+                  <ul className="flex items-center gap-4 text-gray-800 text-md">
+                    {isLoggedIn ? (
+                      <>
+                        <li>
+                          <Link
+                            to="/history"
+                            smooth={true}
+                            offset={-200}
+                            duration={500}
+                          >
+                            <FiList />
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            to="/notification"
+                            smooth={true}
+                            offset={-200}
+                            duration={500}
+                          >
+                            <FiBell />
+                          </Link>
+                        </li>
+                        <li>
+                          <div className="relative">
+                            <div
+                              className="flex gap-0 items-center"
+                              onClick={toggleDropdown}
+                            >
+                              <FiUser />
+                            </div>
+                            {isOpen && (
+                              <div className="absolute font-medium bg-white rounded-md shadow-lg w-36 px-3 py-2 top-10 right-0 text-center z-50">
+                                <button
+                                  className="flex gap-2 pb-3 text-sm"
+                                  onClick={handleClikProfile}
+                                >
+                                  <span className="pt-1">
+                                    <FiUser className="text-[#A06ECE]" />
+                                  </span>
+                                  Profile
+                                </button>
 
-                    <button className="flex gap-2 text-sm">
-                      <span className="pt-1">
-                        <FiLogOut className="text-[#A06ECE]" />
-                      </span>
-                      Logout
-                    </button>
-                  </div>
-                )}
+                                <button
+                                  className="flex gap-2 text-sm"
+                                  onClick={() => dispatch(logout(navigate))}
+                                >
+                                  <span className="pt-1">
+                                    <FiLogOut className="text-[#A06ECE]" />
+                                  </span>
+                                  Logout
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        </li>
+                      </>
+                    ) : (
+                      <>
+                        <li className="py-5 pr-4">
+                          <button className="w-24 text-white px-3 text-sm bg-[#7126B5] text-center items-center h-9 rounded-lg hover:scale-110 flex gap-2">
+                            <CgLogIn className="h-6" />
+                            <Link to="/login">Masuk</Link>
+                          </button>
+                        </li>
+                      </>
+                    )}
+                  </ul>
+                </div>
               </div>
-            </li>
-          </ul>
+              <div
+                onClick={() => setOpen(!open)}
+                className={`z-[999] ${
+                  open ? "text-gray-900" : "text-gray-900"
+                } text-3xl md:hidden m-5 mt-6`}
+              >
+                <FiMenu />
+              </div>
+
+              <div
+                className={`text-gray-900 md:hidden absolute w-2/3 min-h-screen  px-7 py-2 font-medium bg-white top-0 ${
+                  open ? "right-0" : "right-[-100%]"
+                }`}
+              >
+                <>
+                  {isLoggedIn ? (
+                    <div className="py-20 px-5 ustify-items-center flex flex-col gap-5">
+                      <button
+                        className="flex gap-2 text-base"
+                        onClick={handleClikProfile}
+                      >
+                        <span className="pt-1">
+                          <FiUser className="text-[#A06ECE]" />
+                        </span>
+                        Account
+                      </button>
+                      <button
+                        className="flex gap-2 text-base"
+                        onClick={handleClikHistory}
+                      >
+                        <span className="pt-1">
+                          <FiList className="text-[#A06ECE]" />
+                        </span>
+                        History
+                      </button>
+                      <button
+                        className="flex gap-2 text-base"
+                        onClick={handleClikNotif}
+                      >
+                        <span className="pt-1">
+                          <FiBell className="text-[#A06ECE]" />
+                        </span>
+                        Notification
+                      </button>
+                      <button
+                        className="w-24 text-white px-3 text-sm bg-[#7126B5] text-center items-center h-9 rounded-lg hover:scale-110 flex gap-2"
+                        onClick={() => dispatch(logout(navigate))}
+                      >
+                        <span className="pt-1">
+                          <FiLogOut className="" />
+                        </span>
+                        Logout
+                      </button>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="py-20 px-10 text-center items-center justify-items-center">
+                        <button className="w-24 text-white px-3 text-sm bg-[#7126B5] text-center items-center h-9 rounded-lg hover:scale-110 flex gap-2">
+                          <CgLogIn className="h-6" />
+                          <Link to="/login">Masuk</Link>
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </>
+              </div>
+            </div>
+          </nav>
         </div>
-      </div>
-    </nav>
+      )}
+    </>
   );
 };
 

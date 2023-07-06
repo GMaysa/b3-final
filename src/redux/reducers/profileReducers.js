@@ -1,7 +1,9 @@
+/** @format */
+
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  accesstoken: localStorage.getItem("accesstoken") || null,
+  accesstoken: localStorage.getItem("token") || null,
   profile: null,
 };
 

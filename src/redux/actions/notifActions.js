@@ -1,10 +1,12 @@
+/** @format */
+
 import axios from "axios";
 import { toast } from "react-toastify";
 import { setNotifs, setFilter, setStatus } from "../reducers/notifReducers";
 
 export const getNotif = () => async (dispatch) => {
   try {
-    const accesstoken = localStorage.getItem("accesstoken");
+    const accesstoken = localStorage.getItem("token");
     const { data } = await axios.get(
       "https://gcpflypal-l5tho6hrtq-as.a.run.app/api/v1/notification/user",
       {
@@ -26,7 +28,7 @@ export const getNotif = () => async (dispatch) => {
 
 export const getFilter = (categoryName) => async (dispatch) => {
   try {
-    const accesstoken = localStorage.getItem("accesstoken");
+    const accesstoken = localStorage.getItem("token");
     const { data } = await axios.get(
       `https://gcpflypal-l5tho6hrtq-as.a.run.app/api/v1/notification/user?category=${categoryName}`,
       {
@@ -48,7 +50,7 @@ export const getFilter = (categoryName) => async (dispatch) => {
 
 export const updateStatus = (notificationId) => async (dispatch) => {
   try {
-    const accesstoken = localStorage.getItem("accesstoken");
+    const accesstoken = localStorage.getItem("token");
     const { data } = await axios.post(
       `https://gcpflypal-l5tho6hrtq-as.a.run.app/api/v1/notification/read?notification_id=${notificationId}`,
       null,

@@ -26,35 +26,47 @@ function SearchResults() {
     localStorage.getItem("search_flight_data")
   );
 
+  const { isLoggedIn } = useSelector((state) => state.auth);
+
   const handleSubmit = (data) => {
+    if (isLoggedIn == false) {
+      return navigate("/login");
+    }
     if (dataFromPrevPage.arrival) {
       if (flightData.dep == null) {
         setFlightData((prev) => ({ ...prev, dep: data }));
-        // dispatch(
-        //   getAllFlightSearchResult(
-        //     dataFromPrevPage.seat_class.toUpperCase(),
-        //     dataFromPrevPage.arr_airport.iata,
-        //     dataFromPrevPage.dep_airport.iata,
-        //     thisDate(dataFromPrevPage.arr_flight_date),
-        //     navigate
-        //   )
-        // )
+        dispatch(
+          getAllFlightSearchResult(
+            dataFromPrevPage.seat_class.toUpperCase(),
+            dataFromPrevPage.arr_airport.iata,
+            dataFromPrevPage.dep_airport.iata,
+            thisDate(dataFromPrevPage.arr_flight_date),
+            navigate
+          )
+        );
       } else if (flightData.arr == null) {
         setFlightData((prev) => ({ ...prev, arr: data }));
+        localStorage.setItem(
+          "flight_data",
+          JSON.stringify({
+            flight_data: { dep: flightData.dep, arr: data },
+            user_data: dataFromPrevPage,
+          })
+        );
         navigate("/bio");
       }
     } else {
+      localStorage.setItem(
+        "flight_data",
+        JSON.stringify({
+          flight_data: { dep: data, arr: null },
+          user_data: dataFromPrevPage,
+        })
+      );
       setFlightData((prev) => ({ ...prev, dep: data }));
       navigate("/bio");
     }
   };
-  localStorage.setItem(
-    "flight_data",
-    JSON.stringify({
-      flight_data: flightData,
-      user_data: dataFromPrevPage,
-    })
-  );
   // console.log(searchResults)
 
   return (

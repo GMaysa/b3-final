@@ -1,3 +1,5 @@
+/** @format */
+
 import React from "react";
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";

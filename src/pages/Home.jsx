@@ -19,7 +19,7 @@ function Home() {
           {/* TITTLE IMAGE */}
           <div className="w-full h-full flex">
             {/* <div className="w-1/3" /> */}
-            <div
+            <div 
               className="w-full h-full bg-cover bg-center bg-no-repeat"
               style={{
                 backgroundImage: `url(https://images.pexels.com/photos/3140205/pexels-photo-3140205.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)`,
