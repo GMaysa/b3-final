@@ -57,7 +57,7 @@ function App() {
         {showPopup && <PopupNotif onClose={handleClosePopup} />}
 
         <Routes>
-          <Route path="/" element={<Home />}></Route>
+          {/* <Route path="/" element={<Home />}></Route> */}
           {/* <Route path="/search" element={<SearchResults />}></Route>
           <Route path="/login" element={<Login />} />
           <Route path="/reset" element={<Reset />} /> */}
