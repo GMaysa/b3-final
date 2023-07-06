@@ -8,7 +8,8 @@ import { postBookingDetails } from "../redux/actions/bookingActions";
 import { getSeatDetails, updateSeatStatus } from "../redux/actions/seatActions";
 
 const Biodata = () => {
-  const indexnya = 1;
+  const flightData = JSON.parse(localStorage.getItem("flight_data"));
+  const indexnya = flightData.user_data.passengers.count_passengers;
   const dispatch = useDispatch();
   const [selectedSeats, setSelectedSeats] = useState({});
   const [fullNameCos, setFullNameCos] = useState("");
@@ -38,10 +39,12 @@ const Biodata = () => {
     Array.from({ length: indexnya }, () => "")
   );
 
-  const maxSelectedSeats = 1;
+  const bookingMessage = JSON.parse(localStorage.getItem("bookingMessage"));
+  const maxSelectedSeats = flightData.user_data.passengers.count_passengers;
   const [showFamilyName, setShowFamilyName] = useState(false);
   const navigate = useNavigate();
   const { seatDetails } = useSelector((state) => state.seat);
+  // console.log(seatDetails);
   // const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [departSeatIds, setDepartSeatIds] = useState([]);
 
@@ -147,9 +150,9 @@ const Biodata = () => {
 
       const data = {
         booking: {
-          departFlightId: 4,
+          departFlightId: flightData.flight_data.dep.flightId,
           // returnFlightId: 3,
-          departClassId: 1,
+          departClassId: flightData.flight_data.dep.seatClassId,
           //returnClassId: 2,
           costumer: {
             fullName: fullNameCos,
@@ -170,10 +173,23 @@ const Biodata = () => {
       // Handle error
     }
   };
-
+  // console.log(flightData.flight_data.dep.seatClassName);
+  // console.log(flightData.flight_data.dep.flightCode);
   useEffect(() => {
-    dispatch(getSeatDetails());
+    dispatch(
+      getSeatDetails(
+        flightData.flight_data.dep.seatClassName,
+        flightData.flight_data.dep.flightCode
+      )
+    );
   }, [dispatch]);
+  const formatCurrency = (amount) => {
+    const formatter = new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+    });
+    return formatter.format(amount);
+  };
 
   function unixToDateString(unixTimestamp) {
     const date = new Date(unixTimestamp * 1000);
@@ -184,6 +200,38 @@ const Biodata = () => {
   }
 
   const { booking } = useSelector((state) => state.book);
+  const formatDate = (unixTime) => {
+    const date = new Date(unixTime * 1000);
+    const day = date.getDate();
+    const monthNames = [
+      "Januari",
+      "Februari",
+      "Maret",
+      "April",
+      "Mei",
+      "Juni",
+      "Juli",
+      "Agustus",
+      "September",
+      "Oktober",
+      "November",
+      "Desember",
+    ];
+    const month = monthNames[date.getMonth()];
+    const year = date.getFullYear();
+    return `${day} ${month} ${year}`;
+  };
+
+  const formatDateTime = (unixTime) => {
+    const date = new Date(unixTime * 1000);
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const seconds = date.getSeconds();
+    return `${hours}:${minutes}${seconds}`;
+  };
+
+  const depDateTime = flightData.flight_data.dep.depDateTime;
+  const arrDateTime = flightData.flight_data.dep.arrDateTime;
 
   const rows = ["A", "B", "C", "D", "E", "F"];
 
@@ -560,7 +608,8 @@ const Biodata = () => {
                 <div className="pt-[16px] flex items-center">
                   <div className="data_diri bg-[#73CA5C] text-white font-medium py-[8px] px-[16px] w-full sm:w-[486px] rounded-[4px] items-center">
                     <h1 className="font-medium text-center text-[12px] sm:text-[14px]">
-                      Economy - 64 Seats Available
+                      {flightData.flight_data.dep.seatClassName} -{" "}
+                      {flightData.flight_data.dep.seatAvailable} Seats Available
                     </h1>
                   </div>
                 </div>
@@ -591,7 +640,7 @@ const Biodata = () => {
                               key={seatId}
                               className={`bg-${
                                 data.booked
-                                  ? "gray-300"
+                                  ? " bg-gray-300"
                                   : isSelected
                                   ? "[#7126B5]"
                                   : "[#73CA5C]"
@@ -618,7 +667,7 @@ const Biodata = () => {
                               key={seatId}
                               className={`bg-${
                                 data.booked
-                                  ? "gray-300"
+                                  ? " bg-gray-300"
                                   : isSelected
                                   ? "[#7126B5]"
                                   : "[#73CA5C]"
@@ -645,7 +694,7 @@ const Biodata = () => {
                               key={seatId}
                               className={`bg-${
                                 data.booked
-                                  ? "gray-300"
+                                  ? " bg-gray-300"
                                   : isSelected
                                   ? "[#7126B5]"
                                   : "[#73CA5C]"
@@ -684,7 +733,7 @@ const Biodata = () => {
                               key={seatId}
                               className={`bg-${
                                 data.booked
-                                  ? "gray-300"
+                                  ? " bg-gray-300"
                                   : isSelected
                                   ? "[#7126B5]"
                                   : "[#73CA5C]"
@@ -711,7 +760,7 @@ const Biodata = () => {
                               key={seatId}
                               className={`bg-${
                                 data.booked
-                                  ? "gray-300"
+                                  ? " bg-gray-300"
                                   : isSelected
                                   ? "[#7126B5]"
                                   : "[#73CA5C]"
@@ -738,7 +787,7 @@ const Biodata = () => {
                               key={seatId}
                               className={`bg-${
                                 data.booked
-                                  ? "gray-300"
+                                  ? " bg-gray-300"
                                   : isSelected
                                   ? "[#7126B5]"
                                   : "[#73CA5C]"
@@ -780,7 +829,9 @@ const Biodata = () => {
             </div>
             <div className="flex justify-between">
               <div>
-                <h1 className="font-bold text-[12px] sm:text-[14px]">07.00</h1>
+                <h1 className="font-bold text-[12px] sm:text-[14px]">
+                  {formatDateTime(depDateTime)}
+                </h1>
               </div>
               <div>
                 <h1 className="font-bold text-[10px] text-[#A06ECE] pl-[158px] sm:text-[12px]">
@@ -791,13 +842,13 @@ const Biodata = () => {
             <div className="tanggal">
               <div>
                 <h1 className="font-light text-[12px] sm:text-[14px]">
-                  3 Maret 2023
+                  {formatDate(depDateTime)}
                 </h1>
               </div>
             </div>
             <div className="bandara-term">
               <h1 className="font-medium text-[12px] sm:text-[14px]">
-                Soekarno Hatta - Terminal 1A Domestik
+                {flightData.flight_data.dep.depAirportName}
               </h1>
             </div>
             <div className="line pt-[16px]">
@@ -812,11 +863,14 @@ const Biodata = () => {
               <div className="informasi text-[12px] sm:text-[14px]">
                 <div>
                   <h1 className="font-bold text-[#151515]">
-                    Jet Air - Economy
+                    {flightData.flight_data.dep.airlineName} -{" "}
+                    {flightData.flight_data.dep.seatClassName}
                   </h1>
                 </div>
                 <div>
-                  <h1 className="font-bold text-[#151515]">JT - 203</h1>
+                  <h1 className="font-bold text-[#151515]">
+                    {flightData.flight_data.dep.airplaneModel}
+                  </h1>
                 </div>
                 <div className="pt-[18px]">
                   <div>
@@ -841,22 +895,24 @@ const Biodata = () => {
               <div className="flex justify-between">
                 <div>
                   <h1 className="font-bold text-[12px] sm:text-[14px]">
-                    11.00
+                    {formatDateTime(arrDateTime)}
                   </h1>
                 </div>
                 <div>
                   <h1 className="font-bold text-[#A06ECE] pl-[158px] text-[10px] sm:text-[12px]">
-                    Keberangkatan
+                    {bookingMessage.data[0].status.name}
                   </h1>
                 </div>
               </div>
               <div className="tanggal">
                 <div className="text-[12px] text-[12px] sm:text-[14px]">
-                  <h1 className="font-light">3 Maret 2023</h1>
+                  <h1 className="font-light">{formatDate(arrDateTime)}</h1>
                 </div>
               </div>
               <div className="bandara-term text-[12px] sm:text-[14px]">
-                <h1 className="font-medium">Melbourne International Airport</h1>
+                <h1 className="font-medium">
+                  {flightData.flight_data.dep.arrAirportName}
+                </h1>
               </div>
             </div>
             <div className="line pt-[16px]">
@@ -864,19 +920,29 @@ const Biodata = () => {
             </div>
             <div className="pt-[8px] text-[12px] sm:text-[14px]">
               <div>
-                <h1 className="font-bold =">Rincian Harga</h1>
+                <h1 className="font-bold =">Rincian Penumpang</h1>
               </div>
               <div className="flex justify-between text-[12px] sm:text-[14px]">
                 <div>
-                  <h1 className="font-light">2 Adults</h1>
-                  <h1 className="font-light">1 Baby</h1>
-                  <h1 className="font-light">Text</h1>
+                  <h1 className="font-light">
+                    {flightData.user_data.passengers.passengers_detail.adult}{" "}
+                    Adult
+                  </h1>
+                  <h1 className="font-light">
+                    {flightData.user_data.passengers.passengers_detail.child}{" "}
+                    Baby
+                  </h1>
+                  <h1 className="font-light">
+                    {flightData.user_data.passengers.passengers_detail.baby}{" "}
+                    Anak
+                  </h1>
+                  <h1 className="font-light"></h1>
                 </div>
-                <div className="text-end">
+                {/* <div className="text-end">
                   <h1 className="font-light">IDR 9.550.000</h1>
                   <h1 className="font-light">IDR 0</h1>
                   <h1 className="font-light">IDR 300.000</h1>
-                </div>
+                </div> */}
               </div>
             </div>
             <div className="line pt-[4px]">
@@ -888,7 +954,7 @@ const Biodata = () => {
               </div>
               <div className="text-[14px] sm:text-[18px]">
                 <h1 className="font-bold text-[18px] text-[#7126B5]">
-                  IDR 9.850.000
+                  {formatCurrency(bookingMessage.data[0].booking.totalPrice)}
                 </h1>
               </div>
             </div>

@@ -8,7 +8,7 @@ export const getPayconfirm = (formData, navigate) => async (dispatch) => {
       localStorage.getItem("token") ||
       document.cookie.match(/(?<=token=)[^;]+/)?.[0];
     const response = await axios.post(
-      `${process.env.REACT_APP_POSTS_API}/transactions/confirm`,
+      `https://gcpflypal-l5tho6hrtq-as.a.run.app/api/v1/transactions/confirm`,
       formData,
       {
         headers: {

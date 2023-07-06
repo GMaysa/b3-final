@@ -10,7 +10,7 @@ export const getBooking = (bookingCode) => async (dispatch) => {
       document.cookie.match(/(?<=token=)[^;]+/)?.[0];
     const bookingCode = bookingMessage.data[0].booking.bookingCode;
     const response = await axios.get(
-      `${process.env.REACT_APP_POSTS_API}/transactions/detail/${bookingCode}`,
+      `https://gcpflypal-l5tho6hrtq-as.a.run.app/api/v1/transactions/detail/${bookingCode}`,
       {
         headers: {
           Authorization: `Bearer ${accesstoken}`,
@@ -34,7 +34,7 @@ export const postBookingDetails = (data, navigate) => async (dispatch) => {
       localStorage.getItem("token") ||
       document.cookie.match(/(?<=token=)[^;]+/)?.[0];
     const response = await axios.post(
-      `${process.env.REACT_APP_POSTS_API}/transactions/booking`,
+      `https://gcpflypal-l5tho6hrtq-as.a.run.app/api/v1/transactions/booking`,
       data,
       {
         headers: {
