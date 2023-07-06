@@ -17,7 +17,7 @@ export const login = (data, navigate) => async (dispatch) => {
     dispatch(setIsLogeedIn(true));
 
     //mendirect ke pay
-    navigate("/bio");
+    navigate("/");
     // biasanya passing melalui komponen saja
   } catch (error) {
     if (axios.isAxiosError(error)){
@@ -92,7 +92,7 @@ export const otpcode = (data, navigate) => async (dispatch) =>{
     dispatch(setToken(accessToken));
     dispatch(setIsLogeedIn(true));
 
-    navigate("/login");
+    navigate("/");
     // kelogin
   } catch (error) {
     if (axios.isAxiosError(error)) {

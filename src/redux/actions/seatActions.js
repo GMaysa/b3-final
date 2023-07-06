@@ -5,7 +5,7 @@ import { setSeatDetails, setUpdateSeat } from "../reducers/seatReducers";
 export const getSeatDetails = () => async (dispatch) => {
   try {
     const response = await axios.get(
-      `${process.env.REACT_APP_POSTS_API}/flight/seats?class=BUSSINESS&flight_code=GA-1011`
+      `https://gcpflypal-l5tho6hrtq-as.a.run.app/api/v1/flight/seats?class=BUSSINESS&flight_code=GA-1011`
     );
     console.log("berhasil");
     dispatch(setSeatDetails(response.data));
