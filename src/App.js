@@ -5,10 +5,11 @@ import "react-toastify/dist/ReactToastify.css";
 import React, { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Biodata from "./pages/Biodata";
-import Header from "./components/Header";
+import Header from "./Components/Header";
 import Payment from "./pages/Payment";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import { Provider } from "react-redux";
+import Navbar from "./Components/Navbar";
 import store from "./redux/store";
 import { useEffect } from "react";
 import PayConfirm from "./pages/PayConfirm";
@@ -59,7 +60,7 @@ function App() {
     <Provider store={store}>
       <BrowserRouter>
         {showPopup && <PopupNotif onClose={handleClosePopup} />}
-        <Header />
+        <Navbar />
 
         <Routes>
           <Route path="/" element={<Home />}></Route>
