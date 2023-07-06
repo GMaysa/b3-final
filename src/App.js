@@ -1,8 +1,10 @@
+/** @format */
+
 import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
 import React, { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-// import Biodata from "./pages/Biodata";
+import Biodata from "./pages/Biodata";
 import Payment from "./pages/Payment";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import { Provider } from "react-redux";
@@ -17,7 +19,6 @@ import Profile from "./pages/Profile";
 import Notification from "./Components/Notification";
 import FlightTicketHistory from "./Components/FlightTicketHistory";
 import DetailHistory from "./pages/DetailHistory";
-
 import Home from "./pages/Home";
 import SearchResults from "./pages/SearchResults";
 // import Otp from "./pages/Otp";
@@ -25,9 +26,7 @@ import SearchResults from "./pages/SearchResults";
 // import Protected from "./Components/Protected";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
-
 // import Header from "./components/Header";
-import PopupNotif from "./Components/PopupNotif";
 import Reset from "./pages/Reset";
 // import DioNyoba from "./components/DioNyoba";
 import Register from "./pages/Register";
@@ -60,7 +59,6 @@ function App() {
       <BrowserRouter>
         <Navbar />
         {showPopup && <PopupNotif onClose={handleClosePopup} />}
-        <Header />
 
         <Routes>
           <Route path="/" element={<Home />}></Route>
@@ -68,8 +66,6 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/reset" element={<Reset />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/otp" element={<Otppages />} />
-          <Route path="/history" element={<FlightTicketHistory />} />
           <Route path="/otp" element={<Otppages />} />
           <Route
             path="/edit"
@@ -142,7 +138,7 @@ function App() {
               <PaymentSuccess />
               // </RedirectIfProtected>
             }
-          />{" "}
+          />
         </Routes>
       </BrowserRouter>
     </Provider>
