@@ -6,7 +6,7 @@ import { setProfile } from "../reducers/profileReducers";
 
 export const getProfile = () => async (dispatch) => {
   try {
-    const accesstoken = localStorage.getItem("accesstoken");
+    const accesstoken = localStorage.getItem("token");
     const { data } = await axios.get(
       "https://gcpflypal-l5tho6hrtq-as.a.run.app/api/v1/user/profile",
       {
@@ -29,7 +29,7 @@ export const getProfile = () => async (dispatch) => {
 
 export const editProfile = (updatedProfile) => async (dispatch, getState) => {
   try {
-    const accesstoken = localStorage.getItem("accesstoken");
+    const accesstoken = localStorage.getItem("token");
     const { data } = await axios.post(
       "https://gcpflypal-l5tho6hrtq-as.a.run.app/api/v1/user/profile",
       {

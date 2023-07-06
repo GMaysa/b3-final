@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useState, useEffect } from "react";
 import img from "../assets/img.png";
 import { useNavigate } from "react-router-dom";

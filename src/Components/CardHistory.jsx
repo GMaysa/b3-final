@@ -31,13 +31,26 @@ const CardHistory = ({
   }, []);
 
   // Convert date to formay yyyy-mm-dd
-  const formatDateFromTimestamp = (timestamp) => {
-    const date = new Date(timestamp * 1000);
+  const formatDate = (unixTime) => {
+    const date = new Date(unixTime * 1000);
+    const day = date.getDate();
+    const monthNames = [
+      "Januari",
+      "Februari",
+      "Maret",
+      "April",
+      "Mei",
+      "Juni",
+      "Juli",
+      "Agustus",
+      "September",
+      "Oktober",
+      "November",
+      "Desember",
+    ];
+    const month = monthNames[date.getMonth()];
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-
-    return `${year}-${month}-${day}`;
+    return `${day} ${month} ${year}`;
   };
 
   return (
@@ -105,10 +118,7 @@ const CardHistory = ({
                     hour12: true,
                   })}
                 </p>
-                <p className="text-xs">
-                  {" "}
-                  {formatDateFromTimestamp(departureDate)}
-                </p>
+                <p className="text-xs"> {formatDate(departureDate)}</p>
               </div>
             </div>
             <div className="flex flex-col items-center justify-items-center w-full">
@@ -152,9 +162,7 @@ const CardHistory = ({
                     hour12: true,
                   })}
                 </p>
-                <p className="text-xs">
-                  {formatDateFromTimestamp(arrivalDate)}
-                </p>
+                <p className="text-xs">{formatDate(arrivalDate)}</p>
               </div>
             </div>
           </div>

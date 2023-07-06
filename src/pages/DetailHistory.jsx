@@ -23,6 +23,29 @@ const DetailHistory = () => {
     dispatch(getTicket(bookingCode));
   };
 
+  // Convert date to formay yyyy-mm-dd
+  const formatDate = (unixTime) => {
+    const date = new Date(unixTime * 1000);
+    const day = date.getDate();
+    const monthNames = [
+      "Januari",
+      "Februari",
+      "Maret",
+      "April",
+      "Mei",
+      "Juni",
+      "Juli",
+      "Agustus",
+      "September",
+      "Oktober",
+      "November",
+      "Desember",
+    ];
+    const month = monthNames[date.getMonth()];
+    const year = date.getFullYear();
+    return `${day} ${month} ${year}`;
+  };
+
   return (
     <section className="px-10 py-20 sm:py-0 lg:pb-16 mx-auto w-full font-poppins mt-10">
       <div className="flex justify-between py-4">
@@ -71,11 +94,7 @@ const DetailHistory = () => {
         </h1>
         <p className="text-[#A06ECE]">Keberangkatan</p>
       </div>
-      <p>
-        {new Date(
-          historyDetail?.booking?.departFlight?.departureDate * 1000
-        ).toLocaleDateString("en-GB")}
-      </p>
+      <p>{formatDate(historyDetail?.booking?.departFlight?.departureDate)}</p>
 
       <p className="pb-4">
         {historyDetail?.booking?.departFlight?.departureAirport?.name}
@@ -120,11 +139,7 @@ const DetailHistory = () => {
         </h1>
         <p className="text-[#A06ECE]">Kedatangan</p>
       </div>
-      <p>
-        {new Date(
-          historyDetail?.booking?.departFlight?.arrivalDate * 1000
-        ).toLocaleDateString("en-GB")}
-      </p>
+      <p>{formatDate(historyDetail?.booking?.departFlight?.arrivalDate)}</p>
       <p className="pb-4">
         {historyDetail?.booking?.departFlight?.arrivalAirport?.name}
       </p>
@@ -154,9 +169,7 @@ const DetailHistory = () => {
             <p className="text-[#A06ECE]">Keberangkatan</p>
           </div>
           <p>
-            {new Date(
-              historyDetail?.booking?.returnFlight?.departureDate * 1000
-            ).toLocaleDateString("en-GB")}
+            {formatDate(historyDetail?.booking?.returnFlight?.departureDate)}
           </p>
           <p className="pb-4">
             {historyDetail?.booking?.returnFlight?.departureAirport?.name}
@@ -200,11 +213,7 @@ const DetailHistory = () => {
             </h1>
             <p className="text-[#A06ECE]">Kedatangan</p>
           </div>
-          <p>
-            {new Date(
-              historyDetail?.booking?.returnFlight?.arrivalDate * 1000
-            ).toLocaleDateString("en-GB")}
-          </p>
+          <p>{formatDate(historyDetail?.booking?.returnFlight?.arrivalDate)}</p>
           <p className="pb-4">
             {historyDetail?.booking?.returnFlight?.arrivalAirport?.name}
           </p>
