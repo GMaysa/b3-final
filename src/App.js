@@ -22,13 +22,14 @@ import DetailHistory from "./pages/DetailHistory";
 
 import Home from "./pages/Home";
 import SearchResults from "./pages/SearchResults";
-import Reset from "./pages/Reset";
-import Otp from "./pages/Otp";
-import RedirectIfProtected from "./Components/RedirectIfProtected";
-import Protected from "./Components/Protected";
-import Header from "./components/Header";
+// import Otp from "./pages/Otp";
+// import Register from "./pages/Register";
+// import RedirectIfProtected from "./Components/RedirectIfProtected";
+// import Protected from "./Components/Protected";
+// import Header from "./components/Header";
 
 import PopupNotif from "./Components/PopupNotif";
+import Reset from "./pages/Reset";
 
 function App() {
   useEffect(() => {
@@ -58,11 +59,12 @@ function App() {
         <Navbar />
         {showPopup && <PopupNotif onClose={handleClosePopup} />}
         <Header />
+
         <Routes>
           <Route path="/" element={<Home />}></Route>
           <Route path="/search" element={<SearchResults />}></Route>
-          <Route path="/login" element={<Login />} />
-          <Route path="/reset" element={<Reset />} />
+          // <Route path="/login" element={<Login />} />
+          // <Route path="/reset" element={<Reset />} />
           <Route
             path="/edit"
             element={
@@ -79,9 +81,22 @@ function App() {
               // </RedirectIfProtected>
             }
           />
-          <Route path="/notification" element={<Notification />} />
-          <Route path="/history" element={<FlightTicketHistory />} />
-          <Route path="/detail/:bookingCode" element={<DetailHistory />} />
+          <Route
+            path="/notification"
+            element={
+              // <RedirectIfProtected>
+              <Notification />
+              // <RedirectIfProtected>
+            }
+          />
+          <Route
+            path="/history"
+            element={
+              // <RedirectIfProtected>
+              <FlightTicketHistory />
+              // <RedirectIfProtected>
+            }
+          />
           <Route
             path="/detail/:bookingCode"
             element={

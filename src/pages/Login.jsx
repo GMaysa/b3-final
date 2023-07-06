@@ -9,6 +9,7 @@ import { login } from "../redux/actions/auth";
 import wp from "../assets/wp.svg";
 
 const Login = () => {
+  const [pw, setPw] = useState("");
   const [showPassword, setShowPassword] = useState("");
 
   const togglePasswordVisibility = () => {
@@ -88,7 +89,8 @@ const Login = () => {
               className="bg-[#7126B5] text-sm hover:bg-[#35095c] text-white mx-auto font-bold py-2 px-2 mt-6 rounded m-auto w-full"
               type="submit"
             >
-              Masuk
+              {" "}
+              Masuk{" "}
             </button>
           </form>
 
