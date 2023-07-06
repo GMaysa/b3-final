@@ -10,7 +10,7 @@ import PaymentSuccess from "./pages/PaymentSuccess";
 import { Provider } from "react-redux";
 import store from "./redux/store";
 import { useEffect } from "react";
-// import PayConfirm from "./pages/PayConfirm";
+import PayConfirm from "./pages/PayConfirm";
 import Login from "./pages/Login";
 import Navbar from "./Components/Navbar";
 import PopupNotif from "./Components/PopupNotif";
