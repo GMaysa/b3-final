@@ -45,6 +45,7 @@ function SearchResults() {
       }
     } else {
       setFlightData((prev) => ({ ...prev, dep: data }));
+      navigate('/pay')
     }
   };
   localStorage.setItem(
