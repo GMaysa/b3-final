@@ -23,7 +23,6 @@ const PopupNotif = () => {
     );
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
-      console.log(frame);
       stompClient.subscribe("/public/all", function (result) {
         showNotification(JSON.parse(result.body));
       });
@@ -32,10 +31,7 @@ const PopupNotif = () => {
     socket = new SockJS("https://gcpflypal-l5tho6hrtq-as.a.run.app/api/v1/ws");
     privateStompClient = Stomp.over(socket);
     privateStompClient.connect({}, function (frame) {
-      console.log(frame);
       privateStompClient.subscribe("/user/private", function (result) {
-        console.log(result.body);
-
         showNotification(JSON.parse(result.body));
       });
     });

@@ -12,7 +12,7 @@ import {
 
 export const getHistory = () => async (dispatch) => {
   try {
-    const accesstoken = localStorage.getItem("accesstoken");
+    const accesstoken = localStorage.getItem("token");
     const { data } = await axios.get(
       "https://gcpflypal-l5tho6hrtq-as.a.run.app/api/v1/transactions/history",
       {
@@ -35,7 +35,7 @@ export const getHistory = () => async (dispatch) => {
 export const getHistoryDetail = (bookingCode) => async (dispatch) => {
   try {
     if (bookingCode) {
-      const accesstoken = localStorage.getItem("accesstoken");
+      const accesstoken = localStorage.getItem("token");
       const { data } = await axios.get(
         `https://gcpflypal-l5tho6hrtq-as.a.run.app/api/v1/transactions/detail/${bookingCode}`,
         {
@@ -58,7 +58,7 @@ export const getHistoryDetail = (bookingCode) => async (dispatch) => {
 
 export const getHistoryFilter = (from_date, to_date) => async (dispatch) => {
   try {
-    const accesstoken = localStorage.getItem("accesstoken");
+    const accesstoken = localStorage.getItem("token");
     const { data } = await axios.get(
       `https://gcpflypal-l5tho6hrtq-as.a.run.app/api/v1/transactions/history?from_date=${from_date}&to_date=${to_date}`,
       {
@@ -81,7 +81,7 @@ export const getHistoryFilter = (from_date, to_date) => async (dispatch) => {
 
 export const getHistorySearch = (bookingCode) => async (dispatch) => {
   try {
-    const accesstoken = localStorage.getItem("accesstoken");
+    const accesstoken = localStorage.getItem("token");
     const { data } = await axios.get(
       `https://gcpflypal-l5tho6hrtq-as.a.run.app/api/v1/transactions/detail/user/${bookingCode}`,
       {
@@ -105,7 +105,7 @@ export const getHistorySearch = (bookingCode) => async (dispatch) => {
 export const getTicket = (bookingCode) => async (dispatch) => {
   try {
     if (bookingCode) {
-      const accesstoken = localStorage.getItem("accesstoken");
+      const accesstoken = localStorage.getItem("token");
       const { data } = await axios.get(
         `https://gcpflypal-l5tho6hrtq-as.a.run.app/api/v1/transactions/send-email?booking_code=${bookingCode}`,
         {

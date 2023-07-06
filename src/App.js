@@ -5,7 +5,6 @@ import "react-toastify/dist/ReactToastify.css";
 import React, { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Biodata from "./pages/Biodata";
-import Header from "./components/Header";
 import Payment from "./pages/Payment";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import { Provider } from "react-redux";
@@ -13,6 +12,8 @@ import store from "./redux/store";
 import { useEffect } from "react";
 import PayConfirm from "./pages/PayConfirm";
 import Login from "./pages/Login";
+import Navbar from "./Components/Navbar";
+import PopupNotif from "./Components/PopupNotif";
 import EditProfile from "./pages/EditProfile";
 import Profile from "./pages/Profile";
 import Notification from "./Components/Notification";
@@ -25,9 +26,7 @@ import SearchResults from "./pages/SearchResults";
 // import Protected from "./Components/Protected";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
-
 // import Header from "./components/Header";
-import PopupNotif from "./Components/PopupNotif";
 import Reset from "./pages/Reset";
 // import DioNyoba from "./components/DioNyoba";
 import Register from "./pages/Register";
@@ -58,8 +57,8 @@ function App() {
   return (
     <Provider store={store}>
       <BrowserRouter>
+        <Navbar />
         {showPopup && <PopupNotif onClose={handleClosePopup} />}
-        <Header />
 
         <Routes>
           <Route path="/" element={<Home />}></Route>
@@ -67,8 +66,6 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/reset" element={<Reset />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/otp" element={<Otppages />} />
-          <Route path="/history" element={<FlightTicketHistory />} />
           <Route path="/otp" element={<Otppages />} />
           <Route
             path="/edit"
@@ -86,10 +83,30 @@ function App() {
               // </RedirectIfProtected>
             }
           />
-          <Route path="/notification" element={<Notification />} />
-          <Route path="/history" element={<FlightTicketHistory />} />
-          <Route path="/detail/:bookingCode" element={<DetailHistory />} />
-
+          <Route
+            path="/notification"
+            element={
+              // <RedirectIfProtected>
+              <Notification />
+              // <RedirectIfProtected>
+            }
+          />
+          <Route
+            path="/history"
+            element={
+              // <RedirectIfProtected>
+              <FlightTicketHistory />
+              // <RedirectIfProtected>
+            }
+          />
+          <Route
+            path="/detail/:bookingCode"
+            element={
+              // <RedirectIfProtected>
+              <DetailHistory />
+              // <RedirectIfProtected>
+            }
+          />
           <Route
             path="/bio"
             element={
