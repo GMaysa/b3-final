@@ -25,6 +25,8 @@ import SearchResults from "./pages/SearchResults";
 // import Protected from "./Components/Protected";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
+
+// import Header from "./components/Header";
 import PopupNotif from "./Components/PopupNotif";
 import Reset from "./pages/Reset";
 // import DioNyoba from "./components/DioNyoba";
@@ -84,6 +86,9 @@ function App() {
               // </RedirectIfProtected>
             }
           />
+          <Route path="/notification" element={<Notification />} />
+          <Route path="/history" element={<FlightTicketHistory />} />
+          <Route path="/detail/:bookingCode" element={<DetailHistory />} />
 
           <Route
             path="/bio"
