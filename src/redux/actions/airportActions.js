@@ -4,7 +4,7 @@ import { setAirportData } from "../reducers/airportReducers";
 export const getAirport = () => async (dispatch) => {
   try {
     const response = await axios.get(
-      `${process.env.REACT_APP_API}/api/v1/airport`
+      `https://gcpflypal-l5tho6hrtq-as.a.run.app/api/v1/airport`
     );
     // console.log(response)
     dispatch(setAirportData(response.data));
