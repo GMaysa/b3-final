@@ -6,11 +6,11 @@ import {
 } from "react-icons/bs";
 import { MdSwapHoriz } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import Accordion from "../components/Accordion";
+import Accordion from "../Components/Accordion";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { getAllFlightSearchResult } from "../redux/actions/searchFlightsActions";
-import { thisDate } from "../components/DateView";
+import { thisDate } from "../Components/DateView";
 
 function SearchResults() {
   const dispatch = useDispatch();
