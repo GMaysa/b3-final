@@ -1,5 +1,3 @@
-/** @format */
-
 import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
 import React, { useState } from "react";
@@ -23,13 +21,17 @@ import DetailHistory from "./pages/DetailHistory";
 import Home from "./pages/Home";
 import SearchResults from "./pages/SearchResults";
 // import Otp from "./pages/Otp";
-// import Register from "./pages/Register";
 // import RedirectIfProtected from "./Components/RedirectIfProtected";
 // import Protected from "./Components/Protected";
-// import Header from "./components/Header";
+import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 
+// import Header from "./components/Header";
 import PopupNotif from "./Components/PopupNotif";
 import Reset from "./pages/Reset";
+// import DioNyoba from "./components/DioNyoba";
+import Register from "./pages/Register";
+import Otppages from "./pages/Otp";
 
 function App() {
   useEffect(() => {
@@ -63,8 +65,12 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />}></Route>
           <Route path="/search" element={<SearchResults />}></Route>
-          // <Route path="/login" element={<Login />} />
-          // <Route path="/reset" element={<Reset />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/reset" element={<Reset />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/otp" element={<Otppages />} />
+          <Route path="/history" element={<FlightTicketHistory />} />
+          <Route path="/otp" element={<Otppages />} />
           <Route
             path="/edit"
             element={
