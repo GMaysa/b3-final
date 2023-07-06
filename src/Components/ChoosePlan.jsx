@@ -95,10 +95,6 @@ function ChoosePlan() {
   const passengerCount = passengers.adult + passengers.child;
   const [seatClass, setSeatClass] = useState("Bussiness");
 
-  useEffect(() => {
-    dispatch(getAirport);
-  }, [dispatch]);
-
   const handleSwap = () => {
     const updatedData = { ...searchInput };
     const temp = updatedData.from;
@@ -120,11 +116,12 @@ function ChoosePlan() {
         count_passengers: passengerCount,
       },
       dep_flight_date: datePick[0].startDate,
-      arr_flight_date: datePick[0].endDate,
+      arr_flight_date: arrival ? datePick[0].endDate : null,
       arrival: arrival,
     });
 
     localStorage.setItem("search_flight_data", data);
+
     dispatch(
       getAllFlightSearchResult(
         seatClass.toUpperCase(),

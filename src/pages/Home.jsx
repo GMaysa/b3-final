@@ -1,7 +1,6 @@
 import React from "react";
 import ChoosePlan from "../Components/ChoosePlan";
 
-
 function Home() {
 
   return (
