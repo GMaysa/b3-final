@@ -41,21 +41,27 @@ function SearchResults() {
         // )
       } else if (flightData.arr == null) {
         setFlightData((prev) => ({ ...prev, arr: data }));
+        localStorage.setItem(
+          "flight_data",
+          JSON.stringify({
+            flight_data: {dep: flightData.dep, arr: data},
+            user_data: dataFromPrevPage,
+          })
+        );
         navigate("/pay");
       }
     } else {
+      localStorage.setItem(
+        "flight_data",
+        JSON.stringify({
+          flight_data: {dep: data, arr: null},
+          user_data: dataFromPrevPage,
+        })
+      );
       setFlightData((prev) => ({ ...prev, dep: data }));
       navigate('/pay')
     }
   };
-  localStorage.setItem(
-    "flight_data",
-    JSON.stringify({
-      flight_data: flightData,
-      user_data: dataFromPrevPage,
-    })
-  );
-  // console.log(searchResults)
 
   return (
     <div className="max-w-[968px] mx-auto">
