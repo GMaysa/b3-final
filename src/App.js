@@ -27,7 +27,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 
 // import Header from "./components/Header";
-import PopupNotif from "./Components/PopupNotif";
 import Reset from "./pages/Reset";
 // import DioNyoba from "./components/DioNyoba";
 import Register from "./pages/Register";
