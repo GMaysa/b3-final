@@ -5,7 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import React, { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Biodata from "./pages/Biodata";
-import Header from "./components/Header";
+import Header from "./Components/Header";
 import Payment from "./pages/Payment";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import { Provider } from "react-redux";
@@ -80,7 +80,6 @@ function App() {
           {/*  <Route path="/notification" element={<Notification />} />  */}
           {/*  <Route path="/history" element={<FlightTicketHistory />} />  */}
           {/*   <Route path="/detail/:bookingCode" element={<DetailHistory />} /> */}
-
           <Route
             path="/bio"
             element={
