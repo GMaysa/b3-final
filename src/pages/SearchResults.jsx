@@ -6,11 +6,11 @@ import {
 } from "react-icons/bs";
 import { MdSwapHoriz } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import Accordion from "../Components/Accordion";
+import Accordion from "../components/Accordion";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { getAllFlightSearchResult } from "../redux/actions/searchFlightsActions";
-import { thisDate } from "../Components/DateView";
+import { thisDate } from "../components/DateView";
 
 function SearchResults() {
   const dispatch = useDispatch();
@@ -41,21 +41,27 @@ function SearchResults() {
         // )
       } else if (flightData.arr == null) {
         setFlightData((prev) => ({ ...prev, arr: data }));
+        localStorage.setItem(
+          "flight_data",
+          JSON.stringify({
+            flight_data: {dep: flightData.dep, arr: data},
+            user_data: dataFromPrevPage,
+          })
+        );
         navigate("/pay");
       }
     } else {
+      localStorage.setItem(
+        "flight_data",
+        JSON.stringify({
+          flight_data: {dep: data, arr: null},
+          user_data: dataFromPrevPage,
+        })
+      );
       setFlightData((prev) => ({ ...prev, dep: data }));
       navigate('/pay')
     }
   };
-  localStorage.setItem(
-    "flight_data",
-    JSON.stringify({
-      flight_data: flightData,
-      user_data: dataFromPrevPage,
-    })
-  );
-  // console.log(searchResults)
 
   return (
     <div className="max-w-[968px] mx-auto">

@@ -1,5 +1,5 @@
 import React from "react";
-import ChoosePlan from "../Components/ChoosePlan";
+import ChoosePlan from "../components/ChoosePlan";
 
 function Home() {
 
