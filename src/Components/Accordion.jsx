@@ -78,7 +78,7 @@ export default function Accordion({ data, onClick }) {
         {/* price */}
         <div className="w-2/5 flex flex-col justify-center items-end gap-[6px]">
           <p className="font-bold text-purple-700">IDR {data.price.toLocaleString('id-ID')}</p>
-          <button className="font-medium text-white px-8 py-1 bg-purple-800/95 rounded-lg" onClick={()=>onClick()}>
+          <button className="font-medium text-white px-8 py-1 bg-purple-800/95 rounded-lg" onClick={()=>onClick(data)}>
             Pilih
           </button>
         </div>

@@ -12,7 +12,7 @@ export const getTransDetailsGo = (paygo, navigate) => async (dispatch) => {
       localStorage.getItem("token") ||
       document.cookie.match(/(?<=token=)[^;]+/)?.[0];
     const response = await axios.post(
-      `${process.env.REACT_APP_POSTS_API}/transactions/charge`,
+      `https://gcpflypal-l5tho6hrtq-as.a.run.app/api/v1/transactions/charge`,
       paygo,
       {
         headers: {
@@ -39,7 +39,7 @@ export const getTransDetails = (pay, navigate) => async (dispatch) => {
       localStorage.getItem("token") ||
       document.cookie.match(/(?<=token=)[^;]+/)?.[0];
     const response = await axios.post(
-      `${process.env.REACT_APP_POSTS_API}/transactions/charge`,
+      `https://gcpflypal-l5tho6hrtq-as.a.run.app/api/v1/transactions/charge`,
       pay,
       {
         headers: {
@@ -65,7 +65,7 @@ export const getTransDetailsVA = (payva, navigate) => async (dispatch) => {
       localStorage.getItem("token") ||
       document.cookie.match(/(?<=token=)[^;]+/)?.[0];
     const response = await axios.post(
-      `${process.env.REACT_APP_POSTS_API}/transactions/charge`,
+      `https://gcpflypal-l5tho6hrtq-as.a.run.app/api/v1/transactions/charge`,
       payva,
       {
         headers: {
