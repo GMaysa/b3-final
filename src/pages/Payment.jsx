@@ -16,9 +16,9 @@ import { getBooking } from "../redux/actions/bookingActions";
 
 const Payment = () => {
   // const { bookingDetails } = useSelector((state) => state);
+  const flightData = JSON.parse(localStorage.getItem("flight_data"));
   const { booking } = useSelector((state) => state);
   const bookingMessage = JSON.parse(localStorage.getItem("bookingMessage"));
-  console.log(booking);
   const [cardNumber, setCardNumber] = useState("");
   const [cardHolderName, setCardHolderName] = useState("");
   const [cardCvv, setCardCvv] = useState("");
@@ -89,6 +89,7 @@ const Payment = () => {
     setIsOpen(updatedAccordionState);
   };
 
+  const [isLoading, setIsLoading] = useState(false);
   const handleDataGo = (e) => {
     e.preventDefault();
     const paygo = {
@@ -97,6 +98,7 @@ const Payment = () => {
       amount: totalPrice,
       phoneNumber: phoneNumber,
     };
+    setIsLoading(true);
     dispatch(getTransDetailsGo(paygo, navigate));
   };
 
@@ -127,7 +129,7 @@ const Payment = () => {
       amount: totalPrice,
       bankVa: bankVaValue,
     };
-
+    setIsLoading(true);
     dispatch(getTransDetailsVA(payva, navigate));
   };
 
@@ -141,6 +143,7 @@ const Payment = () => {
       cardCvv: cardCvv,
       cardHolderName: cardHolderName,
     };
+    // setIsLoading(true);
     dispatch(getTransDetails(pay, navigate));
   };
 
@@ -175,6 +178,18 @@ const Payment = () => {
   };
   return (
     <div>
+      <div
+        className={`w-screen h-screen bg-gray-400/50 absolute top-0 left-0 flex items-center justify-center ${
+          isLoading === false && "hidden"
+        }`}
+      >
+        <div className="lds-ring">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>
       <div className="pt-[27px] sm:pt-[47px] pb-[20px] px-[50px] sm:px-[100px] xl:px-[260px] shadow-md">
         <div className="text-stage flex gap-[8px] text-[16px] sm:text-[20px]">
           <h1 className="font-bold text-[#8A8A8A]">Isi Data Diri</h1>
@@ -221,7 +236,7 @@ const Payment = () => {
                                 value={phoneNumber}
                                 name="phoneNumber"
                                 onChange={(e) => setPhoneNumber(e.target.value)}
-                                placeholder="4480 0000 0000 0000"
+                                placeholder="08676*****"
                                 className="outline-none rounded-[5px] bg-transparent py-[8px] border-b border-[#D0D0D0] w-[296px]"
                               />
                             </form>
@@ -520,19 +535,27 @@ const Payment = () => {
           </div>
           <div className="pt-[8px] text-[12px] sm:text-[14px]">
             <div>
-              <h1 className="font-bold =">Rincian Harga</h1>
+              <h1 className="font-bold =">Rincian Penumpang</h1>
             </div>
-            <div className="flex justify-between">
+            <div className="flex justify-between text-[12px] sm:text-[14px]">
               <div>
-                <h1 className="font-light">2 Adults</h1>
-                <h1 className="font-light">1 Baby</h1>
-                <h1 className="font-light">Text</h1>
+                <h1 className="font-light">
+                  {flightData.user_data.passengers.passengers_detail.adult}{" "}
+                  Adult
+                </h1>
+                <h1 className="font-light">
+                  {flightData.user_data.passengers.passengers_detail.baby} Baby
+                </h1>
+                <h1 className="font-light">
+                  {flightData.user_data.passengers.passengers_detail.child} Anak
+                </h1>
+                <h1 className="font-light"></h1>
               </div>
-              <div className="text-end">
-                <h1 className="font-light">IDR 9.550.000</h1>
-                <h1 className="font-light">IDR 0</h1>
-                <h1 className="font-light">IDR 300.000</h1>
-              </div>
+              {/* <div className="text-end">
+                  <h1 className="font-light">IDR 9.550.000</h1>
+                  <h1 className="font-light">IDR 0</h1>
+                  <h1 className="font-light">IDR 300.000</h1>
+                </div> */}
             </div>
           </div>
           <div className="line pt-[4px]">

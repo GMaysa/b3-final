@@ -25,12 +25,12 @@ function SearchResults() {
   const dataFromPrevPage = JSON.parse(
     localStorage.getItem("search_flight_data")
   );
-  
-  const { isLoggedIn } = useSelector((state) => state.auth)
+
+  const { isLoggedIn } = useSelector((state) => state.auth);
 
   const handleSubmit = (data) => {
-    if(isLoggedIn == false){
-      return navigate('/login')
+    if (isLoggedIn == false) {
+      return navigate("/login");
     }
     if (dataFromPrevPage.arrival) {
       if (flightData.dep == null) {
@@ -43,13 +43,13 @@ function SearchResults() {
             thisDate(dataFromPrevPage.arr_flight_date),
             navigate
           )
-        )
+        );
       } else if (flightData.arr == null) {
         setFlightData((prev) => ({ ...prev, arr: data }));
         localStorage.setItem(
           "flight_data",
           JSON.stringify({
-            flight_data: {dep: flightData.dep, arr: data},
+            flight_data: { dep: flightData.dep, arr: data },
             user_data: dataFromPrevPage,
           })
         );
@@ -59,14 +59,15 @@ function SearchResults() {
       localStorage.setItem(
         "flight_data",
         JSON.stringify({
-          flight_data: {dep: data, arr: null},
+          flight_data: { dep: data, arr: null },
           user_data: dataFromPrevPage,
         })
       );
       setFlightData((prev) => ({ ...prev, dep: data }));
-      navigate('/bio')
+      navigate("/bio");
     }
   };
+  // console.log(searchResults)
 
   return (
     <div className="max-w-[968px] mx-auto">
