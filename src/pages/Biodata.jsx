@@ -242,11 +242,11 @@ const Biodata = () => {
       };
 
       // Dispatch action to send booking details to API
-      dispatch(postBookingDetails(data, navigate));
     } catch (error) {
       // Handle error
     }
   };
+  
   // console.log(flightData.flight_data.dep.seatClassName);
   // console.log(flightData.flight_data.dep.flightCode);
   useEffect(() => {
@@ -1225,12 +1225,12 @@ const Biodata = () => {
                 </div>
                 <div>
                   <h1 className="font-bold text-[#A06ECE] pl-[158px] text-[10px] sm:text-[12px]">
-                    {bookingMessage.data[0].status.name}
+                    Kedatangan
                   </h1>
                 </div>
               </div>
               <div className="tanggal">
-                <div className="text-[12px] text-[12px] sm:text-[14px]">
+                <div className="text-[12px] sm:text-[14px]">
                   <h1 className="font-light">{formatDate(arrDateTime)}</h1>
                 </div>
               </div>
@@ -1279,7 +1279,7 @@ const Biodata = () => {
               </div>
               <div className="text-[14px] sm:text-[18px]">
                 <h1 className="font-bold text-[18px] text-[#7126B5]">
-                  {formatCurrency(bookingMessage.data[0].booking.totalPrice)}
+                  {formatCurrency(flightData.flight_data.dep.price)}
                 </h1>
               </div>
             </div>
