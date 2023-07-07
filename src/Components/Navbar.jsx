@@ -53,10 +53,10 @@ const Navbar = () => {
       {!isLogin && !isRegister && (
         <div className="pb-10 sm:p-9">
           <nav
-            className={`fixed w-full left-0 top-0  md:px-10 drop-shadow-lg z-10 
-    ${sticky ? "bg-gray-50 text-black h-20 items-center" : "text-black"}`}
+            className={`fixed w-full left-0 top-0 shadow-[0px_0px_3px_2px_rgba(0,0,0,0.05)] bg-white px-4 md:px-10 z-10 
+    ${sticky ? "text-black h-20 items-center" : "text-black"}`}
           >
-            <div className="flex items-center justify-between z-10 gap-8 cursor-pointer drop-shadow-lg h-14 px-6 py-10">
+            <div className="max-w-[1213px] mx-auto flex items-center justify-between z-10 gap-8 cursor-pointer h-14 py-10">
               <img
                 src={logo}
                 className="w-20 items-center"
@@ -74,7 +74,7 @@ const Navbar = () => {
                             offset={-200}
                             duration={500}
                           >
-                            <FiList />
+                            <FiList size={20} />
                           </Link>
                         </li>
                         <li>
@@ -84,7 +84,7 @@ const Navbar = () => {
                             offset={-200}
                             duration={500}
                           >
-                            <FiBell />
+                            <FiBell size={20} />
                           </Link>
                         </li>
                         <li>
@@ -93,10 +93,10 @@ const Navbar = () => {
                               className="flex gap-0 items-center"
                               onClick={toggleDropdown}
                             >
-                              <FiUser />
+                              <FiUser size={20} />
                             </div>
                             {isOpen && (
-                              <div className="absolute font-medium bg-white rounded-md shadow-lg w-36 px-3 py-2 top-10 right-0 text-center z-50">
+                              <div className="absolute font-medium bg-white rounded-sm shadow-[0px_2px_3px_2px_rgba(0,0,0,0.05)] w-36 px-3 py-2 top-[51px] right-0 text-center z-10">
                                 <button
                                   className="flex gap-2 pb-3 text-sm"
                                   onClick={handleClikProfile}
@@ -138,9 +138,9 @@ const Navbar = () => {
                 onClick={() => setOpen(!open)}
                 className={`z-[999] ${
                   open ? "text-gray-900" : "text-gray-900"
-                } text-3xl md:hidden m-5 mt-6`}
+                } text-3xl md:hidden flex items-center`}
               >
-                <FiMenu />
+                <FiMenu size={27} />
               </div>
 
               <div
