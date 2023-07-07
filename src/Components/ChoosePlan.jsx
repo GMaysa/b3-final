@@ -134,22 +134,22 @@ function ChoosePlan() {
   };
   return (
     <div className="w-full rounded-xl bg-white shadow-[0_0_8px_rgba(0,0,0,0.15)] relative top-[-10px] border-[1.5px] border-[#dedede]">
-      <p className="px-[34px] pt-[24px] font-medium  text-xl text-neutral-800">
+      <p className="px-[34px] pt-[24px] font-medium text-base md:text-xl text-neutral-800">
         Choose a special flight schedule on
         <span className="text-purple-800 font-bold italic"> Tiketku</span>
       </p>
 
       {/* FORM */}
-      <form className="px-[34px] pb-[24px] mt-6 flex flex-col gap-8">
+      <form className="px-[34px] pb-[24px] mt-4 md:mt-6 flex flex-col gap-8">
         {/* CHOOSE THE CITY */}
-        <div className="w-full flex items-center font-medium text-xl text-[#8a8a8a]">
+        <div className="w-full flex flex-col md:flex-row items-center font-medium text-xl text-[#8a8a8a]">
           {/* FROM */}
           <div
-            className={`w-full flex gap-5 ${showOptions.from && "relative"}`}
+            className={`w-full flex flex-col md:flex-row gap-0 md:gap-5 ${showOptions.from && "relative"}`}
           >
-            <div className="flex gap-[8px] items-center">
-              <BiSolidPlaneTakeOff size={24} />
-              <p className="text-base">From</p>
+            <div className="flex sm gap-[8px] items-center">
+              <BiSolidPlaneTakeOff size={24} className="hidden lg:flex" />
+              <p className=" text-sm md:text-base">From</p>
             </div>
             <div className="w-full">
               <input
@@ -158,7 +158,7 @@ function ChoosePlan() {
                 value={searchInput.from}
                 onChange={handleInputChange}
                 autoComplete="off"
-                className="w-full bg-white text-lg border-b-2 py-2 text-neutral-700 outline-none"
+                className="w-full bg-white text-base md:text-lg border-b-2 py-2 text-neutral-700 outline-none"
               />
               <div className="w-full absolute top-12 text-lg z-50">
                 {showOptions.from && (
@@ -194,15 +194,15 @@ function ChoosePlan() {
           {/* SWAP BUTTON */}
           <div
             onClick={handleSwap}
-            className="mx-8 text-2xl cursor-pointer text-white p-1 rounded-lg duration-300 bg-violet-800 hover:bg-violet-800"
+            className="mx-8 mt-3 text-2xl cursor-pointer text-white p-1 rounded-lg duration-300 bg-violet-800 hover:bg-violet-800"
           >
-            <MdSwapHoriz />
+            <MdSwapHoriz className=" rotate-90 md:rotate-0"/>
           </div>
           {/* TO */}
-          <div className={`w-full flex gap-10 ${showOptions.to && "relative"}`}>
+          <div className={`w-full flex flex-col md:flex-row gap-0 md:gap-10 ${showOptions.to && "relative"}`}>
             <div className="flex gap-[8px] items-center">
-              <BiSolidPlaneLand size={24} />
-              <p className="text-base">To</p>
+              <BiSolidPlaneLand size={24} className="hidden lg:flex" />
+              <p className=" text-sm md:text-base">To</p>
             </div>
             <div className="w-full">
               <input
@@ -211,7 +211,7 @@ function ChoosePlan() {
                 value={searchInput.to}
                 onChange={handleInputChange}
                 autoComplete="off"
-                className="w-full bg-white text-lg border-b-2 py-2 text-neutral-700 outline-none"
+                className="w-full bg-white text-base md:text-lg border-b-2 py-2 text-neutral-700 outline-none"
               />
               <div className="w-full absolute top-12 text-lg z-50">
                 {showOptions.to && (
@@ -247,21 +247,21 @@ function ChoosePlan() {
         </div>
 
         {/* DATE & PASSENGER PLAN */}
-        <div className="w-full flex items-cente gap-24">
+        <div className="w-full flex flex-col md:flex-row items-cente gap-8 md:gap-24">
           {/* Date */}
-          <div className="w-full flex items-center gap-6">
-            <h3 className="flex gap-2 text-[#8a8a8a] text-base font-medium">
-              <BiCalendar size={24} />
+          <div className="w-full flex flex-col md:flex-row items-left md:items-center gap-0 md:gap-6">
+            <h3 className="hidden md:flex gap-2 text-[#8a8a8a] text-sm md:text-base font-medium">
+              <BiCalendar size={24} className="hidden lg:flex" />
               Date
             </h3>
-            <div className="flex gap-6">
+            <div className="w-full flex gap-6">
               {/* Departure */}
               <div
                 className={`w-full h-full font-medium text-[#8a8a8a] flex flex-col justify-between ${
                   showOptions.date && "relative"
                 }`}
               >
-                <p className="h-full flex items-center">Departure</p>
+                <p className="h-full flex items-center text-base">Departure</p>
                 <div className="w-full flex border-b-2 py-2 outline-none">
                   <input
                     type="text"
@@ -327,8 +327,8 @@ function ChoosePlan() {
           </div>
           {/* Passengers & Seat Class */}
           <div className="w-full flex gap-6">
-            <h3 className="flex items-center text-[#808080] font-medium gap-2">
-              <MdOutlineAirlineSeatReclineExtra size={24} />
+            <h3 className="hidden md:flex items-center text-[#808080] text-sm md:text-base font-medium gap-2">
+              <MdOutlineAirlineSeatReclineExtra size={24} className="hidden lg:flex" />
               Seat
             </h3>
             {/* Passengers */}

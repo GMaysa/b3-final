@@ -21,14 +21,8 @@ import FlightTicketHistory from "./Components/FlightTicketHistory";
 import DetailHistory from "./pages/DetailHistory";
 import Home from "./pages/Home";
 import SearchResults from "./pages/SearchResults";
-// import Otp from "./pages/Otp";
-// import RedirectIfProtected from "./Components/RedirectIfProtected";
-// import Protected from "./Components/Protected";
 import "react-toastify/dist/ReactToastify.css";
-import { toast } from "react-toastify";
-// import Header from "./components/Header";
 import Reset from "./pages/Reset";
-// import DioNyoba from "./components/DioNyoba";
 import Register from "./pages/Register";
 import Otppages from "./pages/Otp";
 

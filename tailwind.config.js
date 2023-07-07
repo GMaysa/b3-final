@@ -11,7 +11,9 @@ module.exports = {
     },
     screens: {
       smm: {'max': '426px'},
+      // maxMd: {'max': '768px'}, 
       //maxwidth dio
+      xs: '320px',
       sm: "425px",
       md: "768px",
       lg: "1024px",
