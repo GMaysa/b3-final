@@ -51,7 +51,7 @@ function App() {
   return (
     <Provider store={store}>
       <BrowserRouter>
-        {/* <Navbar /> */}
+        <Navbar />
         {showPopup && <PopupNotif onClose={handleClosePopup} />}
 
         <Routes>
