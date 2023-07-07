@@ -14,7 +14,7 @@ module.exports = {
       // maxMd: {'max': '768px'}, 
       //maxwidth dio
       xs: '320px',
-      sm: "425px",
+      sm: "426px",
       md: "768px",
       lg: "1024px",
       xl: "1440px",
