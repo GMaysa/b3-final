@@ -26,7 +26,8 @@ export const getTransDetailsGo = (paygo, navigate) => async (dispatch) => {
     navigate("/payconfirm");
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      toast.error(error?.response?.data?.message);
+      console.log(error?.response?.data?.message);
+      // toast.error(error?.response?.data?.message);
       return;
     }
     toast.error(error?.message);

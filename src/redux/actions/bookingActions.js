@@ -47,11 +47,11 @@ export const postBookingDetails = (data, navigate) => async (dispatch) => {
     dispatch(setBookingDetails(response.data));
     navigate("/pay");
   } catch (error) {
-    console.log(error);
+    alert(error);
     if (axios.isAxiosError(error)) {
-      toast.error(error?.response?.data?.message);
+      alert(error?.response?.data?.message);
       return;
     }
-    toast.error(error?.message);
+    alert(error?.message);
   }
 };

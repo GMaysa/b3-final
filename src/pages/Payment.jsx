@@ -129,7 +129,7 @@ const Payment = () => {
       amount: totalPrice,
       bankVa: bankVaValue,
     };
-
+    setIsLoading(true);
     dispatch(getTransDetailsVA(payva, navigate));
   };
 
@@ -143,6 +143,7 @@ const Payment = () => {
       cardCvv: cardCvv,
       cardHolderName: cardHolderName,
     };
+    // setIsLoading(true);
     dispatch(getTransDetails(pay, navigate));
   };
 
@@ -235,7 +236,7 @@ const Payment = () => {
                                 value={phoneNumber}
                                 name="phoneNumber"
                                 onChange={(e) => setPhoneNumber(e.target.value)}
-                                placeholder="4480 0000 0000 0000"
+                                placeholder="08676*****"
                                 className="outline-none rounded-[5px] bg-transparent py-[8px] border-b border-[#D0D0D0] w-[296px]"
                               />
                             </form>
@@ -544,6 +545,9 @@ const Payment = () => {
                 </h1>
                 <h1 className="font-light">
                   {flightData.user_data.passengers.passengers_detail.baby} Baby
+                </h1>
+                <h1 className="font-light">
+                  {flightData.user_data.passengers.passengers_detail.child} Anak
                 </h1>
                 <h1 className="font-light"></h1>
               </div>

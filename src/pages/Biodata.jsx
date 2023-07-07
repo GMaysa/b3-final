@@ -12,6 +12,7 @@ const Biodata = () => {
   const indexnya = flightData.user_data.passengers.count_passengers;
   const dispatch = useDispatch();
   const [selectedSeats, setSelectedSeats] = useState({});
+  const [selectedSeatsReturn, setSelectedSeatsReturn] = useState({});
   const [fullNameCos, setFullNameCos] = useState("");
   const [familyNameCos, setFamilyNameCos] = useState("");
   const [phoneCos, setPhoneCos] = useState("");
@@ -41,12 +42,16 @@ const Biodata = () => {
 
   const bookingMessage = JSON.parse(localStorage.getItem("bookingMessage"));
   const maxSelectedSeats = flightData.user_data.passengers.count_passengers;
+  const maxSelectedSeatsReturn =
+    flightData.user_data.passengers.count_passengers;
   const [showFamilyName, setShowFamilyName] = useState(false);
   const navigate = useNavigate();
   const { seatDetails } = useSelector((state) => state.seat);
+  const { seatDetailsTwo } = useSelector((state) => state.seat);
   // console.log(seatDetails);
   // const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [departSeatIds, setDepartSeatIds] = useState([]);
+  const [returnSeatIds, setReturnSeatIds] = useState([]);
 
   const handleToggleSwitch = () => {
     setShowFamilyName(!showFamilyName);
@@ -125,17 +130,80 @@ const Biodata = () => {
       return prevDepartSeatIds;
     });
   };
+  const toggleSeatReturnSelection = (seatId) => {
+    const seatData = seatDetailsTwo.data.find((data) => data.seatId === seatId);
+    if (!seatData || seatData.booked) return;
+
+    const isSeatSelectedReturn = selectedSeatsReturn.hasOwnProperty(seatId);
+
+    setSelectedSeatsReturn((prevSelectedSeatsReturn) => {
+      if (isSeatSelectedReturn) {
+        const updatedSelectedSeatsReturn = { ...prevSelectedSeatsReturn };
+        delete updatedSelectedSeatsReturn[seatId];
+        return updatedSelectedSeatsReturn;
+      } else if (
+        Object.keys(prevSelectedSeatsReturn).length < maxSelectedSeatsReturn
+      ) {
+        let updatedSelectedSeatsReturn = { ...prevSelectedSeatsReturn };
+        const seatNames = Object.values(prevSelectedSeatsReturn);
+        let seatNameToAddReturn = null;
+
+        for (let i = 1; i <= maxSelectedSeatsReturn; i++) {
+          const seatName = `P${i}`;
+
+          if (!seatNames.includes(seatName)) {
+            seatNameToAddReturn = seatName;
+            updatedSelectedSeatsReturn = {
+              ...updatedSelectedSeatsReturn,
+              [seatId]: seatName,
+            };
+            break;
+          }
+        }
+
+        if (seatNameToAddReturn !== null) {
+          return updatedSelectedSeatsReturn;
+        }
+      }
+      return prevSelectedSeatsReturn;
+    });
+
+    setReturnSeatIds((prevReturnSeatIds) => {
+      if (isSeatSelectedReturn) {
+        return prevReturnSeatIds.filter((id) => id !== seatId);
+      } else if (
+        Object.keys(selectedSeatsReturn).length < maxSelectedSeatsReturn
+      ) {
+        return [...prevReturnSeatIds, seatId];
+      }
+      return prevReturnSeatIds;
+    });
+  };
 
   console.log(departSeatIds);
+  console.log(returnSeatIds);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
       // Update seat status for selected seats
-      await Promise.all(
-        departSeatIds.map((seatId) => dispatch(updateSeatStatus(seatId, true)))
-      );
+      if (flightData.flight_data.arr) {
+        await Promise.all(
+          returnSeatIds.map((seatId) =>
+            dispatch(updateSeatStatus(seatId, true))
+          )
+        );
+      } else {
+        await Promise.all(
+          departSeatIds.map(
+            (seatId) => dispatch(updateSeatStatus(seatId, true)),
+            returnSeatIds.map((seatId) =>
+              dispatch(updateSeatStatus(seatId, true))
+            )
+          )
+        );
+      }
 
       const passengersData = fullNamePasValues.map((fullName, index) => ({
         fullName: fullName,
@@ -151,9 +219,13 @@ const Biodata = () => {
       const data = {
         booking: {
           departFlightId: flightData.flight_data.dep.flightId,
-          // returnFlightId: 3,
+          returnFlightId: flightData.flight_data.arr
+            ? flightData.flight_data.arr.flightId
+            : null,
           departClassId: flightData.flight_data.dep.seatClassId,
-          //returnClassId: 2,
+          returnClassId: flightData.flight_data.arr
+            ? flightData.flight_data.arr.seatClassId
+            : null,
           costumer: {
             fullName: fullNameCos,
             familyName: familyNameCos,
@@ -162,7 +234,9 @@ const Biodata = () => {
           },
           passengers: passengersData,
           departSeatIds: departSeatIds.map((seatId) => seatId),
-          // returnSeatIds: [17, 17],
+          returnSeatIds: flightData.flight_data.arr
+            ? returnSeatIds.map((seatId) => seatId)
+            : [],
         },
         payment: null,
       };
@@ -176,12 +250,30 @@ const Biodata = () => {
   // console.log(flightData.flight_data.dep.seatClassName);
   // console.log(flightData.flight_data.dep.flightCode);
   useEffect(() => {
-    dispatch(
-      getSeatDetails(
-        flightData.flight_data.dep.seatClassName,
-        flightData.flight_data.dep.flightCode
-      )
-    );
+    if (flightData.flight_data.arr) {
+      dispatch(
+        getSeatDetails(
+          flightData.flight_data.dep.seatClassName,
+          flightData.flight_data.dep.flightCode,
+          true
+        )
+      );
+      dispatch(
+        getSeatDetails(
+          flightData.flight_data.arr.seatClassName,
+          flightData.flight_data.arr.flightCode,
+          false
+        )
+      );
+    } else {
+      dispatch(
+        getSeatDetails(
+          flightData.flight_data.dep.seatClassName,
+          flightData.flight_data.dep.flightCode,
+          true
+        )
+      );
+    }
   }, [dispatch]);
   const formatCurrency = (amount) => {
     const formatter = new Intl.NumberFormat("id-ID", {
@@ -235,6 +327,8 @@ const Biodata = () => {
 
   const rows = ["A", "B", "C", "D", "E", "F"];
 
+  // const seatDetailsTwo =
+
   return (
     <div>
       <div className="pt-[27px] sm:pt-[47px] pb-[20px] px-[50px] sm:px-[100px] xl:px-[260px] shadow-md">
@@ -263,7 +357,7 @@ const Biodata = () => {
             <div className="px-[16px]">
               <div className="pt-[16px]">
                 <h1 className="text-[#4B1979] font-bold text-[12px] sm:text-[14px]">
-                  Nama Lengkap
+                  Nama Lengkap<span className="text-red-700">*</span>
                 </h1>
               </div>
               <div className="sm:w-[454px] pt-[4px]">
@@ -338,7 +432,7 @@ const Biodata = () => {
               </div>
               <div className="pt-[12px]">
                 <h1 className="text-[#4B1979] font-bold text-[12px] sm:text-[14px]">
-                  Email
+                  Email<span className="text-red-700">*</span>
                 </h1>
               </div>
               <div className="sm:w-[454px] pt-[4px]">
@@ -413,7 +507,7 @@ const Biodata = () => {
                     </div>
                     <div className="pt-[12px]">
                       <h1 className="text-[#4B1979] font-bold sm:text-[14px]">
-                        Nama Lengkap
+                        Nama Lengkap<span className="text-red-700">*</span>
                       </h1>
                     </div>
                     <div className="sm:w-[454px] pt-[4px]">
@@ -597,12 +691,11 @@ const Biodata = () => {
                 </div>
               </div>
             ))}
-
             <div className="pt-[24px]">
               <div className="isi_data border-[1px] border-[#8A8A8A] px-[16px] pt-[26px] pb-[42px] rounded-[4px] sm:w-[518px]">
                 <div className="data_kursi">
                   <h1 className="font-bold text-[18px] sm:text-[20px]">
-                    Pilih Kursi
+                    Pilih Kursi Keberangkatan
                   </h1>
                 </div>
                 <div className="pt-[16px] flex items-center">
@@ -801,6 +894,238 @@ const Biodata = () => {
                     </div>
                   </div>
                 </div>
+              </div>
+              <div className="pt-[24px]">
+                {flightData.flight_data.arr && (
+                  <div className="isi_data border-[1px] border-[#8A8A8A] px-[16px] pt-[26px] pb-[42px] rounded-[4px] sm:w-[518px]">
+                    <div className="data_kursi">
+                      <h1 className="font-bold text-[18px] sm:text-[20px]">
+                        Pilih Kursi Kepulangan
+                      </h1>
+                    </div>
+                    <div className="pt-[16px] flex items-center">
+                      <div className="data_diri bg-[#73CA5C] text-white font-medium py-[8px] px-[16px] w-full sm:w-[486px] rounded-[4px] items-center">
+                        <h1 className="font-medium text-center text-[12px] sm:text-[14px]">
+                          {flightData.flight_data.arr.seatClassName} -{" "}
+                          {flightData.flight_data.arr.seatAvailable} Seats
+                          Available
+                        </h1>
+                      </div>
+                    </div>
+                    <div className="angka sm:px-[80px] pt-[15px]">
+                      <div className="flex justify-between items-center text-[#8A8A8A] font-medium">
+                        {rows.map((row) => (
+                          <div
+                            key={row}
+                            className="w-[36px] h-[36px] rounded flex justify-center items-center"
+                          >
+                            {row}
+                          </div>
+                        ))}
+                      </div>
+                      <div className="flex justify-between items-center gap-[5px] sm:gap-[20px] pt-[12px]">
+                        <div className="kotak1 grid grid-cols-1 gap-3 mt-2 text-[#F2F2F2]">
+                          {seatDetailsTwo?.data.length > 0 &&
+                            seatDetailsTwo.data
+                              .slice(0, 12)
+                              .map((data, index) => {
+                                const seatId = data.seatId;
+                                const isSeatSelectedReturn =
+                                  selectedSeatsReturn.hasOwnProperty(seatId);
+                                const seatName = isSeatSelectedReturn
+                                  ? selectedSeatsReturn[seatId]
+                                  : index + 1;
+
+                                return (
+                                  <div
+                                    key={seatId}
+                                    className={`bg-${
+                                      data.booked
+                                        ? "gray-300"
+                                        : isSeatSelectedReturn
+                                        ? "[#7126B5]"
+                                        : "[#73CA5C]"
+                                    } w-[36px] h-[36px] rounded flex justify-center items-center`}
+                                    onClick={() =>
+                                      toggleSeatReturnSelection(seatId)
+                                    }
+                                  >
+                                    {seatName}
+                                  </div>
+                                );
+                              })}
+                        </div>
+                        <div className="kotak1 grid grid-cols-1 gap-3 mt-2 text-[#F2F2F2]">
+                          {seatDetailsTwo?.data.length > 0 &&
+                            seatDetailsTwo.data
+                              .slice(12, 24)
+                              .map((data, index) => {
+                                const seatId = data.seatId;
+                                const isSeatSelectedReturn =
+                                  selectedSeatsReturn.hasOwnProperty(seatId);
+                                const seatName = isSeatSelectedReturn
+                                  ? selectedSeatsReturn[seatId]
+                                  : index + 13;
+
+                                return (
+                                  <div
+                                    key={seatId}
+                                    className={`bg-${
+                                      data.booked
+                                        ? "gray-300"
+                                        : isSeatSelectedReturn
+                                        ? "[#7126B5]"
+                                        : "[#73CA5C]"
+                                    } w-[36px] h-[36px] rounded flex justify-center items-center`}
+                                    onClick={() =>
+                                      toggleSeatReturnSelection(seatId)
+                                    }
+                                  >
+                                    {seatName}
+                                  </div>
+                                );
+                              })}
+                        </div>
+                        <div className="kotak1 grid grid-cols-1 gap-3 mt-2 text-[#F2F2F2]">
+                          {seatDetailsTwo?.data.length > 0 &&
+                            seatDetailsTwo.data
+                              .slice(24, 36)
+                              .map((data, index) => {
+                                const seatId = data.seatId;
+                                const isSeatSelectedReturn =
+                                  selectedSeatsReturn.hasOwnProperty(seatId);
+                                const seatName = isSeatSelectedReturn
+                                  ? selectedSeatsReturn[seatId]
+                                  : index + 25;
+
+                                return (
+                                  <div
+                                    key={seatId}
+                                    className={`bg-${
+                                      data.booked
+                                        ? "gray-300"
+                                        : isSeatSelectedReturn
+                                        ? "[#7126B5]"
+                                        : "[#73CA5C]"
+                                    } w-[36px] h-[36px] rounded flex justify-center items-center`}
+                                    onClick={() =>
+                                      toggleSeatReturnSelection(seatId)
+                                    }
+                                  >
+                                    {seatName}
+                                  </div>
+                                );
+                              })}
+                        </div>
+
+                        <div className="kotak2 grid grid-cols-1 gap-3 mt-2 flex text-center text-[12px]">
+                          {Array.from({ length: 12 }, (_, index) => (
+                            <div
+                              key={index + 1}
+                              className="bg-[#F2F2F2] px-[5px] text-[#8A8A8A] w-[16px] h-[36px] rounded flex justify-center items-center"
+                            >
+                              {index + 1}
+                            </div>
+                          ))}
+                        </div>
+
+                        <div className="kotak1 grid grid-cols-1 gap-3 mt-2 text-[#F2F2F2]">
+                          {seatDetailsTwo?.data.length > 0 &&
+                            seatDetailsTwo.data
+                              .slice(36, 48)
+                              .map((data, index) => {
+                                const seatId = data.seatId;
+                                const isSeatSelectedReturn =
+                                  selectedSeatsReturn.hasOwnProperty(seatId);
+                                const seatName = isSeatSelectedReturn
+                                  ? selectedSeatsReturn[seatId]
+                                  : index + 37;
+
+                                return (
+                                  <div
+                                    key={seatId}
+                                    className={`bg-${
+                                      data.booked
+                                        ? "gray-300"
+                                        : isSeatSelectedReturn
+                                        ? "[#7126B5]"
+                                        : "[#73CA5C]"
+                                    } w-[36px] h-[36px] rounded flex justify-center items-center`}
+                                    onClick={() =>
+                                      toggleSeatReturnSelection(seatId)
+                                    }
+                                  >
+                                    {seatName}
+                                  </div>
+                                );
+                              })}
+                        </div>
+                        <div className="kotak1 grid grid-cols-1 gap-3 mt-2 text-[#F2F2F2]">
+                          {seatDetailsTwo?.data.length > 0 &&
+                            seatDetailsTwo.data
+                              .slice(48, 60)
+                              .map((data, index) => {
+                                const seatId = data.seatId;
+                                const isSeatSelectedReturn =
+                                  selectedSeatsReturn.hasOwnProperty(seatId);
+                                const seatName = isSeatSelectedReturn
+                                  ? selectedSeatsReturn[seatId]
+                                  : index + 49;
+
+                                return (
+                                  <div
+                                    key={seatId}
+                                    className={`bg-${
+                                      data.booked
+                                        ? "gray-300"
+                                        : isSeatSelectedReturn
+                                        ? "[#7126B5]"
+                                        : "[#73CA5C]"
+                                    } w-[36px] h-[36px] rounded flex justify-center items-center`}
+                                    onClick={() =>
+                                      toggleSeatReturnSelection(seatId)
+                                    }
+                                  >
+                                    {seatName}
+                                  </div>
+                                );
+                              })}
+                        </div>
+                        <div className="kotak1 grid grid-cols-1 gap-3 mt-2 text-[#F2F2F2]">
+                          {seatDetailsTwo?.data.length > 0 &&
+                            seatDetailsTwo.data
+                              .slice(60, 72)
+                              .map((data, index) => {
+                                const seatId = data.seatId;
+                                const isSeatSelectedReturn =
+                                  selectedSeatsReturn.hasOwnProperty(seatId);
+                                const seatName = isSeatSelectedReturn
+                                  ? selectedSeatsReturn[seatId]
+                                  : index + 61;
+
+                                return (
+                                  <div
+                                    key={seatId}
+                                    className={`bg-${
+                                      data.booked
+                                        ? "gray-300"
+                                        : isSeatSelectedReturn
+                                        ? "[#7126B5]"
+                                        : "[#73CA5C]"
+                                    } w-[36px] h-[36px] rounded flex justify-center items-center`}
+                                    onClick={() =>
+                                      toggleSeatReturnSelection(seatId)
+                                    }
+                                  >
+                                    {seatName}
+                                  </div>
+                                );
+                              })}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
             <div className="pt-[34px] pb-[132px]">

@@ -1,15 +1,23 @@
 import axios from "axios";
 import { toast } from "react-toastify";
-import { setSeatDetails, setUpdateSeat } from "../reducers/seatReducers";
+import {
+  setSeatDetails,
+  setSeatDetailsTwo,
+  setUpdateSeat,
+} from "../reducers/seatReducers";
 
 export const getSeatDetails =
-  (seatClassName, flightCode) => async (dispatch) => {
+  (seatClassName, flightCode, seatReturn) => async (dispatch) => {
     try {
       const response = await axios.get(
         `https://gcpflypal-l5tho6hrtq-as.a.run.app/api/v1/flight/seats?class=${seatClassName}&flight_code=${flightCode}`
       );
       console.log("berhasil");
-      dispatch(setSeatDetails(response.data));
+      if (seatReturn) {
+        dispatch(setSeatDetails(response.data));
+      } else {
+        dispatch(setSeatDetailsTwo(response.data));
+      }
     } catch (error) {
       if (axios.isAxiosError(error)) {
         toast.error(error?.response?.data?.message);
@@ -24,7 +32,7 @@ export const updateSeatStatus = (seatId, booked) => async (dispatch) => {
     const accesstoken =
       localStorage.getItem("token") ||
       document.cookie.match(/(?<=token=)[^;]+/)?.[0];
-    const response = await axios.put(
+    const response = await axios.post(
       `https://gcpflypal-l5tho6hrtq-as.a.run.app/api/v1/flight/seats/${seatId}`,
       {
         booked: booked,
