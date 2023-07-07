@@ -242,11 +242,11 @@ const Biodata = () => {
       };
       dispatch(postBookingDetails(data, navigate))
       // Dispatch action to send booking details to API
+      dispatch(postBookingDetails(data, navigate));
     } catch (error) {
       // Handle error
     }
   };
-
   // console.log(flightData.flight_data.dep.seatClassName);
   // console.log(flightData.flight_data.dep.flightCode);
   useEffect(() => {
@@ -269,8 +269,7 @@ const Biodata = () => {
       dispatch(
         getSeatDetails(
           flightData.flight_data.dep.seatClassName,
-          flightData.flight_data.dep.flightCode,
-          true
+          flightData.flight_data.dep.flightCode
         )
       );
     }
@@ -332,7 +331,7 @@ const Biodata = () => {
   return (
     <div>
       <div className="pt-[27px] sm:pt-[47px] pb-[20px] px-[50px] sm:px-[100px] xl:px-[260px] shadow-md">
-        <div className="text-stage text-[16px] sm:text-[20px] flex gap-[8px] mt-[40px] sm:mt-0">
+        <div className="text-stage text-[16px] sm:text-[20px] flex gap-[8px]">
           <h1 className="font-bold">Isi Data Diri</h1>
           <h1 className="font-bold text-[#8A8A8A]">{">"}</h1>
           <h1 className="font-bold text-[#8A8A8A]">Bayar</h1>
@@ -1225,12 +1224,12 @@ const Biodata = () => {
                 </div>
                 <div>
                   <h1 className="font-bold text-[#A06ECE] pl-[158px] text-[10px] sm:text-[12px]">
-                    Kedatangan
+                    {bookingMessage.data[0].status.name}
                   </h1>
                 </div>
               </div>
               <div className="tanggal">
-                <div className="text-[12px] sm:text-[14px]">
+                <div className="text-[12px] text-[12px] sm:text-[14px]">
                   <h1 className="font-light">{formatDate(arrDateTime)}</h1>
                 </div>
               </div>
@@ -1279,7 +1278,7 @@ const Biodata = () => {
               </div>
               <div className="text-[14px] sm:text-[18px]">
                 <h1 className="font-bold text-[18px] text-[#7126B5]">
-                  {formatCurrency(flightData.flight_data.dep.price)}
+                  {formatCurrency(bookingMessage.data[0].booking.totalPrice)}
                 </h1>
               </div>
             </div>

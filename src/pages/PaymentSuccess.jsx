@@ -1,7 +1,9 @@
 import React from "react";
 import { ReactComponent as Illustration } from "../assets/illustration.svg";
+import { useNavigate } from "react-router";
 
 const PaymentSuccess = () => {
+  const navigate = useNavigate();
   return (
     <div>
       <div className="pt-[27px] sm:pt-[47px] pb-[20px] px-[50px] sm:px-[100px] xl:px-[260px] shadow-md">
@@ -40,6 +42,7 @@ const PaymentSuccess = () => {
               <div
                 className="w-[347px] text-center bg-[#7126B5] py-[16px] px-[12px] rounded-[12px] shadow-md"
                 style={{ boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.25)" }}
+                onClick={() => navigate("/history")}
               >
                 <h1 className="text-[#FFFFFF]">Terbitkan Tiket</h1>
               </div>
@@ -48,6 +51,7 @@ const PaymentSuccess = () => {
               <div
                 className="w-[347px] text-center bg-[#D0B7E6] py-[16px] px-[12px] rounded-[12px] shadow-md"
                 style={{ boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.25)" }}
+                onClick={() => navigate("/")}
               >
                 <h1 className="text-[#FFFFFF]">Cari Penerbangan Lain</h1>
               </div>
