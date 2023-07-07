@@ -246,7 +246,7 @@ const Biodata = () => {
       // Handle error
     }
   };
-  
+
   // console.log(flightData.flight_data.dep.seatClassName);
   // console.log(flightData.flight_data.dep.flightCode);
   useEffect(() => {
@@ -332,7 +332,7 @@ const Biodata = () => {
   return (
     <div>
       <div className="pt-[27px] sm:pt-[47px] pb-[20px] px-[50px] sm:px-[100px] xl:px-[260px] shadow-md">
-        <div className="text-stage text-[16px] sm:text-[20px] flex gap-[8px]">
+        <div className="text-stage text-[16px] sm:text-[20px] flex gap-[8px] mt-[40px] sm:mt-0">
           <h1 className="font-bold">Isi Data Diri</h1>
           <h1 className="font-bold text-[#8A8A8A]">{">"}</h1>
           <h1 className="font-bold text-[#8A8A8A]">Bayar</h1>
