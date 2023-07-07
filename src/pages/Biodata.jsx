@@ -240,7 +240,7 @@ const Biodata = () => {
         },
         payment: null,
       };
-
+      dispatch(postBookingDetails(data, navigate))
       // Dispatch action to send booking details to API
       dispatch(postBookingDetails(data, navigate));
     } catch (error) {
