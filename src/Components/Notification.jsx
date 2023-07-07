@@ -141,7 +141,7 @@ const Notification = () => {
       <div className="py-4 px-2 flex gap-4 items-center pb-8">
         <button
           className="flex gap-4 w-full h-9 rounded-lg items-center px-6 text-white bg-[#A06ECE] text-md"
-          onClick={() => navigate("/beranda")}
+          onClick={() => navigate("/")}
         >
           <AiOutlineArrowLeft className="h-7" />
           Beranda
