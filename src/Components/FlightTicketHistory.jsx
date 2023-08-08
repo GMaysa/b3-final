@@ -37,7 +37,7 @@ const FlightTicketHistory = () => {
 
   const [displayedHistory, setDisplayHistory] = useState([]);
 
-  const { historys, historyFilter, historySearch } = useSelector(
+  const { historys, historyFilter, historySearch, historyDetail } = useSelector(
     (state) => state.history
   );
 
@@ -149,6 +149,7 @@ const FlightTicketHistory = () => {
     setDisplayHistory(displayedHistory);
   }, [isSearching, historySearch, historyFilter, historys]);
 
+  console.log(displayedHistory);
   return (
     <section className="pt-16 md:pt-20 px-7 md:px-20 md:py-16 py-10 w-full mx-auto font-poppins">
       <h1 className="font-bold text-xl px-2">Riwayat Pemesanan</h1>
@@ -277,8 +278,8 @@ const FlightTicketHistory = () => {
                   history.booking.departFlight.departureDate
                 }
                 arrivalAirport={
-                  history.arrCity ||
-                  history.booking.departFlight.arrivalAirport.city
+                  // history.arrCity ||
+                  historyDetail?.booking?.departFlight?.arrivalAirport?.city
                 }
                 arrivalDate={
                   history.depArrDate || history.booking.departFlight.arrivalDate

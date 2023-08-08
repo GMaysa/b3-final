@@ -69,7 +69,7 @@ function ChoosePlan() {
   };
 
   // arrival
-  const [arrival, setArrival] = useState(false)
+  const [arrival, setArrival] = useState(false);
 
   const [showOptions, setShowOptions] = useState({
     from: false,
@@ -93,7 +93,7 @@ function ChoosePlan() {
     baby: 1,
   });
   const passengerCount = passengers.adult + passengers.child;
-  const [seatClass, setSeatClass] = useState("Bussiness");
+  const [seatClass, setSeatClass] = useState("Business");
 
   const handleSwap = () => {
     const updatedData = { ...searchInput };
@@ -145,7 +145,9 @@ function ChoosePlan() {
         <div className="w-full flex flex-col md:flex-row items-center font-medium text-xl text-[#8a8a8a]">
           {/* FROM */}
           <div
-            className={`w-full flex flex-col md:flex-row gap-0 md:gap-5 ${showOptions.from && "relative"}`}
+            className={`w-full flex flex-col md:flex-row gap-0 md:gap-5 ${
+              showOptions.from && "relative"
+            }`}
           >
             <div className="flex sm gap-[8px] items-center">
               <BiSolidPlaneTakeOff size={24} className="hidden lg:flex" />
@@ -196,10 +198,14 @@ function ChoosePlan() {
             onClick={handleSwap}
             className="mx-8 mt-3 text-2xl cursor-pointer text-white p-1 rounded-lg duration-300 bg-violet-800 hover:bg-violet-800"
           >
-            <MdSwapHoriz className=" rotate-90 md:rotate-0"/>
+            <MdSwapHoriz className=" rotate-90 md:rotate-0" />
           </div>
           {/* TO */}
-          <div className={`w-full flex flex-col md:flex-row gap-0 md:gap-10 ${showOptions.to && "relative"}`}>
+          <div
+            className={`w-full flex flex-col md:flex-row gap-0 md:gap-10 ${
+              showOptions.to && "relative"
+            }`}
+          >
             <div className="flex gap-[8px] items-center">
               <BiSolidPlaneLand size={24} className="hidden lg:flex" />
               <p className=" text-sm md:text-base">To</p>
@@ -297,14 +303,27 @@ function ChoosePlan() {
               </div>
               {/* Return */}
               <div className="w-full font-medium text-[#8a8a8a]">
-                <label className={`checkbox-container relative ${!arrival && 'text-neutral-300'}`}>
-                  <input type="checkbox" name="" onClick={()=> setArrival(!arrival)} />
-                  <span className={`checkmark ${!arrival && '!border-neutral-300'}`} /> Arrival
+                <label
+                  className={`checkbox-container relative ${
+                    !arrival && "text-neutral-300"
+                  }`}
+                >
+                  <input
+                    type="checkbox"
+                    name=""
+                    onClick={() => setArrival(!arrival)}
+                  />
+                  <span
+                    className={`checkmark ${!arrival && "!border-neutral-300"}`}
+                  />{" "}
+                  Arrival
                 </label>
                 <div className="w-full flex border-b-2 py-2 outline-none">
                   <input
                     type="text"
-                    value={arrival ? printThisDate(datePick[0].endDate):'disabled'}
+                    value={
+                      arrival ? printThisDate(datePick[0].endDate) : "disabled"
+                    }
                     onClick={() =>
                       setShowOptions((prev) => {
                         const updatedOptions = Object.keys(prev).reduce(
@@ -319,7 +338,9 @@ function ChoosePlan() {
                     }
                     disabled={!arrival}
                     readOnly
-                    className={`w-full text-neutral-700 outline-none bg-white ${!arrival && '!text-neutral-300'}`}
+                    className={`w-full text-neutral-700 outline-none bg-white ${
+                      !arrival && "!text-neutral-300"
+                    }`}
                   />
                 </div>
               </div>
@@ -328,7 +349,10 @@ function ChoosePlan() {
           {/* Passengers & Seat Class */}
           <div className="w-full flex gap-6">
             <h3 className="hidden md:flex items-center text-[#808080] text-sm md:text-base font-medium gap-2">
-              <MdOutlineAirlineSeatReclineExtra size={24} className="hidden lg:flex" />
+              <MdOutlineAirlineSeatReclineExtra
+                size={24}
+                className="hidden lg:flex"
+              />
               Seat
             </h3>
             {/* Passengers */}
@@ -594,13 +618,13 @@ function ChoosePlan() {
                   </li>
                   <li
                     className={`flex items-center justify-between bg-white py-2 px-4 ${
-                      seatClass === "Bussiness"
+                      seatClass === "Business"
                         ? "!bg-violet-300 text-white"
                         : "text-neutral-700"
                     } hover:bg-violet-300 hover:text-white`}
-                    onClick={() => setSeatClass("Bussiness")}
+                    onClick={() => setSeatClass("Business")}
                   >
-                    Bussiness
+                    Business
                   </li>
                   <li
                     className={`flex items-center justify-between bg-white py-2 px-4 ${
@@ -642,4 +666,3 @@ function ChoosePlan() {
 }
 
 export default ChoosePlan;
-

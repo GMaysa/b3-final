@@ -9,7 +9,6 @@ import { login } from "../redux/actions/auth";
 import wp from "../assets/wp.svg";
 
 const Login = () => {
-
   const [showPassword, setShowPassword] = useState("");
 
   const togglePasswordVisibility = () => {
@@ -74,17 +73,21 @@ const Login = () => {
               />
 
               <label
-                    className="absolute top-1/2 -translate-y-1/2 right-5 cursor-pointer"
-                    onClick={togglePasswordVisibility}>
-                    {showPassword ? (<FaEyeSlash className='text-gray-700'/>) : (<FaEye className="text-gray-500" />)}
-                  </label>
+                className="absolute top-1/2 -translate-y-1/2 right-5 cursor-pointer"
+                onClick={togglePasswordVisibility}
+              >
+                {showPassword ? (
+                  <FaEyeSlash className="text-gray-700" />
+                ) : (
+                  <FaEye className="text-gray-500" />
+                )}
+              </label>
             </div>
-           
+
             <button
               className="bg-[#7126B5] text-sm hover:bg-[#35095c] text-white mx-auto font-bold py-2 px-2 mt-6 rounded m-auto w-full"
               type="submit"
             >
-              
               Masuk
             </button>
           </form>

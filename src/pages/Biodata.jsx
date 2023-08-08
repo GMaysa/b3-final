@@ -180,9 +180,6 @@ const Biodata = () => {
     });
   };
 
-  console.log(departSeatIds);
-  console.log(returnSeatIds);
-
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -240,9 +237,9 @@ const Biodata = () => {
         },
         payment: null,
       };
-      dispatch(postBookingDetails(data, navigate))
-      // Dispatch action to send booking details to API
       dispatch(postBookingDetails(data, navigate));
+      // Dispatch action to send booking details to API
+      // dispatch(postBookingDetails(data, navigate));
     } catch (error) {
       // Handle error
     }
@@ -718,8 +715,8 @@ const Biodata = () => {
                   </div>
                   <div className="flex justify-between items-center gap-[5px] sm:gap-[20px] pt-[12px]">
                     <div className="kotak1 grid grid-cols-1 gap-3 mt-2 text-[#F2F2F2]">
-                      {seatDetails?.data.length > 0 &&
-                        seatDetails.data.slice(0, 12).map((data, index) => {
+                      {seatDetailsTwo?.data.length > 0 &&
+                        seatDetailsTwo.data.slice(0, 12).map((data, index) => {
                           const seatId = data.seatId;
                           const isSelected =
                             selectedSeats.hasOwnProperty(seatId);
@@ -745,8 +742,8 @@ const Biodata = () => {
                         })}
                     </div>
                     <div className="kotak1 grid grid-cols-1 gap-3 mt-2 text-[#F2F2F2]">
-                      {seatDetails?.data.length > 0 &&
-                        seatDetails.data.slice(12, 24).map((data, index) => {
+                      {seatDetailsTwo?.data.length > 0 &&
+                        seatDetailsTwo.data.slice(12, 24).map((data, index) => {
                           const seatId = data.seatId;
                           const isSelected =
                             selectedSeats.hasOwnProperty(seatId);
@@ -772,8 +769,8 @@ const Biodata = () => {
                         })}
                     </div>
                     <div className="kotak1 grid grid-cols-1 gap-3 mt-2 text-[#F2F2F2]">
-                      {seatDetails?.data.length > 0 &&
-                        seatDetails.data.slice(24, 36).map((data, index) => {
+                      {seatDetailsTwo?.data.length > 0 &&
+                        seatDetailsTwo.data.slice(24, 36).map((data, index) => {
                           const seatId = data.seatId;
                           const isSelected =
                             selectedSeats.hasOwnProperty(seatId);
@@ -811,8 +808,8 @@ const Biodata = () => {
                     </div>
 
                     <div className="kotak1 grid grid-cols-1 gap-3 mt-2 text-[#F2F2F2]">
-                      {seatDetails?.data.length > 0 &&
-                        seatDetails.data.slice(36, 48).map((data, index) => {
+                      {seatDetailsTwo?.data.length > 0 &&
+                        seatDetailsTwo.data.slice(36, 48).map((data, index) => {
                           const seatId = data.seatId;
                           const isSelected =
                             selectedSeats.hasOwnProperty(seatId);
@@ -838,8 +835,8 @@ const Biodata = () => {
                         })}
                     </div>
                     <div className="kotak1 grid grid-cols-1 gap-3 mt-2 text-[#F2F2F2]">
-                      {seatDetails?.data.length > 0 &&
-                        seatDetails.data.slice(48, 60).map((data, index) => {
+                      {seatDetailsTwo?.data.length > 0 &&
+                        seatDetailsTwo.data.slice(48, 60).map((data, index) => {
                           const seatId = data.seatId;
                           const isSelected =
                             selectedSeats.hasOwnProperty(seatId);
@@ -865,8 +862,8 @@ const Biodata = () => {
                         })}
                     </div>
                     <div className="kotak1 grid grid-cols-1 gap-3 mt-2 text-[#F2F2F2]">
-                      {seatDetails?.data.length > 0 &&
-                        seatDetails.data.slice(60, 72).map((data, index) => {
+                      {seatDetailsTwo?.data.length > 0 &&
+                        seatDetailsTwo.data.slice(60, 72).map((data, index) => {
                           const seatId = data.seatId;
                           const isSelected =
                             selectedSeats.hasOwnProperty(seatId);
@@ -924,39 +921,37 @@ const Biodata = () => {
                       </div>
                       <div className="flex justify-between items-center gap-[5px] sm:gap-[20px] pt-[12px]">
                         <div className="kotak1 grid grid-cols-1 gap-3 mt-2 text-[#F2F2F2]">
-                          {seatDetailsTwo?.data.length > 0 &&
-                            seatDetailsTwo.data
-                              .slice(0, 12)
-                              .map((data, index) => {
-                                const seatId = data.seatId;
-                                const isSeatSelectedReturn =
-                                  selectedSeatsReturn.hasOwnProperty(seatId);
-                                const seatName = isSeatSelectedReturn
-                                  ? selectedSeatsReturn[seatId]
-                                  : index + 1;
+                          {seatDetails?.data.length > 0 &&
+                            seatDetails.data.slice(0, 12).map((data, index) => {
+                              const seatId = data.seatId;
+                              const isSeatSelectedReturn =
+                                selectedSeatsReturn.hasOwnProperty(seatId);
+                              const seatName = isSeatSelectedReturn
+                                ? selectedSeatsReturn[seatId]
+                                : index + 1;
 
-                                return (
-                                  <div
-                                    key={seatId}
-                                    className={`bg-${
-                                      data.booked
-                                        ? "gray-300"
-                                        : isSeatSelectedReturn
-                                        ? "[#7126B5]"
-                                        : "[#73CA5C]"
-                                    } w-[36px] h-[36px] rounded flex justify-center items-center`}
-                                    onClick={() =>
-                                      toggleSeatReturnSelection(seatId)
-                                    }
-                                  >
-                                    {seatName}
-                                  </div>
-                                );
-                              })}
+                              return (
+                                <div
+                                  key={seatId}
+                                  className={`bg-${
+                                    data.booked
+                                      ? "gray-300"
+                                      : isSeatSelectedReturn
+                                      ? "[#7126B5]"
+                                      : "[#73CA5C]"
+                                  } w-[36px] h-[36px] rounded flex justify-center items-center`}
+                                  onClick={() =>
+                                    toggleSeatReturnSelection(seatId)
+                                  }
+                                >
+                                  {seatName}
+                                </div>
+                              );
+                            })}
                         </div>
                         <div className="kotak1 grid grid-cols-1 gap-3 mt-2 text-[#F2F2F2]">
-                          {seatDetailsTwo?.data.length > 0 &&
-                            seatDetailsTwo.data
+                          {seatDetails?.data.length > 0 &&
+                            seatDetails.data
                               .slice(12, 24)
                               .map((data, index) => {
                                 const seatId = data.seatId;
@@ -986,8 +981,8 @@ const Biodata = () => {
                               })}
                         </div>
                         <div className="kotak1 grid grid-cols-1 gap-3 mt-2 text-[#F2F2F2]">
-                          {seatDetailsTwo?.data.length > 0 &&
-                            seatDetailsTwo.data
+                          {seatDetails?.data.length > 0 &&
+                            seatDetails.data
                               .slice(24, 36)
                               .map((data, index) => {
                                 const seatId = data.seatId;
@@ -1029,8 +1024,8 @@ const Biodata = () => {
                         </div>
 
                         <div className="kotak1 grid grid-cols-1 gap-3 mt-2 text-[#F2F2F2]">
-                          {seatDetailsTwo?.data.length > 0 &&
-                            seatDetailsTwo.data
+                          {seatDetails?.data.length > 0 &&
+                            seatDetails.data
                               .slice(36, 48)
                               .map((data, index) => {
                                 const seatId = data.seatId;
@@ -1060,8 +1055,8 @@ const Biodata = () => {
                               })}
                         </div>
                         <div className="kotak1 grid grid-cols-1 gap-3 mt-2 text-[#F2F2F2]">
-                          {seatDetailsTwo?.data.length > 0 &&
-                            seatDetailsTwo.data
+                          {seatDetails?.data.length > 0 &&
+                            seatDetails.data
                               .slice(48, 60)
                               .map((data, index) => {
                                 const seatId = data.seatId;
@@ -1091,8 +1086,8 @@ const Biodata = () => {
                               })}
                         </div>
                         <div className="kotak1 grid grid-cols-1 gap-3 mt-2 text-[#F2F2F2]">
-                          {seatDetailsTwo?.data.length > 0 &&
-                            seatDetailsTwo.data
+                          {seatDetails?.data.length > 0 &&
+                            seatDetails.data
                               .slice(60, 72)
                               .map((data, index) => {
                                 const seatId = data.seatId;
@@ -1224,7 +1219,7 @@ const Biodata = () => {
                 </div>
                 <div>
                   <h1 className="font-bold text-[#A06ECE] pl-[158px] text-[10px] sm:text-[12px]">
-                    {bookingMessage.data[0].status.name}
+                    {/* {bookingMessage.data[0].status.name} */}
                   </h1>
                 </div>
               </div>
@@ -1278,7 +1273,11 @@ const Biodata = () => {
               </div>
               <div className="text-[14px] sm:text-[18px]">
                 <h1 className="font-bold text-[18px] text-[#7126B5]">
-                  {formatCurrency(bookingMessage.data[0].booking.totalPrice)}
+                  {/* {formatCurrency(bookingMessage.data[0].booking.totalPrice)} */}
+                  {formatCurrency(
+                    flightData.flight_data.dep.price *
+                      flightData.user_data.passengers.count_passengers
+                  )}
                 </h1>
               </div>
             </div>

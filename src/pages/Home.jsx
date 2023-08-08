@@ -4,24 +4,24 @@ import ChoosePlan from "../Components/ChoosePlan";
 function Home() {
   const cardData = [
     {
-      from: 'Jakarta',
-      to: 'Denpasar-Bali Island',
-      img: 'https://images.pexels.com/photos/4553367/pexels-photo-4553367.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-      airline: 'Garuda Indonesia',
-      price: '800.000',
-      banner: 'Limited!',
-      dateRange: '20 - 30 March'
+      from: "Jakarta",
+      to: "Denpasar-Bali Island",
+      img: "https://images.pexels.com/photos/4553367/pexels-photo-4553367.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      airline: "Garuda Indonesia",
+      price: "800.000",
+      banner: "Limited!",
+      dateRange: "20 - 30 March",
     },
     {
-      from: 'Jakarta',
-      to: 'Mataram',
-      img: 'https://images.pexels.com/photos/4741215/pexels-photo-4741215.jpeg?auto=compress&cs=tinysrgb&w=1600',
-      airline: 'Garuda Indonesia',
-      price: '800.000',
-      banner: '50% OFF',
-      dateRange: '20 - 30 March'
+      from: "Jakarta",
+      to: "Mataram",
+      img: "https://images.pexels.com/photos/4741215/pexels-photo-4741215.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      airline: "Garuda Indonesia",
+      price: "800.000",
+      banner: "50% OFF",
+      dateRange: "20 - 30 March",
     },
-  ]
+  ];
 
   return (
     <div>
@@ -73,7 +73,10 @@ function Home() {
         <div className="flex gap-4 md:gap-6 ">
           {/* Map Card Here */}
           {cardData.map((data, key) => (
-            <div key={key} className=" w-40 md:w-[180px] h-48 md:h-[200px] p-2 shadow-[0_0_6px_rgba(0,0,0,0.1)] md:shadow-[0_0_8px_rgba(0,0,0,0.15)] rounded-lg flex flex-col">
+            <div
+              key={key}
+              className=" w-40 md:w-[180px] h-48 md:h-[200px] p-2 shadow-[0_0_6px_rgba(0,0,0,0.1)] md:shadow-[0_0_8px_rgba(0,0,0,0.15)] rounded-lg flex flex-col"
+            >
               {/* Image */}
               <div
                 className="w-full h-full flex justify-end bg-cover bg-center rounded-md overflow-hidden"
@@ -87,16 +90,23 @@ function Home() {
                 </div>
               </div>
               <div className="w-full h-fit flex flex-col gap-[2px] mt-1">
-                <h1 className="text-xs md:text-[14px] font-medium truncate">{data.from} -&gt; {data.to} </h1>
-                <p className="text-[9px] md:text-[10px] font-bold text-purple-700">AirAsia</p>
-                <p className="text-[10px] md:text-[11px] text-neutral-400 font-medium">20 - 30 March 2023</p>
+                <h1 className="text-xs md:text-[14px] font-medium truncate">
+                  {data.from} -&gt; {data.to}{" "}
+                </h1>
+                <p className="text-[9px] md:text-[10px] font-bold text-purple-700">
+                  AirAsia
+                </p>
+                <p className="text-[10px] md:text-[11px] text-neutral-400 font-medium">
+                  20 - 30 March 2023
+                </p>
                 <p className="text-[12px] md:text-[13px]">
                   Start From{" "}
-                  <span className="text-red-500 font-semibold">IDR 950.000</span>
+                  <span className="text-red-500 font-semibold">
+                    IDR 950.000
+                  </span>
                 </p>
               </div>
             </div>
-
           ))}
         </div>
       </div>

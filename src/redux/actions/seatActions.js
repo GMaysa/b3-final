@@ -14,9 +14,9 @@ export const getSeatDetails =
       );
       console.log("berhasil");
       if (seatReturn) {
-        dispatch(setSeatDetails(response.data));
-      } else {
         dispatch(setSeatDetailsTwo(response.data));
+      } else {
+        dispatch(setSeatDetails(response.data));
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {

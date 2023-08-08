@@ -55,21 +55,24 @@ const Reset = () => {
             />
             {/*==================== Confirmm PASSWORD ===================================*/}
 
-        <p className='mt-9 mb-1 text-xs'>Ulangi Password baru</p>
-          <input 
-            type="text" 
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder="Konfirmasi ulang Password" 
-              className="px-3 py-2 border rounded-2xl w-full block text-sm placeholder:text-slate-200 focus:outline-none focus:ring-1 focus:ring-[#7126B5] focus:border-[#7126B5] " 
-              />
-             <button className="bg-[#7126B5] text-sm hover:bg-[#35095c] text-white mx-auto  py-2 px-2 mt-6 rounded m-auto w-full"
-             type="submit"> Simpan </button>
-             
-      </form>
-      
+            <p className="mt-9 mb-1 text-xs">Ulangi Password baru</p>
+            <input
+              type="text"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              placeholder="Konfirmasi ulang Password"
+              className="px-3 py-2 border rounded-2xl w-full block text-sm placeholder:text-slate-200 focus:outline-none focus:ring-1 focus:ring-[#7126B5] focus:border-[#7126B5] "
+            />
+            <button
+              className="bg-[#7126B5] text-sm hover:bg-[#35095c] text-white mx-auto  py-2 px-2 mt-6 rounded m-auto w-full"
+              type="submit"
+            >
+              {" "}
+              Simpan{" "}
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
     </div>
   );
 };
